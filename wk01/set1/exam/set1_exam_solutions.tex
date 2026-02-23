@@ -1,0 +1,111 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 1 Practice Exam -- Answer Key}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Part A: Multiple Choice}
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item \textbf{B} (ISA)
+  \item \textbf{C}
+  \item \textbf{B}
+  \item \textbf{C}
+  \item \textbf{C}
+  \item \textbf{C}
+  \item \textbf{C}
+  \item \textbf{C}
+  \item \textbf{B}
+  \item \textbf{B}
+\end{enumerate}
+
+\section*{Part B: Computational Solutions}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{Information content and encoding}\\
+  Minimum bits needed for \(N\) symbols is \(\lceil \log_2 N \rceil\).\\
+  (a) \(\lceil \log_2 26 \rceil = 5\) bits.\\
+  (b) \(\lceil \log_2 100 \rceil = 7\) bits.
+
+  \item \textbf{Base conversion I}\\
+  \(53_{10}=32+16+4+1=2^5+2^4+2^2+2^0\).\\
+  Therefore \(53_{10}=110101_2\).
+
+  \item \textbf{Base conversion II}\\
+  \(11010110_2 = 1\cdot128 + 1\cdot64 + 0\cdot32 + 1\cdot16 + 0\cdot8 + 1\cdot4 + 1\cdot2 + 0\cdot1\)\\
+  \(=128+64+16+4+2=214\).\\
+  So \(11010110_2=214_{10}\).
+
+  \item \textbf{Binary/hex conversion}\\
+  (a) \(1111\,0111_2 = F7_{16}\).\\
+  (b) \(D741_{16}=1101\ 0111\ 0100\ 0001_2\).
+
+  \item \textbf{Representable ranges, \(N=8\)}\\
+  (a) Unsigned: \(0\) to \(2^8-1=255\).\\
+  (b) Sign/magnitude: \(-127\) to \(+127\).\\
+  (c) 2's complement: \(-128\) to \(+127\).
+
+  \item \textbf{2's complement encoding/decoding (8-bit)}\\
+  (a) \(18_{10}=00010010_2\). Invert: \(11101101\). Add 1: \(11101110\).\\
+  So \(-18\) is \(\boxed{11101110_2}\).\\
+  (b) \(11101011_2\): MSB is 1, so negative.\\
+  Invert: \(00010100\), add 1: \(00010101_2=21\).\\
+  So value is \(\boxed{-21}\).
+
+  \item \textbf{Unsigned addition and overflow (4-bit)}\\
+  \(1111_2+1111_2=11110_2\).\\
+  4-bit stored result is lower 4 bits: \(\boxed{1110_2}\).\\
+  Carry out is 1, so \(\boxed{\text{overflow occurs}}\).
+
+  \item \textbf{2's complement addition and overflow (5-bit)}\\
+  (a) \(01001_2=+9,\ 01011_2=+11\).\\
+  Sum: \(10100_2\), interpreted as \(-12\).\\
+  Two positives produced negative \(\Rightarrow\) \(\boxed{\text{overflow}}\).\\
+  (b) \(10100_2=-12,\ 11010_2=-6\).\\
+  Sum: \(01110_2\), interpreted as \(+14\).\\
+  Two negatives produced positive \(\Rightarrow\) \(\boxed{\text{overflow}}\).
+
+  \item \textbf{Sign extension}\\
+  \(1101_2\) (4-bit 2's complement) has MSB \(=1\), so extend with 1s:\\
+  \(11111101_2\).\\
+  Decode: invert \(00000010\), add 1 \(\to 00000011\), so value is \(\boxed{-3}\).
+
+  \item \textbf{Bitwise operations}\\
+  \(A=00110110,\ B=00001111\).\\
+  (a) \(A\&B = 00000110\).\\
+  (b) \(A|B = 00111111\).\\
+  (c) \(A\oplus B = 00111001\).
+
+  \item \textbf{Bit mask tasks}\\
+  \(X=10110010_2\).\\
+  (a) Lowest 4 bits: use mask \(00001111\).\\
+  \(X\&00001111 = 00000010\).\\
+  (b) Clear lowest 2 bits: use mask \(11111100\).\\
+  \(X\&11111100 = 10110000\).\\
+  (c) Set highest 2 bits to 1: use mask \(11000000\).\\
+  \(X|11000000 = 11110010\).
+
+  \item \textbf{Logic/truth table and useful circuits}\\
+  (a) \(Y=(A+B)'\) (NOR):
+  \[
+  \begin{array}{c c|c}
+  A & B & Y\\\hline
+  0 & 0 & 1\\
+  0 & 1 & 0\\
+  1 & 0 & 0\\
+  1 & 1 & 0
+  \end{array}
+  \]
+  (b) 2:1 MUX equation: \(Y=\bar{S}I_0 + SI_1\).\\
+  With \(I_0=1, I_1=0\): \(Y=\bar{S}\).\\
+  So \(S=0\Rightarrow Y=1,\ S=1\Rightarrow Y=0\).\\
+  (c) Half adder: \(Sum=A\oplus B,\ Carry=A\cdot B\).\\
+  For \(A=1,B=1\): \(\boxed{Sum=0,\ Carry=1}\).
+\end{enumerate}
+
+\end{document}

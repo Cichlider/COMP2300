@@ -1,0 +1,3277 @@
+
+
+===== PAGE 1 =====
+Convener: Shoaib Akram
+shoaib.akram@anu.edu.au
+
+===== PAGE 2 =====
+Shoaib Akram
+School of Computing, (Jan 2020 – ), Senior Lecturer
+Ph.D., 2019 (Ghent, Belgium)
+1
+
+===== PAGE 3 =====
+Teaching
+§ COMP2300 (2023 – 2025), ENGN2219 (2021 – 2025)
+§ COMP2310 (2022 – 2023) Systems, Networks, & Concurrency
+§ Special Topics in Computer Systems, Computer
+Microarchitecture, 2022 – 2023
+§ Special Topics in Computer Systems: Parallel Computer
+Architecture (2025)
+2
+
+===== PAGE 4 =====
+Research
+§ PhD Research
+§ Memory management and computer architecture
+§ PhD Thesis: Optimizing the language runtime for hardware
+heterogeneity
+§ Current Research
+§ Efficient computer systems for data-intensive applications
+§ Information retrieval and databases
+§ Integrating new memory and storage technologies
+3
+
+===== PAGE 5 =====
+My Group’s Recent Work
+Jack Kilrain
+Ph.D. Student
+Adnan Hasnat
+Ph.D. Student
+And more …..
+4
+
+===== PAGE 6 =====
+My Group’s Recent WorkAustralian National University, School of Computing, 2026 onward
+Adnan Hasnat (Primary ANU Advisor)
+Joint/Dual Ph.D. agreement between ANU and Ruhr University Bochum (RUB)
+RUB Advisor: Yuval Yarom
+Thesis Topic: Hardware Security
+Honours Students (ANU)
+• Aditya Chilukuri (Graduation: semester 1, 2022) Bachelor of Advanced Computing
+• Hou (Harris) Loi (Graduation: semester 2, 2022) Bachelor of Advanced Computing
+• Jack Kilrain (Graduation: semester 2, 2022) Bachelor of Software Engineering
+• Junming Zhao (Graduation: semester 1, 2023) Bachelor of Engineering and Advanced Com-
+puting
+! University Medal for Academic Excellence
+• Anson Thai (Graduation: semester 1, 2024) Bachelor of Advanced Computing
+! University Medal for Academic Excellence
+• Adnan Hasnat (Graduation: semester 2, 2025) Bachelor of Advanced Computing
+! University Medal for Academic Excellence
+! Erin Brent Computer Science Prize for best honours result
+• Kshama Patel (Graduation: semester 2, 2025) Bachelor of Advanced Computing
+• Itay Yarom (Graduation: semester 2, 2026) Bachelor of Advanced Computing
+B.S. and M.S. Project Students
+• Arjun Sharma (2024, ANU, PhB Advanced Studies Course, 6 units)
+• Nicholas Arvanitellis (2024, ANU, PhB Advanced Studies Course, 6 units)
+• Yuki Misumi (2024, ANU, COMP8755, 12 units)
+5
+
+===== PAGE 7 =====
+PhD Advisor
+6
+
+===== PAGE 8 =====
+PhD Advisor
+7
+
+===== PAGE 9 =====
+PhD Advisor
+8
+
+===== PAGE 10 =====
+Systems @ ANU
+§ Computer Architecture
+§ Parallel Computer Architecture
+§ Systems, Networks, & Concurrency
+§ Compilers (+ Language Runtimes – 2026 S2)
+§ Operating Systems
+§ Computer Networks
+§ Parallel Systems
+9
+
+===== PAGE 11 =====
+Systems @ ANU
+§ Why do we “still” invest in systems?
+§ Advances in computer systems is the key enabler of modern
+applications (Big Data, AI/ML, social media platforms, search
+engines, communications, mobile apps, drones, among others)
+§ Renewed demand for more compute power and balancing it
+against cost and energy efficiency, and sustainability
+10
+
+===== PAGE 12 =====
+Logistics
+§ Course webpage: https://comp.anu.edu.au/courses/comp2300/
+§ Lectures (on the website)
+§ Lecture slides
+§ Lecture videos are available via Echo360
+§ Policies
+§ General conduct, assignment submissions, support, management,
+grading, late submissions
+§ Resources
+§ Frequently asked questions
+§ Writing design documents
+§ Stuff needed to finish the assignments
+11
+
+===== PAGE 13 =====
+Communication
+§ We will use Ed for
+§ Announcements
+§ Addressing your concerns
+§ Answering your questions
+§ Students are added automatically
+§ If not send an email to comp2300@anu.edu.au 12
+
+===== PAGE 14 =====
+Communication
+§ The course email is an alternative form of communication
+§ comp2300@anu.edu.au
+13
+
+===== PAGE 15 =====
+Tutorials
+§ Labs are an important component of this course (starting week 2)
+§ Handouts should be posted on the website
+§ Relationship to assessment
+§ 20% (Assignment 1)
+§ Midterm and Final exam questions (ARM assembly)
+§ Excellent tutors with deep technical knowledge of the subject
+§ Almost all of them have taken multiple courses in the systems
+& architecture specialization
+14
+
+===== PAGE 16 =====
+Lectures
+§ Go well beyond what is covered in the tutorials
+§ Exams (80%) mostly based on lectures
+§ Tutorials teach you how to build and program a
+simple computer to manage complexity
+§ Lectures will systematically build up from simple
+to a very complex, state-of-the-art, computer
+15
+
+===== PAGE 17 =====
+Assignment Submission
+§ Assignment submissions are handled via Gitlab
+§ You will learn about it in the labs
+§ Make a habit of using Gitlab properly!
+§ Push often, always pull the latest
+§ Extensions
+§ https://comp.anu.edu.au/courses/comp2300/policies/#extensions
+16
+
+===== PAGE 18 =====
+Assessment
+17
+
+===== PAGE 19 =====
+Textbook
+§ Freely (?) available online (check Ed or course webpage)
+§ I will post the chapters/sections on the Lectures page after the lecture
+18
+
+===== PAGE 20 =====
+COMP2300
+§ Asks a question
+§ Let’s give it a shot!
+19
+
+===== PAGE 21 =====
+COMP2300
+How does a computer
+actually work?
+20
+
+===== PAGE 22 =====
+COMP2300
+How does a computer
+work under the hood?
+21
+
+===== PAGE 23 =====
+COMP2300
+How does a computer work under the hood?
+High abstraction level Low abstraction level 22
+
+===== PAGE 24 =====
+COMP2300
+How does a computer work under the hood?
+High abstraction level Low abstraction level 23
+
+===== PAGE 25 =====
+COMP2300
+Let’s be more specific
+....
+24
+
+===== PAGE 26 =====
+COMP2300
+How does a computer
+perform a useful task?
+25
+
+===== PAGE 27 =====
+COMP2300
+How does a computer
+perform a wide variety
+of useful tasks?
+26
+
+===== PAGE 28 =====
+COMP2300
+How do we make a
+computer perform a
+wide variety of useful
+tasks?
+27
+
+===== PAGE 29 =====
+COMP2300
+How do we make
+electrons perform a
+wide variety of useful
+tasks?
+28
+
+===== PAGE 30 =====
+COMP2300
+How do we make
+electrons execute a
+wide variety of useful
+programs?
+29
+
+===== PAGE 31 =====
+How do we make electrons do the
+work?
+Problem Statement: “Save the planet”
+Devices
+30
+
+===== PAGE 32 =====
+How do we make electrons do the
+work?
+Problem Statement: “Save the planet”
+The Algorithm
+Devices
+31
+
+===== PAGE 33 =====
+How do we make electrons do the
+work?
+Problem Statement: “Save the planet”
+The Algorithm
+Program in a High-Level Language
+Devices
+32
+
+===== PAGE 34 =====
+How do we make electrons do the
+work?
+Problem Statement: “Save the planet”
+The Algorithm
+Program in a High-Level Language
+Instruction Set Architecture (ISA)
+Devices
+33
+
+===== PAGE 35 =====
+How do we make electrons do the
+work?
+Problem Statement: “Save the planet”
+The Algorithm
+Program in a High-Level Language
+Instruction Set Architecture (ISA)
+Microarchitecture
+Devices
+34
+
+===== PAGE 36 =====
+How do we make electrons do the
+work?
+Problem Statement: “Save the planet”
+The Algorithm
+Program in a High-Level Language
+Instruction Set Architecture (ISA)
+Microarchitecture
+Circuits
+Devices
+35
+
+===== PAGE 37 =====
+How do we make electrons do the
+work?
+Problem Statement: “Save the planet”
+The Algorithm
+Program in a High-Level Language
+Instruction Set Architecture (ISA)
+Microarchitecture
+Circuits
+Devices
+36
+
+===== PAGE 38 =====
+How do we make electrons do the
+work?
+§ Using a sequence of systematic transformations
+developed over many decades
+§ Each step must be studied and improved for the
+whole “compute stack” to work/operate
+efficiently
+37
+
+===== PAGE 39 =====
+Transformation Hierarchy
+§ We call the steps of the process: Levels of transformation OR
+transformation hierarchy
+Problem
+§ At each level of the stack, we have choices
+§ Many languages: Java, Python, Ruby, Scala, C++, C#
+§ ISAs: ARM, x86, SPARC, PowerPC, RISC-V
+§ Microarchitectures: Intel, AMD, IBM, Apple
+Algorithm
+Program
+Architecture
+micro-arch
+circuits
+§ If we ignore any of the steps, then we cannot
+§ Make the best use of computer systems
+§ Build the best system for a set of programs
+devices
+38
+
+===== PAGE 40 =====
+Computer Architecture
+Problem Statement: “Save the planet”
+The Algorithm
+Program in a High-Level Language
+Compiler and Third-Party Libraires/Binaries
+Operating System
+Instruction Set Architecture (ISA)
+Microarchitecture
+Circuits
+Devices
+Computer
+Architecture
+39
+
+===== PAGE 41 =====
+Hardware/Software Interface
+Problem Statement: “Save the planet”
+Software
+The Algorithm
+Program in a High-Level Language
+Compiler and Third-Party Libraires/Binaries
+ISA = Hw/Sw
+boundary/interface
+Operating System
+Instruction Set Architecture (ISA)
+Microarchitecture
+Circuits
+Devices
+Hardware
+Systems
+software
+40
+
+===== PAGE 42 =====
+ISA vs. Microarchitecture
+§ ISA: Specification of a set of definite instructions that the computer
+can carry out
+§ All computers (CPUs/microprocessors) perform the same set of
+basic instructions
+§ ADD, MULTIPLY, DIVIDE, MOVE, BRANCH
+§ Two manufacturers might differ in which set of basic instructions
+§ Microarchitecture: Implementation of the ISA using circuits
+41
+
+===== PAGE 43 =====
+ISA vs. Microarchitecture
+§ ISA: What the driver needs to know as he sits
+inside the automobile to make the automobile
+carry out the driver’s wishes
+§ If the middle pedal (brake) is pressed, the car
+stops
+§ Steering wheel, ignition key, the gears,
+windshield wipers
+§ Microarchitecture: What goes underneath the
+hood
+§ Different cost/performance tradeoffs
+§ Some are turbocharged. Some have disc
+brakes. Some cost a million $. Some are more
+fuel efficient than others 42
+
+===== PAGE 44 =====
+Defining Computer Architecture
+§ Traditional view
+§ Design of a computer system including instruction set
+architecture and organization (microarchitecture)
+§ What we will cover in this course
+§ Traditionally what computer architects do
+§ But modern realities require architects to take a more
+expanded view of building and optimizing computer systems
+43
+
+===== PAGE 45 =====
+Modern Computer Architecture
+§ Traditional view
+§ Design of a computer system including instruction set
+architecture and organization (microarchitecture) and ISA
+§ Modern (expanded) view
+§ Cross-layer design: co-design across the transformation
+hierarchy or compute stack
+§ From algorithms to devices
+44
+
+===== PAGE 46 =====
+Transformation Hierarchy
+Problem
+Algorithm
+Program/Language
+System Software
+SW/HW Interface
+Computer Architecture
+(expanded view)
+Micro-architecture
+Computer Architecture
+(narrow view)
+Circuits
+Devices
+45
+
+===== PAGE 47 =====
+Approach: Cross Layer Design
+To achieve the highest efficiency,
+performance, robustness:
+we must take the expanded view
+of computer architecture
+Broad research
+spanning applications, systems, software, logic, circuits
+with architecture at the center
+
+===== PAGE 48 =====
+Approach: Cross Layer Design
+To achieve the highest efficiency,
+performance, robustness:
+we must take the expanded view
+Problem
+Algorithm
+of computer architecture
+Program/Language
+Co-design across the hierarchy:
+Algorithms to devices
+System Software SW/HW Interface
+Micro-architecture
+Circuits
+Devices
+Specialize as much as possible
+within the design goals
+Broad research
+spanning applications, systems, software, logic, circuits
+47
+with architecture at the center
+
+===== PAGE 49 =====
+Modern Computer Architecture
+§ is the science and art of designing computing platforms
+(hardware, interface, system software, and programming model)
+§ to achieve a set of design goals
+§ E.g., highest performance on earth on workloads X, Y, Z
+§ E.g., longest battery life at a form factor that fits in your pocket with cost < $$$ AUD
+§ E.g., best average performance across all known workloads at the
+best performance/cost ratio
+§
+…
+§ Designing a supercomputer is different from designing a
+smartphone à But, many fundamental principles are similar
+48
+
+===== PAGE 50 =====
+Different Platforms, Different Goals
+49
+
+===== PAGE 51 =====
+Different Platforms, Different Goals
+50
+
+===== PAGE 52 =====
+Different Platforms, Different Goals
+51
+
+===== PAGE 53 =====
+Different Platforms, Different Goals
+52
+
+===== PAGE 54 =====
+Different Platforms, Different Goals
+Jouppi et al., “In-Datacenter Performance Analysis of a Tensor Processing Unit”, ISCA 2017.
+53
+
+===== PAGE 55 =====
+Different Platforms, Different Goals
+New ML applications (vs. TPU3):
+• Computer vision
+• Natural Language Processing (NLP)
+• Recommender system
+• Reinforcement learning that plays Go
+250 TFLOPS per chip in 2021
+vs 90 TFLOPS in TPU3
+1 ExaFLOPS per board
+https://spectrum.ieee.org/tech-talk/computing/hardware/heres-how-googles-tpu-v4-ai-chip-stacked-up-in-training-tests54
+
+===== PAGE 56 =====
+Different Platforms, Different Goals
+55
+
+===== PAGE 57 =====
+Different Platforms, Different Goals
+n ML accelerator: 260 mm2, 6 billion transistors, 600
+GFLOPS GPU, 12 ARM 2.2 GHz CPUs.
+n Two redundant chips for better safety.
+56
+
+===== PAGE 58 =====
+Many Other AI/ML Chips in
+Production
+§ Alibaba
+§ Amazon
+§ Facebook
+§ Google
+§ Huawei
+§ Intel
+§ Microsoft
+§ NVIDIA
+§ Tesla
+§ Many Others and Many Startups are Building Their Own Chips…
+§ Many More to Come…
+57
+
+===== PAGE 59 =====
+x2
+x10
+2,560-DPU Processing-in-Memory
+Host
+CPU 0
+Host
+CPU 1
+Main Memory
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+System
+DRAM
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM-enabled
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+memory
+PIM-enabled Memory
+PIM-enabled
+Main Memory
+memory
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM
+Chip
+PIM-enabled Memory
+PIM-enabled
+memory
+CPU 1
+DRAM
+Chip
+DRAM
+Chip
+PIM
+Chip
+PIM
+Chip
+DRAM
+Chip
+DRAM
+Chip
+PIM
+Chip
+PIM
+Chip
+x2
+DRAM
+CPU 0
+x10
+PIM-enabled
+memory
+58
+https://arxiv.org/pdf/2105.03814.pdf
+
+===== PAGE 60 =====
+2,560-DPU Processing-in-Memory
+System
+59
+
+===== PAGE 61 =====
+Computer Architecture Today
+Problem
+New demands
+from the top
+(Look Up)
+Algorithm
+Program/Language
+System
+Software
+ISA
+Microarchitecture
+Many new issues and opportunities
+at the bottom
+(Look Down)
+Circuits
+Devices
+60
+
+===== PAGE 62 =====
+Our Major Goals
+§ Understand the basics and principles of design in computer
+architecture
+§ Learn how a general purpose computer (CPU) works
+§ Evaluate tradeoffs of different designs and ideas
+§ Implement your own designs
+§ Enable you to come up with novel out-of-box ideas
+61
+
+===== PAGE 63 =====
+Two Recurring Themes
+§ The notion of abstraction
+§ Hardware + software = computer system
+62
+
+===== PAGE 64 =====
+The Notion of Abstraction
+§ Abstraction: Know components from a high level of detail
+No human (programmer) can track
+10 billion elements. Computer systems
+work because of abstraction!
+Apple M1 Chip
+Billions of transistors
+All working in parallel
+63
+
+===== PAGE 65 =====
+The Notion of Abstraction
+§ Abstraction: View the world from a higher level
+§ Focus on the important aspects
+§ It is a way to enhance productivity and efficiency
+64
+
+===== PAGE 66 =====
+The Notion of Abstraction
+§ We will raise the level of abstraction in this course
+every couple weeks
+§ We start from the ground (up) because this is how
+computers have evolved
+§ Each layer in the transformation hierarchy is an
+abstraction layer
+§ The ability to un-abstract or deconstruct is an
+important one
+Problem
+Algorithm
+Program
+Architecture
+micro-arch
+circuits
+devices
+65
+
+===== PAGE 67 =====
+Hardware versus Software
+§ Hardware
+§ CPU, memory, storage device, disk, SSD, network card, USB
+device, AI accelerator, FPGA, PLA, motherboard, PCI express
+bus, SATA drive
+§ Software
+§ Programs, operating systems, compilers, virtual machines,
+device drivers,
+§ One view: Ok to be an expert at one of these
+66
+
+===== PAGE 68 =====
+Hardware versus Software
+§ Hardware and Software
+§ Two interacting parts of the computer system
+§ Knowing the capabilities and limitations of each leads
+to better overall systems
+67
+
+===== PAGE 69 =====
+Hardware-Software Interplay
+╳
+Requirements
+Software
+Applications
+Hardware
+Systems
+Opportunities
+68
+
+===== PAGE 70 =====
+Hardware-Software Interplay
+§ Many important and emerging applications are data-intensive
+services
+§ It is easier and convenient to produce data than to process,
+analyze, and store it
+§ This trend of producing data at high velocity is driving new
+applications and correspondingly novel hardware
+Requirements
+Software
+Applications
+Hardware
+Systems
+Opportunities
+69
+
+===== PAGE 71 =====
+Why are there so many
+hardware choices?
+70
+
+===== PAGE 72 =====
+Hardware: General Purpose vs. Special
+Purpose
+CPUs
+General Purpose Special Purpose
+GPUs FPGAs ASICs
+Common
+building
+block of
+computers
+Apple M1 Nvidia GTX 1070 Xilinx Spartan
+Cerebras WSE-2
+Flexible: Can execute any program
+Easy to program & use
+Not the best performance & efficiency
+C/C++/Java/...
+Efficient & High performance
+(Usually) Difficult to program & use
+Inflexible: Limited set of programs
+Domain-specific, special purpose languages
+71
+
+===== PAGE 73 =====
+General Purpose vs. Special Purpose
+General Purpose Special Purpose
+Flexible: Can work with any bolt
+Easy to use
+Not the best fit, results or efficiency Efficient & High performance
+(Usually) Difficult to use
+Inflexible: Only for fitting bolts
+72
+
+===== PAGE 74 =====
+Two Key Ideas
+§ Key components of a computer are the same
+§ All computers can compute the same things
+73
+
+===== PAGE 75 =====
+Idea 1: Key components are same
+Council Bluffs, Iowa
+data center, Google
+(115, 000 sq. feet)
+Self-flying nano drone
+94 milli-watts
+Research server for my
+students with special memory
+& storage devices 74
+
+===== PAGE 76 =====
+A Canonical Computer System
+§ Most computer systems can be viewed as below
+§ Key resources: CPU, memory, I/O devices, storage
+§ CPU (processor/microprocessor) does the actual computation
+§ Processor can access memory much faster than storage
+I/O Peripherals
+Main Memory
+Storage
+75
+
+===== PAGE 77 =====
+Idea 1: Key components are same
+§ Key Idea 1: All computer systems, big or small, have a few
+fundamental components
+§ Microprocessor (processor or central processing unit or
+CPU) for doing computation
+§ Main memory for storing temporary information and
+program data close to the processor
+§ Storage devices (disks or SSDs) for storing long-term or
+persistent information
+§ I/O devices to communicate with the external environment
+§ Sensors
+§ Peripherals
+76
+
+===== PAGE 78 =====
+Idea 2: They all can solve the same
+problems
+§ Key Idea 2: All computers regardless of size, cost, and speed
+can compute the same things if they are given enough time
+and memory
+§ Anything a fast computer can do, a slow computer can do
+77
+
+===== PAGE 79 =====
+Computer = Universal Computational Device
+§ Anything that can be computed, can be computed by a
+computer provided it has enough time and enough memory
+§ We instruct the computer how to do X, and it obliges by
+interpreting our instructions
+§ Instructions are stored in memory like regular data
+§ Computer is programmable because we can rewrite
+instructions to make it do something else
+78
+
+===== PAGE 80 =====
+Computer = Universal Computational Device
+§ The idea of a universal computational device is due
+to Alan Turing (1937)
+§ He gave the mathematical description of the Turing
+machine
+§ A particular kind of machine called the Turing
+machine can carry out all computations
+79
+
+===== PAGE 81 =====
+Computer = Universal Computational Device
+§ First, we have two simple example Turing machines
+§ One for addition, and one for multiplication
+§ What we now call a computer is a Turing machine that can
+simulate all Turing machines
+§ What does it need as inputs?
+§ Inputs and the description of the Turing machine to simulate
+§ We say that Turing machines are programmable
+§ Hence, computers are programmable
+80
+
+===== PAGE 82 =====
+Course Plan
+§ Navigate the transformation hierarchy
+§ Bottom-up ✓
+§ Top-down
+81
+
+===== PAGE 83 =====
+Course Plan
+82
+
+===== PAGE 84 =====
+Course Plan
+Software
+Hardware ISA is the boundary
+(Contract)
+83
+
+===== PAGE 85 =====
+Course Plan
+C Program
+Assembly
+Machine
+Code
+01010010
+10101010
+10101001
+10000011
+Memory
+int z = z + 1;
+for (...) {
+compiler
+assembler
+Software
+Hardware ISA is the boundary
+(Contract)
+84
+
+===== PAGE 86 =====
+Course Plan
+C Program
+Assembly
+Machine
+Code
+01010010
+10101010
+10101001
+10000011
+Memory
+int z = z + 1;
+for (...) {
+compiler
+assembler
+Software
+Hardware ISA is the boundary
+(Contract)
+Instructions stored as 0’s and 1’s
+CPU
+85
+
+===== PAGE 87 =====
+Course Plan
+C Program
+Assembly
+Machine
+Code
+01010010
+10101010
+10101001
+10000011
+Memory
+int z = z + 1;
+for (...) {
+compiler
+assembler
+Software
+Hardware ISA is the boundary
+(Contract)
+Instructions stored as 0’s and 1’s
+Fetch, decode, execute
+an instruction every clock cycle
+CPU
+86
+
+===== PAGE 88 =====
+Course Plan
+C Program
+Assembly
+Machine
+Code
+int z = z + 1;
+for (...) {
+compiler
+assembler
+Software
+Hardware ISA is the boundary
+(Contract)
+01010010
+10101010
+10101001
+10000011
+Memory
+Assignment 1: Build CPU
+Instructions stored as 0’s and 1’s
+Fetch, decode, execute
+an instruction every clock cycle
+CPU
+87
+
+===== PAGE 89 =====
+Old Course Plan
+C Program
+Assembly
+Machine
+Code
+int z = z + 1;
+for (...) {
+compiler
+assembler
+Assignment 2: Program CPU
+Software
+Hardware ISA is the boundary
+(Contract)
+01010010
+10101010
+10101001
+10000011
+Memory
+Assignment 1: Build CPU
+Instructions stored as 0’s and 1’s
+Fetch, decode, execute
+an instruction every clock cycle
+CPU
+88
+
+===== PAGE 90 =====
+Academic Integrity
+§ Please follow the best practice guidelines in the
+assessment handout and policies
+§ AI use is permitted with acknowledgement
+§ Rubric will dictate max. grade with AI use
+§ Not a big issue for COMP2300
+§ Closed-book exams account for 80% of the grade
+§ COMP2300 is known for upholding integrity!
+89
+
+===== PAGE 91 =====
+2026 Course Plan
+C Program
+Assembly
+Machine
+Code
+int z = z + 1;
+for (...) {
+compiler
+assembler
+Assignment 2: Program CPU
+Software
+Hardware ISA is the boundary
+(Contract)
+01010010
+10101010
+10101001
+10000011
+Memory
+Assignment 1: Build CPU
+Instructions stored as 0’s and 1’s
+Fetch, decode, execute
+an instruction every clock cycle
+CPU
+90
+
+===== PAGE 92 =====
+2026 Course Plan
+C Program
+Assembly
+Machine
+Code
+int z = z + 1;
+for (...) {
+compiler
+assembler
+Assembly in Labs
+New labs
+New exam questions
+Software
+Hardware ISA is the boundary
+(Contract)
+01010010
+10101010
+10101001
+10000011
+Memory
+Assignment 1: Build CPU
+Instructions stored as 0’s and 1’s
+Fetch, decode, execute
+an instruction every clock cycle
+CPU
+91
+
+===== PAGE 93 =====
+2026 Course Plan
+§ Assembly practice in the labs after
+assignment 1 submission
+§ New labs focusing on advanced CPU
+(computer) design
+§ New exam questions replacing old
+assignment 2
+92
+
+===== PAGE 94 =====
+Why Study Computer architecture ?
+§ Hardware is increasingly heterogeneous
+§ Programmers today need a good understanding of what the
+hardware offers
+Past Systems
+Microprocessor Main Memory Storage (SSD/HDD)
+93
+
+===== PAGE 95 =====
+Why Study Computer architecture ?
+§ Programmers today need a good understanding of what the hardware offers
+FPGAs
+Modern systems
+Hybrid Main Memory
+Heterogeneous
+Processors and
+Accelerators
+Persistent Memory/Storage
+(General Purpose) GPUs
+94
+
+===== PAGE 96 =====
+Why Study Computer architecture ?
+§ Programming models are domain-specific
+§ New ML/AI accelerators
+§ Programming models intertwined with hardware details
+§ No luxury of a commodity language
+95
+
+===== PAGE 97 =====
+New Important Metrics
+§ Traditional metrics to evaluate a computer
+§ Performance
+§ Energy efficiency
+§ Battery life
+§ Cost
+96
+
+===== PAGE 98 =====
+New Important Metrics
+§ Today, we care a lot about
+§ Reliability
+§ Sustainability
+§ Security
+97
+
+===== PAGE 99 =====
+Sustainability
+§ Sustainability is an important concern
+§ ICT contribution to global GHG emissions around 4%, and
+increasing
+§ Need to understand emissions during manufacturing of
+computers and in deployment
+§ Sustainability is the latest sub-area in the field of computer
+architecture
+98
+
+===== PAGE 100 =====
+Security Demands Robust Hardware
+§ Security is desirable over raw performance in many
+environments
+§ Recent cyber attacks target vulnerabilities in CPU design
+§ Speculative execution reveals secrets
+§ Today’s hardware built for performance
+§ Need to consider security as a first principle in design
+99
+
+===== PAGE 101 =====
+Why Study Computer architecture ?
+§ Writing compilers, operating systems, virtual
+machines
+100
+
+===== PAGE 102 =====
+Why Study Computer architecture ?
+§ Writing compilers, operating systems, virtual
+machines
+§ Programming embedded computers
+§ Nano drones, IoT devices, wearable computing
+101
+
+===== PAGE 103 =====
+Why Study Computer architecture ?
+§ Writing compilers, operating systems, virtual
+machines
+§ Programming embedded computers
+§ Nano drones, IoT devices, wearable computing
+§ Debugging performance issues better than the
+average programmer
+102
+
+===== PAGE 104 =====
+Our Ultimate Goals
+§ Make you think broadly about computing
+§ Make you think critically
+§ Give INSIGHT
+103
+
+===== PAGE 105 =====
+Some Comments from Previous Years
+§ COMP2300 is “empowering”
+§ “After building the CPU, I know exactly what my program is doing”
+§ “When I engage with a computer expert, I know what they are
+talking about”
+§ “I use the knowledge of modern processors from this course every
+single day” Now a Security professional
+104
+
+===== PAGE 106 =====
+Some Comments from Previous Years
+§ Genuinely the best course I have taken yet - the content was
+really well structured, eg. the transition from circuits to then
+assembly coding just made so much sense. There was a real
+sense of satisfaction at the end of assignment 1, looking at
+how I could understand every individual part of the CPU we
+built. The lectures expanded on the knowledge that was
+taught in labs, which helped to solidify the concepts. Also, I
+liked how the assignments built upon the labs, as it gave a lot
+of incentive to stay on top of course work. The content is fun
+too, looking forward to comp2310.
+105
+
+===== PAGE 107 =====
+Some Comments from Previous Years
+§ How the course starts from scratch and progressively
+abstracts and builds upon concepts to build strong intuition in
+complex topics. The high quality of explanations in lectures,
+and the support from tutors and the course conveners on Ed
+and in labs. The assignment tasks were awesome, especially
+for the opportunity they provided to take on extension tasks.
+the exam was excellently designed. Everything about this
+course is great.
+106
+
+===== PAGE 108 =====
+Some Comments from Previous Years
+§ This is easily the best, most interesting and well-structured
+course I have done in the two years I've spent at ANU. I
+definitely have learnt a lot about computers and how they
+execute programs under the hood. The assignments were
+quite interesting and I particularly enjoyed making my own
+CPU and building a snake game on the microbit. I couldn't
+emphasise any more about how great this course was in my
+experience, Shoaib was great he often swiftly replied on ed
+and emails and seemed to actually care about student
+wellbeing and how students were interpreting the course
+material.
+107
+
+===== PAGE 109 =====
+Some Comments from Previous Years
+§ Out of my many years at ANU, this course is definitely in my
+top 3 favourite courses. The content was taught in a well
+thought out manner that structurally built upon itself at a
+reasonable pace. Additionally, the content was taught in an
+engaging manner, I particularly liked how the assignments
+were done. Shoaib's explanations in the lectures where really
+good, he took an appropriate amount of time explaining
+concepts and even explained the same concept in different
+styles which greatly helped with my understanding of a
+complicated topic.
+108
+
+===== PAGE 110 =====
+Some Comments from Previous Years
+§ The content was extremely interesting, and it was very well
+taught. Shoaib was a great lecturer, and clearly understood
+what he was teaching us very well. He was also pretty funny
+lol.
+109
+
+===== PAGE 111 =====
+110
+
+===== PAGE 112 =====
+Representing Information
+111
+
+===== PAGE 113 =====
+Representing Information
+§ Continuous or analog variables/signals can take an
+infinite number of values
+§ Frequency of oscillation
+§ Pressure
+§ Position
+§ Volume
+112
+
+===== PAGE 114 =====
+Analog Signals
+§ What do we mean by “analog” signals?
+§ Let’s look at some examples
+113
+
+===== PAGE 115 =====
+Representing Information: Analog
+§ Mercury’s volume represents temperature
+114
+
+===== PAGE 116 =====
+Representing Information: Analog
+§ Position of needle represents weight
+115
+
+===== PAGE 117 =====
+Representing Information: Analog
+§ Modulated grooves on vinyl record represent sound
+116
+
+===== PAGE 118 =====
+Representing Information: Analog
+§ Chemical properties of film represent captured image
+117
+
+===== PAGE 119 =====
+Representing Information: Analog
+§ Measuring things and storing data by analogy has been
+the predominant approach in history
+§ Analog signals are called analog because they are
+directly proportional to the original information they
+represent (and can take an infinite # values)
+§ The term analog comes from the Greek word
+"analogos" which means "proportional"
+118
+
+===== PAGE 120 =====
+Problem with Analog Approach
+§ Using continuous variables to represent information
+is hard for the computer to deal with
+§ Sometimes difficult to measure precisely
+§ Difficult to store
+§ Difficult to copy
+119
+
+===== PAGE 121 =====
+This Course Uses Digital Approach
+§ If we don’t want to represent data as something
+with potentially infinitely varying analog values,
+what can we do?
+§ Use the Digital approach
+§ Represent information using discrete steps rather
+than continuous variation
+120
+
+===== PAGE 122 =====
+This Course Uses Digital Approach
+§ Digital Systems represent information
+with discrete-valued variables
+§ Discrete variables can have a finite
+number of distinct values
+121
+
+===== PAGE 123 =====
+Early Digital System
+§ Charles Babbage’s analytical engine used ten
+discrete values
+§ Used mechanical parts such as gears with ten
+positions 0 – 9
+122
+
+===== PAGE 124 =====
+Digital Approach
+§ Modern digital systems use a binary (two-valued)
+representation
+0 1
+§ Digital designers can focus on 1’s and 0’s without
+worrying about the physical realization of such variables
+123
+
+===== PAGE 125 =====
+Binary Representation
+§ High voltage: Presence of “something” meaning 1
+§ Low voltage: Absence of “something” meaning 0
+0 1
+§ As we will see precise voltage levels do not matter
+124
+
+===== PAGE 126 =====
+Another Binary Representation
+0 1
+125
+
+===== PAGE 127 =====
+With “some” effort, one can build a
+computer using billions of coca colas
+But there is not a big market for
+Cola Computers.
+126
+
+===== PAGE 128 =====
+§ Computer systems & architecture
+is closer to engineering than
+science
+§ Practicality and cost-efficiency are
+primary concerns
+127
+
+===== PAGE 129 =====
+Why do Computers Use Voltage?
+§ Mechanical parts are not easy to scale to do large
+computations – circa 1850 Babbage engine
+§ Some 1964 computers (CDC 6600 & IBM 360)
+§ 2020 Apple M1 400 mm2 and 16 billion transistors
+128
+
+===== PAGE 130 =====
+Representing Large Sets in Binary
+§ We need more than 0 and 1 to represent large
+quantities and sets
+§ Data is represented using a sequence of symbols
+where each symbol is 0 or 1
+129
+
+===== PAGE 131 =====
+Binary Representation
+§ Digital systems internally use “voltages” for representing
+binary variables
+→ Low voltage means 0
+→ High voltage means 1
+B I N A R Y D I G I T
+§ A bit is a unit of information
+§ A binary variable represents one bit of information
+§ To represent discrete sets with more than two elements, we
+combine multiple bits into a binary code 130
+
+===== PAGE 132 =====
+Binary Codes
+§ Suppose we want to represent 4 colors: {red, blue, green, black}
+§ How many bits of information do I need?
+§ (00, 01, 10, 11)
+§ The assignment of the 2-bit binary code to colors is ad-hoc
+§ Also legitimate is: (10, 11, 00, 01)
+§ How many bits of information do we need to represent the
+alphabet set in English?
+§ For 26 alphabets, we need 5 bits
+131
+
+===== PAGE 133 =====
+Information Content in a Binary Code
+§ Amount of information in a discrete variable with
+N states
+D = 𝐿𝑜𝑔2 𝑁 𝑏𝑖𝑡𝑠
+§ If C is a variable representing four colors in the
+color set
+§ We say that C has or caries two bits of
+information
+§ A variable A represents the English alphabet
+§ It contains 5 bits of information
+132
+
+===== PAGE 134 =====
+Why do computers use binary?
+§ Two symbols enable simplified hardware and
+improved reliability
+§ Keep complexity and cost under control
+§ Easy to use transistor as a switch!
+§ We will see later
+133
+
+===== PAGE 135 =====
+TRUE and FALSE
+0 1
+F T
+False
+True
+Off
+On
+§ True and False are called logical values
+§ Logical variable is one that can be 1
+or 0 (True or False)
+134
+
+===== PAGE 136 =====
+Number Systems
+135
+
+===== PAGE 137 =====
+Decimal Number System
+§ Base 10 means 10 digits (0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+§ Multiple digits form longer decimal numbers
+§ Each column of a decimal number has 10 times the
+weight of the previous column
+1000’s column
+100’s column
+10’s column
+1’s column
+coefficient
+power of 10
+9742 = 9 X 103 + 7 X 102 + 4 X 101 + 2 X 100
+nine
+thousands
+seven
+hundreds
+four
+two
+tens
+ones
+136
+
+===== PAGE 138 =====
+Range of Decimal Numbers
+§ An N-digit decimal number represents one of
+10N possibilities
+§ 0, 1, 2, 3, ..., 10N – 1
+§ 3 digits: 1000 possibilities in the range 0 – 999
+137
+
+===== PAGE 139 =====
+Binary Numbers
+§ Base 2 means 2 digits (0, 1)
+§ Multiple bits form longer binary numbers
+§ Each column of a binary number has 2 times the
+weight of the previous column
+coefficient
+4’s column
+8’s column
+1’s column
+2’s column
+power of 2
+1001 = 1 X 23 + 0 X 22 + 0 X 21 + 1 X 20
+one
+eight
+one
+four
+zero
+two
+one
+one
+138
+
+===== PAGE 140 =====
+Range of Binary Numbers
+§ An N-bit binary number represents one of 2N
+possibilities
+§ 0, 1, 2, 3, ..., 2N – 1
+§ 3 bits: 8 (= 2 X 2 X 2) possibilities in the range 0 – 7
+§ 4 bits: ?
+§ 5 bits: ?
+§ 10 bits: ?
+139
+
+===== PAGE 141 =====
+Powers of 2
+Columns # Power of 2 Weight
+0 20 1
+1 21 2
+2 22 4
+3 23 8
+4 24 16
+5 25 32
+6 26 64
+7 27 128
+8 28 256
+9 29 512
+Columns # Power of 2 Weight
+10 210 1024
+11 211 2048
+12 212 4096
+13 213 8192
+14 214 16384
+15 215 32768
+16 216 65536
+Kilo
+140
+
+===== PAGE 142 =====
+Powers of 2
+Power of 2 Decimal Value Abbreviation
+210 1024 Kilo (K)
+220 1048576 Mega (M)
+230 1073741824 Giga (G)
+What is 224 in decimal?
+§ 220 X 24 = 1 M X 16 = 16 M
+What is 217 in decimal?
+§ 210 X 27 = 1 K X 128 = 128 K
+~ 1000
+~ 1000, 000
+~ 1000, 000, 000
+141
+
+===== PAGE 143 =====
+Terminology
+Byte
+Nibble
+Word
+§ 8 bits
+§ 4 bits
+§ Machine-dependent
+§ 8 – 16 bits (gadgets)
+§ 32 – 64 bits (high-end)
+Most Significant Bit
+1 0 The bit in the highest position
+Least Significant Bit
+1
+0 0 0 0 0
+0 0
+0 0 0 1
+0 1
+The bit in the lowest position
+142
+
+===== PAGE 144 =====
+Terminology
+Most Significant Byte
+0
+0 0 0
+0 0 0 1
+0
+0 0 0
+The byte in the highest position
+Least Significant Byte
+0
+0 0 0
+0 0 0 1
+0
+0 0 0
+The byte in the lowest position
+0 0 0 0 0 1
+0 1
+143
+
+===== PAGE 145 =====
+Rev: Binary Codes
+Column weight
+Column #
+§ Write combinations in a systematic way
+§ Note how often the bit flips in each column
+§ Can represent an arbitrary set with a binary code
+22 21 20
+2 1 0
+0 0 0
+0 0 1
+0 1 0
+0 1 1
+1 0 0
+1 0 1
+1 1 0
+1 1 1
+3-bit
+8 elements
+144
+
+===== PAGE 146 =====
+Rev: Binary Codes
+0 0 0 0 0 0 0
+0 0
+0 0 0
+0 0 1
+0 1
+0 0 1
+0 1 1-bit
+2 elements
+1 0
+0 1 0
+0 1 1 1
+0 1 1
+0 1 2-bit
+4 elements
+1 0 0
+0 1 1 0 1
+1 0 1 1 0
+1 0 1 1 1
+1 0 3-bit
+8 elements
+1 0 1 1 1 1 § Write combinations in a systematic way
+§ Note how often the bit flips in each column
+§ Can represent an arbitrary set with a binary code
+1 1 1 1 0 0
+0 1
+1 0
+1 1
+0 0
+0 1
+1 0
+1 1
+0 0
+0 1
+1 0
+1 1
+0 0
+0 1
+1 0
+1 1
+4-bit
+16 elements
+145
+
+===== PAGE 147 =====
+Decimal to Binary Conversion
+Method # 1: Find the largest power of 2, subtract, and repeat
+Example: Convert 5310 to binary
+53 32 X 1
+53 – 32 = 21 16 X 1
+21 – 16 = 5 4 X 1
+5 – 4 = 1 1 X 1
+25 24 23 22 21 20
+1 1 0 1 0 1
+146
+
+===== PAGE 148 =====
+Decimal to Binary Conversion
+Method # 2: Repeatedly divide by 2, remainder goes in each
+column
+Example: Convert 5310 to binary
+53/2 = 26 R: 1
+26/2 = 13 R: 0
+13/2 = 6 R: 1
+6/2 = 3 R: 0
+3/2 = 1 R: 1
+1/2 = 0 R: 1
+25 24 23 22 21 20
+1 1 0 1 0 1
+147
+
+===== PAGE 149 =====
+Hexadecimal Numbers
+Motivation: Tedious and error-prone to write long
+binary numbers
+Hexadecimal or base 16: A group of four bits
+represent 24 or 16 possibilities
+16 digits: 0 – 9, A, B, C, D, E, F
+Column weights: 1, 16, 162 (or 256), 163 (or 4096)
+148
+
+===== PAGE 150 =====
+Hex Digit Decimal Equivalent Binary Equivalent
+0 0 0000
+1 1 0001
+Hexadecimal
+2 2 0010
+3 3 0011
+4 4 0100
+Numbers
+5 5 0101
+6 6 0110
+7 7 0111
+8 8 1000
+9 9 1001
+A 10 1010
+B 11 1011
+C 12 1100
+D 13 1101
+E 14 1110
+F 15 1111
+149
+
+===== PAGE 151 =====
+Binary to Hexadecimal
+Binary 1 1 1 1 0 1 1 1
+Hexa F 7
+Binary 1 1 1 1 1 1 1 0
+Hexa F E
+150
+
+===== PAGE 152 =====
+Hexadecimal to Binary
+Hexa D 7 4 1
+Binary 1 1 0 1 0 1 1 1 0 1 0 0 0 0 0 1
+151
+
+===== PAGE 153 =====
+Binary Addition
+carries
+1 1
+4 2 7 7
++ 5 4 9 9
+1 1
+1 0 1 1
++ 0 0 1 1
+9 7 7 6
+1 1 1 0
+Decimal
+Addition
+Binary
+Addition
+1 + 1 = 2 (10 in binary), but a binary variable
+can either be 0 or 1
+§ We record the 1’s digit (0), and carry
+the 2’s digit (1) over to the next
+column
+1 + 1 + 1 = 3 (11 in binary), but a binary
+variable can either be 0 or 1
+§ We record the 1’s digit (1), and carry
+the 2’s digit (1) over to the next
+column
+152
+
+===== PAGE 154 =====
+Overflow
+§ A = 1111 and B = 1111
+§ A + B does not fit in the largest value four
+bits can represent
+§ Overflow: When the result is too big
+to fit inside the available bits
+§ Detection: If there is a carry bit out of
+the most significant column
+1 1 1
+1 1 1 1 15
++ 1 1 1 1 15
+1 1 1 1 0 30
+153
+
+===== PAGE 155 =====
+Signed Binary Numbers
+154
+
+===== PAGE 156 =====
+Signed Binary Numbers
+§ We need both positive and negative
+numbers to solve real-world problems
+§ How do we make a string of 1 and 0
+represent both positive and negative
+numbers?
+§ If we write all possible combinations
+of 0 and 1 in a disciplined fashion,
+maybe we can find a way
+least significant
+Most significant
+bit
+bit
+0 0 0
+0 0 1
+0 1 0
+0 1 1
+1 0 0
+1 0 1
+1 1 0
+1 1 1
+155
+
+===== PAGE 157 =====
+Signed Binary Numbers
+§ Use the most significant bit to
+represent the sign: 0 means positive
+and 1 means negative
+§ N bit sign/magnitude system: 1 bit for
+sign and N – 1 bits for magnitude
+(absolute)
+Decimal
+0 0 0 +0
+0 0 1 +1
+0 1 0 +2
+0 1 1 +3
+1 0 0 -0
+1 0 1 -1
+1 1 0 -2
+1 1 1 -3
+156
+
+===== PAGE 158 =====
+Drawbacks of Sign/Mag Rep.
+§ Ordinary binary addition does not work for
+sign/magnitude numbers
+§ What is the sum of +3 and -3 and does the
+result make sense?
+§ Zero has two representations (awkward)
+Decimal
+0 0 0 +0
+0 0 1 +1
+0 1 0 +2
+0 1 1 +3
+1 0 0 -0
+1 0 1 -1
+1 1 0 -2
+1 1 1 -3
+157
+
+===== PAGE 159 =====
+One’s Complement
+§ 1’s complement was tried in early computers,
+such as, Control Data Corporation (CDC) 6600
+§ Negative number: Flip all bits of the binary
+representation of a positive integer
+§ Suffers from the same problems as the
+sign/magnitude representation
+Decimal
+0 0 0 +0
+0 0 1 +1
+0 1 0 +2
+0 1 1 +3
+1 0 0 -3
+1 0 1 -2
+1 1 0 -1
+1 1 1 -0
+158
+
+===== PAGE 160 =====
+Two’s Complement
+§ A third system of representation for signed integers
+§ Ordinary addition works
+§ There is a single representation for zero
+§ Used in almost all computers today
+159
+
+===== PAGE 161 =====
+Problem: If A + B = C, and A is
+known, then find B, such that
+C = 0
+Binary Decimal
+A = 0 1 0 1 ?
++ B = ? ? ? ? ?
+C = 0 0 0 0 0
+160
+
+===== PAGE 162 =====
+Problem: If A + B = C, and A is
+known, then find B, such that
+C = 0
+Binary Decimal
+A = 0 1 0 1 + B = ? ? ? ? ?
++5
+C = 0 0 0 0 0
+161
+
+===== PAGE 163 =====
+Problem: If A + B = C, and A is
+known, then find B, such that
+C = 0
+Binary Decimal
+A = 0 1 0 1 + B = ? ? ? ? +5
+-5
+C = 0 0 0 0 0
+162
+
+===== PAGE 164 =====
+Problem: If A + B = C, and A is
+known, then find B, such that
+C = 0
+Binary Decimal
+A = 0 1 0 1 + B = 1 0 1 1 +5
+-5
+C = 0 0 0 0 0
+163
+
+===== PAGE 165 =====
+Problem: If A + B = C, and A is
+known, then find B, such that
+C = 0
+What is the relationship between A and B?
+Binary Decimal
+A = 0 1 0 1 + B = 1 0 1 1 +5
+-5
+C = 0 0 0 0 0
+164
+
+===== PAGE 166 =====
+Some Observations
+Observation # 1: If A + B = C, and A is +5, and C is 0, then
+B must be -5. (We have found a new representation for
+negative numbers.)
+Observation # 2: To transform A to B (i.e., +5 to -5), we
+need to take 1’s complement of A and then add +1. We
+say that B is 2’s complement of A
+Observation # 3: Like sign/magnitude numbers, positive
+numbers have the MSB set to 0, and negative numbers
+have the MSB set to 1
+165
+
+===== PAGE 167 =====
+Some Observations
+Observation # 4: Ordinary addition works
+§ What is the sum of +3 and -3 in two’s complement
+system, and does the result make sense?
+§ Since ordinary addition works, a circuit to add
+numbers can handle both addition and subtraction
+§ Recall that, X – A is equivalent to X + (–A ) 1
+0 1 1 +3
++ 1 0 1 -3
+0 0 0
+166
+
+===== PAGE 168 =====
+2’s Complement
+Circle
+167
+
+===== PAGE 169 =====
+More Observations
+Observation # 5: There is only one representation for zero
+Observation # 6: There is one more negative number than
+positive number
+§ With 3 bits, this number is 100
+§ With 4 bits, this number is 1000
+§ This negative number has no positive counterpart
+§ It is called the weird number
+§ The 2’s complement of the weird number is the
+weird number (verify!)
+168
+
+===== PAGE 170 =====
+2’s Complement to Decimal
+§ If MSB is 0
+§ It is a positive number. The magnitude is
+represented by the remaining N – 1 bits
+§ If MSB is 1
+§ It is a negative number. Take the two’s complement
+of the (binary) number. The magnitude of the
+negative number) is represented by the N – 1 bits
+Practice and test your understanding using the two’s
+complement circle
+169
+
+===== PAGE 171 =====
+
+
+===== PAGE 172 =====
+Overflow in 2’s Complement
+§ Suppose we have two 5-bit numbers
+§ A = 01001 and B = 01011
+§ What is A + B?
+§ What is the largest value 5 bits can
+represent in 2’s complement?
+§ Overflow
+§ The result is too big to fit inside the
+available bits
+§ Sum of two positive integers cannot
+produce a negative integer!
+1 1
+0 1 0 0 1 +9
++ 0 1 0 1 1 +11
+1 0 1 0 0 -12
+171
+
+===== PAGE 173 =====
+Overflow in 2’s Complement
+§ Suppose we have two 5-bit numbers
+§ A = 10100 and B = 11010
+§ What is A + B?
+§ What is the smallest value 5 bits
+can represent in 2’s complement?
+§ Overflow
+§ The result is too big to fit inside the
+available bits
+§ Sum of two negative integers cannot
+produce a positive integer!
+1 0 1 0 0 + 1 1 0 1 0 0 1 1 1 0 -12
+-6
+14
+172
+
+===== PAGE 174 =====
+Overflow in 2’s Complement
+Observation # 1: If two number being added have the
+same sign bit and the result has the opposite sign bit
+(easy!)
+Observation # 2: Unlike unsigned numbers, a carry out of
+the most significant bit does not indicate overflow
+Observation # 3: The sum of a negative number and a
+positive number never produces an overflow (prove
+yourself!)
+173
+
+===== PAGE 175 =====
+Range of Number Systems
+Number System Minimum Maximum
+Unsigned 0 2N – 1
+Sign/Magnitude -2N-1 + 1 2N-1 – 1
+Two’s Complement -2N-1 2N-1 – 1
+N = 3
+N = 4
+Unsigned: 0 to 7
+Sign/Magnitude: -3 to 3
+2’s Complement: -4 to 3
+Unsigned: 0 to ?
+Sign/Magnitude: -? to ?
+2’s Complement: -? to ?
+174
+
+===== PAGE 176 =====
+Comparing Number Systems
+Binary Representation Decimal Value Represented
+Unsigned
+Signed
+Magnitude
+1’s
+Complement
+2’s
+Complement
+000 0 0 0 0
+001 1 1 1 1
+010 2 2 2 2
+011 3 3 3 3
+100 4 -0 -3 -4
+101 5 -1 -2 -3
+110 6 -2 -1 -2
+111 7 -3 -0 -1
+175
+
+===== PAGE 177 =====
+Quiz: See any errors?
+Unsigned Signed 1’s Comp. 2’s Comp.
+0 0 0 0
+0
+0
+0
+0
+0 0 0 1
+1
+1
+1
+1
+0 0 1 0
+2
+2
+2
+2
+0 0 1 1
+3
+3
+3
+3
+0 1 0 0
+4
+4
+4
+4
+0 1 0 1
+5
+5
+5
+5
+0 1 1 0
+6
+6
+6
+6
+0 1 1 1
+7
+7
+7
+7
+1 0 0 0
+8
+-0
+-7
+-1
+1 0 0 1
+9
+-1
+-6
+-2
+1 0 1 0
+10
+-2
+-5
+-3
+1 0 1 1
+11
+-3
+-4
+-4
+1 1 0 0
+12
+-4
+-3
+-5
+1 1 0 1
+13
+-5
+-2
+-6
+1 1 1 0
+14
+-6
+-1
+-7
+1 1 1 1
+15
+-7
+-0
+-8
+176
+
+===== PAGE 178 =====
+Sign Extension in 2’s Comp. #s
+Question: What is the difference between the 16-bit and 4-bit
+numbers below?
+16-bit number
+0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 1
+4-bit number
+0 1 0 1
+Answer: None. They both represent the positive number 5
+Leading zeros do not impact the magnitude of a binary number
+There are times when it is useful to allocate a small number of
+bits to represent a value
+177
+
+===== PAGE 179 =====
+Sign Extension
+§ What value does the two numbers below represent?
+16-bit number (A)
+4-bit number (B)
+0 0 0 0 0 0 0 0 0 0 0 0 1 1 1 1 0 1
+§ What is the sum of A and B?
+§ Scenario # 1: Assume the absence of bits in B to be 0
+§ Scenario # 2: Assume the absence of bits in B to be 1
+0 1
+178
+
+===== PAGE 180 =====
+Scenario # 1
+0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 1
++
+0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 1
++13
+-3
+☓
+was wrong
+The assumption that appending 0’s will lead to correct addition
+179
+
+===== PAGE 181 =====
+Scenario # 2
+0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 1
++
+1 1 1 1 1 1 1 1 1 1 1 1 1 1 0 1
++13
+-3
+✓
+was right
+The assumption that appending 1’s will lead to correct addition
+180
+
+===== PAGE 182 =====
+Sign Extension
+§ Leading 0’s do not change the magnitude of the
+positive number
+§ Leading 1’s do not change the magnitude of the
+negative number
+When a 2’s complement number is extended to more bits, the
+sign bit must be copied into the most significant bit positions.
+We refer to the operation as Sign-EXTension or SEXT
+181
+
+===== PAGE 183 =====
+Building Block of Computers
+Transistors
+182
+182
+
+===== PAGE 184 =====
+We are Here.
+183
+
+===== PAGE 185 =====
+Transistors
+§ Computers are built from billions of small and simple
+structures called transistors
+§ 1970: Few 1000s of transistors
+§ Apple’s M2 Max: 50+ Billion transistors
+§ Moore’s Law:Transistor count double in 18 months
+§ Computers with improved capability over time due
+to a large # transistors at the device level
+§ We will cover
+§ How MOS transistor works (as a logic element)?
+§ How transistors are connected to form logic gates?
+§ How logic gates are interconnected to form larger
+units that are needed to construct a computer
+Problem
+Algorithm
+Program in C/Java
+Runtime System
+(Operating system)
+ISA (Architecture)
+Microarchitecture
+Logic
+Devices
+Electrons
+184
+
+===== PAGE 186 =====
+2X transistors/chip
+every two years
+185
+
+===== PAGE 187 =====
+Transistors
+§ Sections 1.6 and 1.7 in Harris & Harris provide
+more technical explanations than what we will
+cover
+186
+
+===== PAGE 188 =====
+MOS Transistor
+§ MOS stands for
+§ Conductors (Metal)
+§ Insulators (Oxide)
+§ Semiconductors
+Gate
+Source Drain
+§ MOS transistor has three terminals
+§ We can combine many of these to form logic gates
+§ The electrical properties of metal-oxide semiconductors are well beyond the
+scope of what we want to understand in this course
+§ They are below our lowest level of abstraction
+§ If transistors misbehave, an architect is at their mercy (unlikely to happen)
+187
+
+===== PAGE 189 =====
+Two Types of MOS Transistors
+§ Two types: n-type and p-type
+§ They both operate “logically,” very similar to the way wall switches
+work
+n-type p-type
+188
+
+===== PAGE 190 =====
+How Does a Transistor work?
+Wall Switch
+Wall Switch
+Power Supply
+Power Supply
+§ For the lamp to glow, electrons must flow
+§ For electrons to flow, there must be a closed circuit from the
+power supply to the lamp and back to the power supply
+§ The lamp can be turned on and off by simply manipulating the
+wall switch to make or break the closed circuit
+189
+
+===== PAGE 191 =====
+n-type MOS Transistor
+§ Instead of the wall switch, we could use an n-type or a p-type
+MOS transistor to make or break the closed circuit
+If the gate of the n-type transistor is supplied with
+a high voltage, the connection from source to drain
+acts like a piece of wire (we have a closed circuit)
+Drain
+Gate
+If the gate of the n-type transistor is supplied with
+zero voltage, the connection between source and
+drain is broken (we have an open circuit)
+Source
+Schematic of an n-type
+MOS transistor
+§ Depending on the technology, high voltage can range from 0.3V
+to 3V 190
+
+===== PAGE 192 =====
+How Does a Transistor work?
+§ The n-type transistor in a circuit with a battery and a bulb
+3 Volt
+0 Volt
+Gate
+Power Supply
+Power Supply
+Shorthand notation
+191
+
+===== PAGE 193 =====
+p-type MOS Transistor
+§ The p-type MOS transistor works in exactly the opposite
+fashion from the n-type transistor
+The circuit is open when the gate is supplied with
+Drain
+3V
+Gate
+The circuit is closed when the gate is supplied with
+Source
+0V
+§ Depending on the technology, high voltage can range from 0.3V
+to 3V
+192
+
+===== PAGE 194 =====
+Some Examples of
+Transistors as Building Blocks
+193
+193
+
+===== PAGE 195 =====
+Modern Special-Purpose ASIC
+n The largest ML
+accelerator chip (2021)
+n 850,000 cores
+Cerebras WSE-2
+2.6 Trillion transistors
+46,225 mm2
+Largest GPU
+54.2 Billion transistors
+826 mm2
+NVIDIA Ampere GA100
+https://www.anandtech.com/show/14758/hot-chips-31-live-blogs-cerebras-wafer-scale-deep-learning
+https://www.cerebras.net/cerebras-wafer-scale-engine-why-we-need-big-chips-for-deep-learning/
+194
+
+===== PAGE 196 =====
+Apple M1 Ultra (2022)
+https://stadt-bremerhaven.de/apple-neuer-m1-ultra-chip-ist-offiziell/
+195
+
+===== PAGE 197 =====
+Modern General-Purpose Microprocessor
+Intel Alder Lake,
+2021
+196
+
+===== PAGE 198 =====
+Logic Gates
+197
+
+===== PAGE 199 =====
+One Level Higher in Abstraction
+§ Now, we know how a MOS transistor works
+§ How do we build logic structures out of individual MOS transistors
+§ We called these logic structures logic gates and they implement
+simple Boolean functions
+ISA (Architecture)
+Microarchitecture
+Logic
+Devices
+Electrons
+198
+
+===== PAGE 200 =====
+George Boole
+Boolean Logic
+English mathematician and philosopher
+§ A system for describing logical statements/expressions
+where variables are TRUE or FALSE
+§ Defines important but simple logical operations on binary
+logical variables
+§ Boolean algebra defines manipulation rules similar to
+elementary algebra
+199
+
+===== PAGE 201 =====
+Logic
+§ Logic comes from reasoning or thinking
+§ When presented with some facts, how to derive a valid
+conclusion
+§ Assume statements are either TRUE or FALSE
+§ When many statements (or conditions) are combined,
+what is the conclusion or resulting statement?
+200
+
+===== PAGE 202 =====
+Origin of Logic Functions
+§ Canberra is the capital of Australia, AND today I am
+in Canberra, therefore, today, I am in the capital of
+Australia
+§ Given it is warm, and given it is sunny, OR it is my
+birthday, I conclude that I am going to the beach
+201
+
+===== PAGE 203 =====
+Logic Functions vs. Gates
+§ Logic gates are the physical realization of logic
+functions (built with transistors)
+§ Logic operations are the steppingstone for composing
+sophisticated digital circuits that perform binary
+arithmetic
+202
+
+===== PAGE 204 =====
+Logic Gates
+§ Logic gates are digital circuits that take one or more inputs
+and produce a binary output
+§ The inputs are to the left, and the outputs are to the right
+§ The relationship between inputs and outputs is described by
+a truth table or a Boolean equation
+203
+
+===== PAGE 205 =====
+Truth Table
+§ A convenient way to describe the behavior of logical functions
+§ Suppose A and B are input operands and Y is the output
+§ A can be 0 or 1
+§ B can be 0 or 1
+§ Four combinations (rows)
+§ Three columns (2 inputs and an output)
+§ The Boolean equation for Y: Y = 0
+§ The values of A and B does not matter
+A B Y
+0 0 0
+0 1 0
+1 0 0
+1 1 0
+204
+
+===== PAGE 206 =====
+Truth Table with More Inputs
+A B C Y
+0 0 0 1
+0 0 1 1
+0 1 0 1
+0 1 1 1
+1 0 0 1
+1 0 1 1
+1 1 0 1
+1 1 1 1
+§ Boolean Equation for output Y: Y = 1
+Note: Soon we will see more interesting
+logic functions than Y = 0 and Y = 1
+205
+
+===== PAGE 207 =====
+206
+
+===== PAGE 208 =====
+A Useful Circuit: Tutorial # 1
+§ What does this circuit do?
+§ Multiplexer
+§ Used for decision making and often found inside
+control logic
+207
+
+===== PAGE 209 =====
+Making Logic Gates Using CMOS
+Technology
+§ Modern computers use both n-type and p-type transistors, called
+Complementary MOS (CMOS) technology
+§ nMOS + pMOS = CMOS
+208
+
+===== PAGE 210 =====
+CMOS Technology Fundamentals
+§ Let’s look at the simplest logic structure that exists in a modern
+computer
+§ What does this circuit do? 3V
+p-type
+In (A)
+Out (Y)
+n-type
+0V
+209
+
+===== PAGE 211 =====
+CMOS Technology Fundamentals
+§ What happens when the input is connected to 0V?
+3V
+3V
+p-type transistor pulls
+the output up
+0V
+Out (Y)
+Y = 3V
+0V
+0V
+210
+
+===== PAGE 212 =====
+CMOS Technology Fundamentals
+§ p-type transistors are good at pulling up the
+voltage
+211
+
+===== PAGE 213 =====
+CMOS Technology Fundamentals
+§ What happens when the input is connected to 3V?
+3V
+3V
+A= 3V
+Out (Y)
+Y = 0V
+n-type transistor pulls
+the output down
+0V
+0V
+212
+
+===== PAGE 214 =====
+CMOS Technology Fundamentals
+§ n-type transistors are good at pulling down the
+voltage
+213
+
+===== PAGE 215 =====
+CMOS NOT Gate (Inverter)
+§ We have seen a NOT gate at the transistor level
+§ If A = 0V then Y = 3V
+§ If A = 3V then Y = 0V
+In (A)
+§ Interpretation of voltage levels
+§ Interpret 0V as logical (binary) 0 value
+§ Interpret 3V as logical (binary) 1 value
+A P N Y
+0 ON OFF 1
+1 OFF ON 0
+3V
+Out (Y)
+0V
+𝑌 = ̅ 𝐴
+214
+
+===== PAGE 216 =====
+CMOS NOT Gate (Inverter)
+A Y
+The NOT gate has only one input (unary)
+Y = A’
+–
+Y = A
+0 1
+1 0
+bubble à invert
+Truth Table NOT Logic Gate Boolean Equation
+NOT Function: The output Y is the inverse of the input A
+215
+
+===== PAGE 217 =====
+Another CMOS Gate: What is this?
+3V
+P1
+P2
+Out (Y)
+In (A)
+N1
+In (B)
+N2
+0V
+216
+
+===== PAGE 218 =====
+CMOS NAND Gate
+3V
+A B P1 P2 N1 N2 Y
+P1
+P2
+Out (Y)
+In (A)
+In (B)
+N1
+N2
+0V
+§ P1 and P2 are in parallel; only one must be ON to pull up the
+voltage to 3V
+§ N1 and N2 are connected in series; both must be ON to pull down
+the voltage to 0V 217
+
+===== PAGE 219 =====
+CMOS NAND Gate
+3V
+A B P1 P2 N1 N2 Y
+P1
+P2
+0 0 ON ON OFF OFF 1
+Out (Y)
+In (A)
+In (B)
+N1
+N2
+0V
+§ P1 and P2 are in parallel; only one must be ON to pull up the
+voltage to 3V
+§ N1 and N2 are connected in series; both must be ON to pull down
+the voltage to 0V 218
+
+===== PAGE 220 =====
+CMOS NAND Gate
+3V
+A B P1 P2 N1 N2 Y
+P1
+P2
+0 0 ON ON OFF OFF 1
+Out (Y)
+In (A)
+In (B)
+N1
+N2
+0 1 ON OFF OFF ON 1
+0V
+§ P1 and P2 are in parallel; only one must be ON to pull up the
+voltage to 3V
+§ N1 and N2 are connected in series; both must be ON to pull down
+the voltage to 0V 219
+
+===== PAGE 221 =====
+CMOS NAND Gate
+3V
+A B P1 P2 N1 N2 Y
+P1
+P2
+0 0 ON ON OFF OFF 1
+Out (Y)
+In (A)
+In (B)
+N1
+N2
+0 1 ON OFF OFF ON 1
+1 0 OFF ON ON OFF 1
+0V
+§ P1 and P2 are in parallel; only one must be ON to pull up the
+voltage to 3V
+§ N1 and N2 are connected in series; both must be ON to pull down
+the voltage to 0V 220
+
+===== PAGE 222 =====
+CMOS NAND Gate
+3V
+A B P1 P2 N1 N2 Y
+P1
+P2
+0 0 ON ON OFF OFF 1
+Out (Y)
+In (A)
+In (B)
+N1
+N2
+0 1 ON OFF OFF ON 1
+1 0 OFF ON ON OFF 1
+1 1 OFF OFF ON ON 0
+0V
+§ P1 and P2 are in parallel; only one must be ON to pull up the
+voltage to 3V
+§ N1 and N2 are connected in series; both must be ON to pull down
+the voltage to 0V 221
+
+===== PAGE 223 =====
+CMOS NAND Gate
+A B Y
+0 0 1
+0 1 1
+1 0 1
+1 1 0
+Y = (AB)’
+Y = AB
+Truth Table NAND Logic Gate Boolean Equation
+NAND Function: The output Y is 1 unless both inputs are 1
+222
+
+===== PAGE 224 =====
+CMOS AND Gate
+3V
+3V
+P1
+P2
+P3
+Out (Y)
+In (A)
+N1
+N3
+In (B)
+N2
+0V
+0V
+§ We make an AND gate using one NAND gate and one NOT gate
+§ Homework: Can we not use fewer transistors for the AND gate?
+223
+
+===== PAGE 225 =====
+NOT
+CMOS NOT, NAND, and AND Gates
+A Y
+A
+Y
+B
+A Y
+Y = A
+A Y
+A
+B
+Y
+A B Y
+A B Y
+0 1
+1 0
+3V
+0 0 1
+0 1 1
+1 0 1
+1
+1
+0
+3V
+0 0 0
+0 1 0
+1 0 0
+1
+1
+1
+3V
+3V
+P
+P1
+P2
+P1
+In (A)
+Out (Y)
+Out (Y)
+N
+0V
+In (A)
+In (B)
+N1
+N2
+0V
+In (A)
+In (B)
+P2
+N1
+N2
+0V
+P3
+Out (Y)
+N3
+0V
+224
+
+===== PAGE 226 =====
+General CMOS Gate Structure
+pMOS
+pull-up
+network
+§ We have a general form to construct any inverting logic gate,
+such as, NOT, NAND, NOR
+§ The networks may consist of transistors in
+series of in parallel
+§ When transistors are in parallel, the
+network is ON if one of the transistors
+inputs
+is ON
+§ When transistors are in series, then
+network is ON only if all transistors
+are ON
+pMOS transistors are used for pull-up
+nMOS transistors are used for pull-down
+output
+nMOS
+pull-down
+network
+225
+
+===== PAGE 227 =====
+General CMOS Gate Structure
+§ Exactly one network should be ON, and the other network
+should be OFF at any given time
+§ If both networks are ON simultaneously,
+there is a short circuit à incorrect operation
+inputs
+§ If both networks are OFF simultaneously,
+the output is floating à undefined
+pMOS
+pull-up
+network
+output
+nMOS
+pull-down
+network
+pMOS transistors are used for pull-up
+nMOS transistors are used for pull-down
+226
+
+===== PAGE 228 =====
+Why This Structure?
+§ MOS transistors are imperfect switches
+§ pMOS transistors pass 1’s well but 0’s poorly
+§ pMOS transistors are good at “pulling up” the output
+§ nMOS transistors pass 0’s well but 1’s poorly
+§ nMOS transistors are good at “pulling down” the output
+3V
+3V
+P1
+P2
+P3
+pMOS
+pull-up
+network
+Out (Y)
+inputs
+In (A)
+N1
+N3
+output
+In (B)
+N2
+0V
+nMOS
+pull-down
+network
+0V
+227
+
+===== PAGE 229 =====
+Latency or Delay
+§ Which one is faster?
+§ Transistor in series
+§ Transistors in parallel
+§ Series connections are slower than parallel connections
+§ More resistance on the wire
+§ Remember: Latency of series vs. parallel circuits extend from transistors
+to gates and larger circuits
+§ See Section 1.7.8 for more details
+228
+
+===== PAGE 230 =====
+Gates with More Than Two Inputs
+§ We can create larger gates with more than 2 inputs
+§ 3-input NOR gate or 11-input NAND gate
+229
+
+===== PAGE 231 =====
+Manufacturing Tech is the Enabler
+§ Precision
+Manufacturing
+§ Extreme
+Ultraviolet
+(EUV) light to
+pattern <10nm
+structures
+https://www.youtube.com/watch?v=Jv40Viz-KTc
+230
+
+===== PAGE 232 =====
+We are here
+231
+
+===== PAGE 233 =====
+The AND Function
+A B Y
+0 0 0
+0 1 0
+1 0 0
+1 1 1
+Y = AB
+Y = A.B
+Y= A∩B
+(product)
+(intersection)
+Truth Table AND Logic Gate Boolean Equation
+AND Function: The output Y is 1 if and only if both A and B are 1
+232
+
+===== PAGE 234 =====
+The OR Function
+A B Y
+0 0 0
+0 1 1
+1 0 1
+1 1 1
+Y = A + B
+Y = A ∪ B
+(sum)
+(union)
+Truth Table OR Logic Gate Boolean Equation
+OR Function: The output Y is 1 if either A or B are 1
+233
+
+===== PAGE 235 =====
+The XOR Function
+eXclusive-OR
+A B Y
+0 0 0
+0 1 1
+1 0 1
+1 1 0
+Y= A ⊕ B
+Truth Table XOR Logic Gate Boolean Equation
+XOR Function: The output Y is 1 if A or B, but not both, are 1
+234
+
+===== PAGE 236 =====
+OR and XOR
+§ The term exclusive is used because the output is 1 if only
+one of the inputs is 1 (mutually exclusive)
+§ OR produces an output 1, if only one of the two sources is
+a 1, or both sources are one (inclusive OR)
+235
+
+===== PAGE 237 =====
+The NOT Unary Function
+A Y
+The NOT gate has only one input (unary)
+Y = A’
+–
+Y = A
+0 1
+1 0
+bubble à invert
+Truth Table NOT Logic Gate Boolean Equation
+NOT Function: The output Y is the inverse of the input A
+236
+
+===== PAGE 238 =====
+Inverting a Gate’s Operation
+Any gate can be followed by a bubble to invert its operation
+NOT AND à NAND
+NOT OR à NOR
+NOT XOR à XNOR
+NOT NOT à BUF
+237
+
+===== PAGE 239 =====
+In Boolean logic, two wrongs make a
+right!
+leads to
+We say that two bubbles cancel each other’s effect
+238
+
+===== PAGE 240 =====
+The NAND Function
+A B Y
+0 0 1
+0 1 1
+1 0 1
+1 1 0
+Y = (AB)’
+Truth Table NAND Logic Gate Boolean Equation
+NAND Function: The output Y is 1 unless both inputs are 1
+239
+
+===== PAGE 241 =====
+The NOR Function
+A B Y
+0 0 1
+0 1 0
+1 0 0
+1 1 0
+Y = (A + B)’
+Truth Table NOR Logic Gate Boolean Equation
+NOR Function: The output Y is 1 if neither A nor B is 1
+240
+
+===== PAGE 242 =====
+The XNOR Function
+A B Y
+0 0 1
+0 1 0
+1 0 0
+1 1 1
+Y = (A ⊕ B)’
+Truth Table XNOR Logic Gate Boolean Equation
+XNOR Function: The output Y is 1 if both A and B are 1
+241
+
+===== PAGE 243 =====
+XOR and XNOR are special
+A B Y
+A B Y
+0 0 0
+0 1 1
+1 0 1
+1 1 0
+XOR
+XOR: Output is 1 when inputs are
+not equal (odd number of 1’s)
+Parity Gate
+0 0 1
+0 1 0
+1 0 0
+1 1 1
+XNOR
+XNOR: Output is 1 when inputs are
+equal (even number of 1’s)
+Equality Gate
+242
+
+===== PAGE 244 =====
+Buffer (BUF)
+A Y
+0 0
+0 0
+1 1
+1 1
+Truth Table BUF Logic Gate
+Y = A
+Boolean Equation
+Buffer: The output Y is equal to the input A
+243
+
+===== PAGE 245 =====
+244
+
+===== PAGE 246 =====
+Multiple-Input Gates
+A B C Y
+Gates with multiple inputs are possible
+0 0 0 0
+0 0 1 0
+0 1 0 0
+0 1 1 0
+1 0 0 0
+1 0 1 0
+1 1 0 0
+1 1 1 1
+Looking at the truth table, can you guess
+the 3-input gate?
+Y = ABC
+245
+
+===== PAGE 247 =====
+Multiple-Input Gates
+A B C Y
+Gates with multiple inputs are possible
+0 0 0 1
+0 0 1 0
+0 1 0 0
+0 1 1 0
+1 0 0 0
+1 0 1 0
+1 1 0 0
+1 1 1 0
+Looking at the truth table, can you guess
+the 3-input gate?
+Y = (A + B + C)’
+246
+
+===== PAGE 248 =====
+Bitwise Operations
+§ All logical operators are applicable to two bit-patterns (group of
+bits or bit vectors) of m bits each, m is any # bits (8, 16, ...)
+§ We apply the operation individually to each pair of bits
+§ If A and B are 8-bit input sources (or source operands), then their AND or
+product, C, is also 8 bits
+C = AB (bit-wise AND)
+C = A + B (bit-wise OR)
+A
+B
+C
+0 0 0 0 1 1 0 1
+1 1 1 1 1 1 1 1
+A
+B
+C
+0 0 0 0 1 1 0 1
+0 0 0 0 0 0 0 0
+247
+
+===== PAGE 249 =====
+Bitwise Operations
+§ All logical operators are applicable to two bit-patterns (group of
+bits or bit vectors) of m bits each, m is any # bits (8, 16, ...)
+§ We apply the operation individually to each pair of bits
+§ If A and B are 8-bit input sources (or source operands), then their AND or
+product, C, is also 8 bits
+C = AB (bit-wise AND)
+C = A + B (bit-wise OR)
+A
+B
+C 0 0 0 0 0 1 1 0 1
+1 1 1 1 1 1 1 1
+0 0 0 1 1 0 1
+A
+B
+C 0 0 0 0 0 1 1 0 1
+0 0 0 0 0 0 0 0
+0 0 0 1 1 0 1
+248
+
+===== PAGE 250 =====
+Bit Masks
+passwd
+user id
+Packet
+0 1 1 0 1 1 0 1
+A B
+0 1 1 0 1 1 0 1
+§ B wants to create a new packet with user id set to A’s id and
+passwd bits set to 0 (e.g., to send a packet to another computer)
+249
+
+===== PAGE 251 =====
+Bit Masks
+§ Bit mask: A binary pattern (B) that separates the bits of A into
+two halves
+§ Suppose we want to extract the least significant 4 bits from A,
+ignoring the remaining 4 bits
+C = AB (bit-wise AND)
+A
+B
+C 0 0 1 1 0 1 1 0 1
+0 0 0 0 1 1 1 1
+0 0 0 1 1 0 1
+250
+
+===== PAGE 252 =====
+Exercises
+§ Suppose, A = 11000010, and the rightmost two bits are of
+particular significance. Find a bitmask and a logical operation
+to mask out the values in the rightmost positions in a new bit
+pattern B. (All other bits in B are set to 0.)
+§ Suppose, A = 10110010, and the leftmost two bits are of
+particular significance. Find a bitmask and a logical operation
+to mask out the values in the leftmost positions in a new bit
+pattern B. (All other bits in B are set to 1.)
+251
+
+===== PAGE 253 =====
+
+
+===== PAGE 254 =====
+Exercise
+§ How can we find out if two bit-patterns A and B are identical?
+§ Verify that, 1 AND X = X, where X is a binary variable. verify that, 0 OR X = X.
+Also,
+§ Verify that, B AND B = B, where B is a binary variable. verify that, B OR B = B.
+Also,
+§ Verify that, B AND B’ = 0, where B is a binary variable. verify that, B OR B’ = 1.
+Also,
+253
+
+===== PAGE 255 =====
+A Useful Circuit: Tutorial # 1
+§ What does this circuit do?
+§ Multiplexer
+§ Used for decision making and often found inside
+control logic
+254
+
+===== PAGE 256 =====
+Another Useful Circuit
+§ What does this circuit do?
+§ Half adder (no carry input)
+§ Used for making an ALU – Arithmetic & Logic Unit
+255
+
+===== PAGE 257 =====
+Coming Attractions
+§ We will learn to systematically build circuits from a
+specification
+§ We will look at many useful circuits
+§ We will study two types of logic circuits –
+Combinational and sequential
+256
