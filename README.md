@@ -1,28 +1,18 @@
-# COMP2300 - Computer Architecture (2026 S1)
+### 💻 COMP2300/6300/ENGN2219 课程核心内容简述
 
-This repository is for my COMP2300 course materials and assignments. 
+这门课的核心目标是带你从底层彻底搞懂**“计算机到底是如何运行的”**。课程内容主要分为两大板块：
 
-## ⚖️ Course Policies (TL;DR)
-
-### 1. Submission & Marking
-* **Official Submission:** Only the code pushed to the **ANU GitLab server** counts.
-* **The "Final" Rule:** The last commit on the `main` branch before the deadline is what gets marked.
-* **CI/CD:** Pay attention to GitLab CI emails. A "failed pipeline" usually means a missing Statement of Originality or formatting issue.
-* **Language:** All code must be written in the language specified (Digital Logic or ARM Assembly). No exceptions.
-
-### 2. Academic Integrity
-* **Statement of Originality (SoO):** Every assignment MUST include a signed `statement-of-originality.md`.
-* **Citations:** If I use code from StackOverflow or discuss strategies with classmates, it **must** be documented in the SoO.
-* **Plagiarism:** All submissions are run through plagiarism detection software.
-
-### 3. Lab & Help
-* **Labs:** Attendance is crucial as assessments build on lab work.
-* **Forum:** Use the course forum (Ed) for troubleshooting and questions. Do not post full assignment code publicly.
-* **Feedback:** Marks and feedback are released via a dedicated feedback branch in the GitLab repo.
+* **前半部分（纯硬件视角）：** 你将使用 `Digital` 逻辑电路模拟器。抛开高级代码，从最基础的逻辑门（Logic Gates）和导线开始，一步步亲手搭建出一个能运作的 CPU，理解计算机是如何通过电信号处理指令和存储数据的。
+* **后半部分（软硬结合视角）：** 视角切换到软件底层，学习 **ARM 汇编语言 (Assembly Language)**。你将了解平时写的高级编程语言（如 C/Rust/Python）到底是如何被翻译成底层指令，并交由你搭建的 CPU 架构去执行的。
 
 ---
 
-## 🛠️ Environment Setup
-- **Hardware Simulation:** [Digital](https://github.com/hneemann/Digital)
-- **Software:** VS Code with ARM Assembly extensions
-- **Version Control:** Git & GitLab
+### 📊 课程评估方案 (Assessment Scheme)
+
+*(注：所有时间均为堪培拉时间。目前暂未发布任何具体作业，详细日期将在后续更新。)*
+
+| 评估项目 (Assessment Item) | 发布时间 (Release Date) | 截止时间 (Due Date) | 权重 (Weighting) |
+| --- | --- | --- | --- |
+| **Assignment 1** | 第 6 周 | 第 9 周 | 20% |
+| **期中考试 (Midsemester Exam)** | 2026年4月20日 | - | 30% |
+| **期末考试 (Final Exam)** | 待定 (TBD) | - | 50% |
