@@ -166,4 +166,53 @@ Choose exactly one option for each question.
   (c) For a half adder with inputs \(A=1, B=1\), compute Sum and Carry.
 \end{enumerate}
 
+
+\section*{Part C: Past Exam Questions}
+
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{Digital Logic Fundamentals (from 2023 Final Exam)}
+  \begin{itemize}
+    \item During a work assignment, you are asked to design a combinational circuit with a three-bit input, \{A, B, C\} (A is the most significant bit and C is the least significant bit), and two 1-bit outputs, Factorial and Div3. The value of each output is determined as follows:
+    \begin{itemize}
+        \item The output Factorial is 1 if the input number is equal to its factorial. Factorial is the product of all positive integers (excluding 0) that are less than or equal to the input number. When the input combinations are all 0, the output is 1.
+        \item The output Div3 is 1 only when the input 3-bit number is divisible by 3.
+    \end{itemize}
+    \item Answer the following questions.
+    \begin{enumerate}
+        \item[A.] Draw the truth table for the combinational circuit.
+        \item[B.] Express the output Factorial as the simplest sum of products representation. Show your work step-by-step.
+        \item[C.] Express the output Div3 as the simplest sum of products representation. Show your work step-by-step.
+        \item[D.] Draw a schematic of Factorial and Div3 using basic logic gates.
+        \item[E.] It is well-known that we can implement any Boolean function either using basic logic gates or a look-up table (N to 1 multiplexer). Explain the tradeoff between the two approaches.
+    \end{enumerate}
+  \end{itemize}
+
+  \item \textbf{Digital Logic Fundamentals (from 2023 Final Exam Supp/DA)}
+  \begin{itemize}
+    \item During a work assignment, you are asked to design a combinational circuit with a three-bit input, \{A, B, C\} (A is the most significant bit and C is the least significant bit), and two 1-bit outputs, O and E. The value of each output is determined as follows:
+    \begin{itemize}
+        \item The output E is 1 if the input number is even. When the input combinations are all 0, the output is 1.
+        \item The output O is 1 only when the input 3-bit number is odd.
+    \end{itemize}
+    \item Answer the following questions.
+    \begin{enumerate}
+        \item[A.] Draw the truth table for the combinational circuit.
+        \item[B.] Express the output E as the simplest sum of products representation. Show your work step-by-step.
+        \item[C.] Express the output O as the simplest sum of products representation. Show your work step-by-step.
+        \item[D.] Draw a schematic of E and O using basic logic gates.
+        \item[E.] Explain the difference between a multiplexer and a decoder. Which one of the two has a higher logic complexity?
+    \end{enumerate}
+  \end{itemize}
+
+  \item \textbf{Multiple Choice (from exam24px1.pdf)}
+    \begin{enumerate}
+        \item How many bits are needed to represent -512 with sign/magnitude numbers?
+        \item If one of the inputs of an XNOR gate is connected to logic level 1 (TRUE) forever, the resulting circuit behaves like: (OR gate, NOR gate, NOT gate, Short circuit wire, None of the above)
+        \item Under De Morgan's Theorem, which of the following circuits are equivalent: (An NOR gate with inverted output is equivalent to an AND gate with one inverted input, An AND gate with inverted output is equivalent to a NOR gate with inverted output, An AND gate with inverted output is equivalent to an OR gate with inverted inputs, An OR gate with inverted output is equivalent to an OR gate with inverted inputs, A NAND gate with inverted output is equivalent to an OR gate with inverted inputs, None of the above)
+        \item A 2:4 decoder can be used to implement an XNOR gate by connecting which ones of its one-hot outputs to the inputs of an OR gate: (00 and 01, 00 and 11, 01 and 10, 10 and 11, 00 and 10)
+    \end{enumerate}
+
+\end{enumerate}
+
 \end{document}
+

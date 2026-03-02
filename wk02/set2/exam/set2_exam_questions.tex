@@ -1,0 +1,192 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 2 Practice Exam}
+\author{Topics: Combinational Logic, SOP/POS, MUX/LUT, Adders, Decoder/PLA, ALU, Timing}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Time:} 120 minutes \hfill
+\textbf{Total:} 100 marks
+
+\vspace{0.5em}
+\noindent\textbf{Instructions}
+\begin{itemize}[leftmargin=1.5em]
+  \item Answer in English.
+  \item Part A is multiple-choice (concept-focused).
+  \item Part B is computational/design-focused. Show all key steps.
+  \item Assume ideal wires unless a delay table is provided.
+\end{itemize}
+
+\section*{Part A: Multiple Choice (30 marks, 3 marks each)}
+Choose exactly one option for each question.
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item Which statement is correct?
+  \begin{enumerate}[label=(\Alph*)]
+    \item A combinational circuit output depends on input history.
+    \item A sequential circuit has no state.
+    \item A combinational circuit output depends only on current inputs.
+    \item All decoders are sequential circuits.
+  \end{enumerate}
+
+  \item In the logic design workflow, which step comes immediately after writing the truth table?
+  \begin{enumerate}[label=(\Alph*)]
+    \item Place-and-route
+    \item Derive Boolean equation
+    \item Build pipeline stages
+    \item Write assembly code
+  \end{enumerate}
+
+  \item Canonical SOP form is:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Always minimal.
+    \item OR of minterms where output is 1.
+    \item AND of maxterms where output is 0.
+    \item Only valid for two-input functions.
+  \end{enumerate}
+
+  \item For a 2:1 MUX with inputs $D_0$, $D_1$, select $S$, the output is:
+  \begin{enumerate}[label=(\Alph*)]
+    \item $Y = SD_0 + S'D_1$
+    \item $Y = S'D_0 + SD_1$
+    \item $Y = D_0 + D_1$
+    \item $Y = SD_0D_1$
+  \end{enumerate}
+
+  \item Which pair is correct for a half adder?
+  \begin{enumerate}[label=(\Alph*)]
+    \item $S=A+B$, $C_{out}=A\oplus B$
+    \item $S=A\oplus B$, $C_{out}=AB$
+    \item $S=A\oplus B\oplus C_{in}$, $C_{out}=AB$
+    \item $S=AB$, $C_{out}=A+B$
+  \end{enumerate}
+
+  \item Ripple-carry adders are slow for large bit-width because:
+  \begin{enumerate}[label=(\Alph*)]
+    \item They cannot add negative numbers.
+    \item They need floating-point units.
+    \item Carry propagates serially through many full adders.
+    \item They require LUTs only.
+  \end{enumerate}
+
+  \item Main tradeoff of carry-lookahead adder (CLA):
+  \begin{enumerate}[label=(\Alph*)]
+    \item Lower speed, lower area than RCA.
+    \item Higher speed, higher logic cost/area.
+    \item Same speed and same area as RCA.
+    \item No carry logic is needed.
+  \end{enumerate}
+
+  \item A 2:4 decoder output behavior is typically:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Two outputs are always 1.
+    \item Exactly one output is 1 for each input code.
+    \item Output is random for each input code.
+    \item Decoder must include a register.
+  \end{enumerate}
+
+  \item For ALU flags, overflow flag $V$ is most relevant to:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Unsigned carry only
+    \item Signed arithmetic overflow
+    \item Bitwise OR instruction only
+    \item Memory address decode only
+  \end{enumerate}
+
+  \item Tri-state buffer output $Z$ means:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Logic 0
+    \item Logic 1
+    \item High impedance (not driving the wire)
+    \item Arithmetic zero flag set
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part B: Computational and Design Problems (70 marks)}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{Truth table from specification (8 marks)}\\
+  Define $Y=1$ when the 3-bit input $(A,B,C)$ has at least two 1s, except $(A,B,C)=(1,0,1)$ where $Y=0$.\\
+  (a) Construct the full truth table.\\
+  (b) Write canonical SOP.\\
+  (c) Simplify to minimal SOP.
+
+  \item \textbf{SOP to shorthand and implementation (7 marks)}\\
+  Given $F(A,B,C)=A'B'C + A'BC + AB'C + ABC'$.\\
+  (a) Write $F$ in $\Sigma m(\cdot)$ notation.\\
+  (b) State whether this form is canonical and whether it is guaranteed minimal.\\
+  (c) Draw a two-level AND-OR implementation (gate names only are acceptable).
+
+  \item \textbf{2:1 MUX derivation and evaluation (7 marks)}\\
+  (a) Derive the Boolean equation of a 2:1 MUX from its behavior definition.\\
+  (b) Let $D_0=A$, $D_1=B'$, $S=C$. Express $Y$ as a Boolean equation in $A,B,C$.\\
+  (c) Evaluate $Y$ for $(A,B,C)=(1,1,0)$ and $(0,1,1)$.
+
+  \item \textbf{Full adder and 4-bit ripple adder (8 marks)}\\
+  (a) Write equations of $S$ and $C_{out}$ for a full adder.\\
+  (b) Add $A=1011_2$ and $B=0110_2$ with 4-bit ripple-carry arithmetic and report sum and carry-out.
+
+  \item \textbf{Delay analysis: ripple-carry vs CLA intuition (8 marks)}\\
+  Assume one full adder delay is $t_{FA}=14$ ps and ignore wire delay.\\
+  (a) Give delay of an $N$-bit ripple-carry adder in terms of $N$.\\
+  (b) Compute the delay for $N=16$.\\
+  (c) Briefly explain why CLA can reduce delay growth trend.
+
+  \item \textbf{2:4 decoder equations (6 marks)}\\
+  Inputs are $A$ (MSB), $B$ (LSB). Outputs are $D_0$ to $D_3$ (one-hot).\\
+  (a) Write Boolean equations for $D_0,D_1,D_2,D_3$.\\
+  (b) Give output vector $(D_0,D_1,D_2,D_3)$ for $AB=10$.
+
+  \item \textbf{Priority circuit (8 marks)}\\
+  Inputs $IRQ0$ (highest), $IRQ1$, $IRQ2$ (lowest). Outputs $OUT0,OUT1,OUT2$, with only highest active request granted.\\
+  (a) Write simplified SOP expressions for all outputs.\\
+  (b) Evaluate outputs for:\\
+  i. $(IRQ0,IRQ1,IRQ2)=(1,1,1)$\\
+  ii. $(0,1,1)$\\
+  iii. $(0,0,1)$\\
+  iv. $(0,0,0)$
+
+  \item \textbf{ALU add/sub and flags (8 marks)}\\
+  4-bit 2's complement ALU, control: 00=Add, 01=Subtract.\\
+  (a) For Add: $A=0111$, $B=0011$. Give result and flags $(N,Z,C,V)$.\\
+  (b) For Subtract: $A=1000$, $B=0001$ (i.e., $A-B$). Give result and flags $(N,Z,C,V)$.
+
+  \item \textbf{Boolean simplification and De Morgan (6 marks)}\\
+  (a) Simplify $Y=AB+AB'$.\\
+  (b) Simplify $X=A'BC + ABC + AB'C$.\\
+  (c) Use De Morgan to rewrite $(A+B+C)'$ using only AND and inverted literals.
+
+  \item \textbf{Tri-state buffer reasoning (4 marks)}\\
+  Two units (CPU and MEM) share one bus via tri-state buffers with enables $E_{CPU}$ and $E_{MEM}$.\\
+  (a) What must hold between enables to avoid bus contention?\\
+  (b) What is the bus state if both enables are 0?\\
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions (Source-Tagged)}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{Combinational design with two outputs (Source: 2023\_Final\_Exam.pdf, Q1)}\\
+  A 3-bit input $(A,B,C)$ feeds two outputs: \texttt{Factorial} and \texttt{Div3}.\\
+  \texttt{Factorial}=1 when the input value equals its factorial (with all-zero input mapped to 1).\\
+  \texttt{Div3}=1 when the input value is divisible by 3.\\
+  Tasks: build truth table, derive simplest SOP for both outputs, and draw basic-gate schematics.
+
+  \item \textbf{Even/Odd dual-output design (Source: 2023\_Final\_Exam\_SuppDA.pdf, Q1)}\\
+  A 3-bit input $(A,B,C)$ feeds outputs \texttt{E} and \texttt{O}.\\
+  \texttt{E}=1 iff input is even (including 0), and \texttt{O}=1 iff input is odd.\\
+  Tasks: truth table, simplest SOP equations, schematic, and explain one difference between multiplexer and decoder.
+
+  \item \textbf{Priority interrupt controller (Source: exam2025-main.pdf, Section 2 Q1)}\\
+  Three interrupt inputs $IRQ0>IRQ1>IRQ2$ drive outputs $OUT0,OUT1,OUT2$ where only one output can be 1 at a time (highest active request wins).\\
+  Tasks: full truth table (and a don't-care optimized view), minimal SOP expressions, and gate-level schematic.
+
+  \item \textbf{MUX-based logic and timing reasoning (Source: exam24r.pdf, Q2b and Q3a)}\\
+  (a) Determine output cases for a given multiplexer-based logic implementation.\\
+  (b) For a given combinational block with per-component delays, identify the critical path under different delay assignments.
+\end{enumerate}
+
+\end{document}

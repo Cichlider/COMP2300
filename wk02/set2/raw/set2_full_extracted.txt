@@ -1,0 +1,868 @@
+===== PAGE 1 =====
+Convener: Shoaib Akram shoaib.akram@anu.edu.au
+
+===== PAGE 2 =====
+Broadening our horizon“one layer at a time”
+
+===== PAGE 3 =====
+Classification of Digital Circuits§Combinational Circuit:  Output depends only on the combination of input values§Memory-less (a distinct and critical feature)§All logic gates are combinational§Sequential Circuit:  Output depends on the current input combination, and history of inputs§The sequence of inputs over time determine the output§Sequential circuits have a state or memory§Example: Elevator controller (State: on the ground, in transit, at the top)
+Section 2.1 of H&H
+
+===== PAGE 4 =====
+§Example:  Suppose a combinational circuit, consisting of an AND gate, with two inputs, A and Btime àt0t1t2t3t4t5t6A0110101B0100101Output0100101§At time t6, the sequence of changes to A and B between t0 – t5 is irrelevant§Output is strictly determined by the values of A and B at t6
+Combinational Behavior
+
+===== PAGE 5 =====
+Combinational CircuitsFunctional SpecTiming Spec§Functional specification:  What is the behavior of the circuit?§What is the output for a given combination of input values?§Timing specification:  How long does the circuit takes to produce the output? §Worst-case:  10 nanoseconds§Best-case:     1 nanoseconds
+inputs outputs
+
+===== PAGE 6 =====
+Combinational Circuits
+§Hierarchy:  The top-level circuit, CL, is made up for of two combinational sub-circuits, CL1 and CL2 §Nodes:  n1 is an internal wire or node
+inputs outputsCL1CL2n1CL
+§Abstraction:  The input and output interface, and the functional and timing specification is enough for someone to use CL
+
+===== PAGE 7 =====
+§Steps in implementing combinational Logic§Initial specification (e.g., in English)§Construct the truth table§Derive the Boolean equation§Simplify the Boolean equation (use Boolean algebra)§Implement the equation using logic gates
+Implementing Combinational LogicFunctional specification
+
+===== PAGE 8 =====
+[Happy] Mr. X is not happy if there is an assignment deadline, or their favorite bar is closed.  Design a circuit that outputs 1 only if Mr. X ishappy.[Multiplexer] Design a circuit with three inputs: D0, D1, select; and one output. The output is D0 if select is 0, and D1 if select is 1.  [Half Adder] Design a circuit that adds two binary variables: A and B.  The circuit has two outputs:  sum and carry-out (Cout).  
+Specification
+[Full Adder] Design a circuit that adds three binary variables: A, B, and a carry-in (Cin). The circuit has two outputs:  sum and carry-out (Cout).
+
+===== PAGE 9 =====
+Constructing Truth Tables§Identify inputs and outputs (interface)§The interface may be implicit or require some thought
+§Write all the possible combinations of input values§For each input combination, determine the output§All inputs to the left, outputs to the right
+
+===== PAGE 10 =====
+Truth Table: Simple Example, Happy
+DBH001010100110
+Truth Table
+Specification: Mr. X is not happy if there is an assignment deadline, OR their favorite bar is closed.  Design a circuit that outputs 1 only if Mr. X ishappy.
+
+===== PAGE 11 =====
+Truth Table: BeachSpecification: IF it is warm and sunny, OR it is my birthday, THEN I am going to the beach. Write the truth table where the output is 1 when I am going to the beach
+
+===== PAGE 12 =====
+Deriving a Boolean Equation§The truth table is the unique signature of a Boolean function§But it is an expensive representation§Why is that?
+
+===== PAGE 13 =====
+Deriving a Boolean Equation§Boolean equation is an alternative way to represent the function of a combinational logic block§Enables the systematic transformation of the function into simpler functions (using Boolean algebra, we will see later)§The simplification process can be automated via Computer-Aided Design (CAD) and Electronic Design Automation (EDA)§Different Boolean expressions of the same Boolean function lead to different logic gate-level implementations§Different hardware area, cost, latency, energy properties
+
+===== PAGE 14 =====
+Definitions
+Section 2.2 of H&H
+¢Complement: variable with a bar or prime (’) over it𝑨 , 𝑩 , 𝑪, A’, B’, C’¢Literal: variable or its complement𝑨 ,  𝑨 , 𝑩 , 𝑩 , 𝑪 , 𝑪 ¢Implicant: product (AND) of literals(𝑨%𝑩%𝑪), (𝑨%𝑪), (𝑩%𝑪)¢Minterm: product (AND) that includes all input variables(𝑨%𝑩%𝑪), (𝑨%𝑩%𝑪), (𝑨%𝑩%𝑪)¢Maxterm: sum (OR) that includes all input variables(𝑨+𝑩+𝑪), (𝑨+𝑩+𝑪), (𝑨+𝑩+𝑪)
+
+===== PAGE 15 =====
+Minterms
+§Each minterm is obtained from an AND term of n variables§Use prime of the variable if the bit is 0 and unprimed if 1§The subscript j in the symbol for each minterm (mj) denotes the decimal equivalent of the binary number of the minterm designated
+
+===== PAGE 16 =====
+Maxterms
+§Each maxterm is obtained from an OR term of n variables
+
+===== PAGE 17 =====
+Operation Precedence§NOT has the highest precedence §Next is  AND§Last is  OR§Example:  Y = A + BC’§First, we find C’§Then, we find BC’ (product/AND)§Finally, we perform A + (the result of BC’)
+
+===== PAGE 18 =====
+Standardized Representations§Enable a single, universally agreed on way of representing a Boolean function from its truth table§Also called canonical representations§Sum of Products (SOP) form§Product of Sums (POS) form
+
+===== PAGE 19 =====
+Sum of Products (SOP)§Sum of Products Form (SOP)§Also known as disjunctive normal form or minterm expansion§SOP is canonical/standard form of a Boolean function§We have a truth table of a Boolean Function F and we need to express the function in terms of inputs in a standard manner§A.k.a., give it a unique algebraic signature§Truth table is an expensive representation§SOP is more compact and unique signature of a Boolean function§All Boolean equations can be written in SOP form
+
+===== PAGE 20 =====
+Key Idea of SOP§Express the truth table as a two-level Boolean expression§contains all input variable combinations that result in a 1 output§if ANY of the combinations of input variables that result in a 1 is TRUE, then the output is 1§F = OR of all input variable combinations that result in a 1§Why does it work?§Output is 1 whenever the corresponding minterm is 1§Minterm is 1 when the corresponding input combinations result in the minterm evaluating to 1All Boolean equations can be written in SOP form
+
+===== PAGE 21 =====
+Sum of Products Form (SOP)Also known as disjunctive normal form or mintermexpansion0 1110010 111011100000010010001111001101111011111
+All Boolean equations can be written in SOP form
+•Each row in a truth table has a minterm•A minterm is a product (AND) of literals•Each minterm is TRUE for that row (and only that row)
+𝑭=#𝑨𝐁𝐂	+	𝐀#𝑩#𝑪	+	𝐀#𝑩𝐂	+	𝐀𝐁#𝑪	+	𝐀𝐁𝐂𝐀𝐁𝐂𝐅
+Find all the input combinations (minterms) for which the output of the function is TRUE.
+Two-Level Canonical Forms: SOP
+
+===== PAGE 22 =====
+00000010010001111001101111011111nOnly the shaded product term — 𝐀#𝑩𝐂   = 𝟏%)𝟎%𝟏	— will be 1  nNo other product terms will “turn on” — they will all be 0nSo if inputs A B C correspond to a product term in expression,qWe get  0 + 0 + … + 1 + … + 0 + 0 = 1 for outputnIf inputs A B C do not correspond to any product term in expressionqWe get 0 + 0 + … + 0 = 0 for output 
+0 1110010 1110111𝑭=#𝑨𝐁𝐂	+	𝐀#𝑩#𝑪	+	𝐀#𝑩𝐂	+	𝐀𝐁#𝑪	+	𝐀𝐁𝐂𝐀𝐁𝐂𝐅 This input
+Activatesthis term
+The function evaluates to TRUE (i.e., output is 1) if any of the Products (minterms) causes the output to be 1
+SOP Form – Why Does it Work?
+
+===== PAGE 23 =====
+111 = decimal 7 so this is minterm#7, or  m7100 = decimal 4 so this is minterm#4, or  m4
+nStandard “shorthand” notationqWe can enumerate each row with the decimal number that corresponds to the binary number created by the input pattern00000010010001111001101111011111f == ∑m(3,4,5,6,7)m3 + m4 + m5 + m6 + m7We can write this as a sum of productsOr, we can use a summation notation
+𝐀𝐁𝐂𝐅
+Standard Notation for SOP Form
+
+===== PAGE 24 =====
+Shorthand Notation forMinterms of  3 Variables
+F in canonical form:F(A,B,C) = ∑m(3,4,5,6,7)= m3 + m4 + m5 + m6 + m7
+canonical form ≠ minimal form
+2-Level AND/ORRealization
+ minterms000            = m0001  = m1010  = m2011 = m3100 = m4101 = m5110 = m6111 = m7
+𝑭=#𝑨𝐁𝐂	+	𝐀#𝑩#𝑪	                +	𝐀#𝑩𝐂	+	𝐀𝐁#𝑪	+	𝐀𝐁𝐂
+𝑭=𝐀#𝑩𝑪+#𝑪+	#𝑨𝐁𝐂+	𝐀𝐁(𝑪+#𝑪)=𝐀#𝑩+	#𝑨𝐁𝐂+	𝐀𝐁=𝐀(#𝑩+𝑩)+	#𝑨𝐁𝐂=𝐀+	#𝑨𝐁𝐂=𝐀+	𝐁𝐂
+%𝑨%𝑩%𝑪	%𝑨%𝑩𝑪%𝑨𝑩%𝑪	%𝑨𝑩𝑪𝑨%𝑩%𝑪	𝑨%𝑩𝑪	𝑨𝑩%𝑪	𝑨𝑩𝑪
+𝐀𝐁𝐂Canonical SOP Form
+
+===== PAGE 25 =====
+More SOP Examples
+24
+
+===== PAGE 26 =====
+SOP: Simple Example (1 minterm)
+ABY1mintermname000A’B’m0011A’Bm1100AB’m2110ABm3
+To write the Boolean equation for a truth table, sum each of the minterms for which the output is 1  
+Y1 = A’BY1 is 1 only when A = 0 and B = 1Conversely, when A’ = 1 and B = 1  
+Boolean Eq
+
+===== PAGE 27 =====
+ABY1mintermname000A’B’m0011A’Bm1100AB’m2111ABm3
+To write the Boolean equation for a truth table, sum each of the minterms for which the output is 1  
+Y1 = A’B + ABY1 is 1 either when A = 0 and B = 1OR, when A = 1 and B = 1Y1 =∑1,3  
+Boolean Eq
+SOP: Example (2 minterms)
+
+===== PAGE 28 =====
+SOP Summary§A Boolean function can be expressed algebraically from a given truth table §by forming a minterm for each combination of the variables that produces a 1 in the function §and then taking the OR of all those terms§The minterms whose sum defines the Boolean function are those that give the 1’s of the function in a truth table§The sum of products canonical form can also be written in sigma notation using the summation symbol, ∑𝒎𝟏,𝒎𝟐,…
+
+===== PAGE 29 =====
+Equation: Happy
+DBH001010100110
+Truth TableH = D’B’Boolean Eq
+Specification: Mr. X is not happy if there is an assignment deadline, or their favorite bar is closed.  Design a circuit that outputs 1 only if Mr. X ishappy.
+
+===== PAGE 30 =====
+From Equation to GatesSchematic:  A diagram of a digital circuits with elements (gates) and the wires that connect them togetherY = AB’ + B’C’Example Boolean EqSchematic1.Inputs are on the left (or top) side2.Outputs are on the right3.Gates flow from left to right4.Use straight wires5.Wires connect at a T junction6.A dot where wires cross indicates a connection
+
+===== PAGE 31 =====
+From Equation to Gates§Another example𝒀=𝑨,𝑩,𝑪+𝑨,𝑩,𝑪+𝑨,𝑩,𝑪BA C
+Y
+minterm:  ABC
+minterm:  ABC
+minterm:  ABC
+A B C
+Key to remember: SOP form does NOT directly lead to minimal logic (next lecture)
+
+===== PAGE 32 =====
+Schematic: Happy
+DBH001010100110
+Truth TableH = D’B’Boolean EqLogic Gate Implementation
+H = (D)’ AND (B)’DBH
+Specification: Mr. X is not happy if there is an assignment deadline, or their favorite bar is closed.  Design a circuit that outputs 1 only if Mr. X ishappy.
+
+===== PAGE 33 =====
+Specification: Mr. X is not happy if there is an assignment deadline, or their favorite bar is closed.  Design a circuit that outputs 1 only if Mr. X ishappy. 
+DBH001010100110
+Truth TableH = D’B’Boolean EqLogic Gate Implementation
+H = (D)’ AND (B)’DBH
+Which (monolithic) gate is this?  
+Schematic: Happy
+
+===== PAGE 34 =====
+Specification: Mr. X is not happy if there is an assignment deadline, or their favorite bar is closed.  Design a circuit that outputs 1 only if Mr. X ishappy. 
+DBH001010100110
+Truth TableH = D’B’Boolean EqLogic Gate Implementation
+H = (D)’ AND (B)’DBH
+DBH
+Which (monolithic) gate is this?  Answer:  NOR gate
+Schematic: Happy
+
+===== PAGE 35 =====
+Why does the happiness detector lack an OR gate in the two-level representation as a gate-level schematic?Schematic: Happy
+
+===== PAGE 36 =====
+Combinational Building Blocks used in Modern Computers
+35
+
+===== PAGE 37 =====
+Multiplexers
+36
+
+===== PAGE 38 =====
+Multiplexer: T. Table + Eq Specification:  Circuit with three inputs: D0, D1, select (S), and one output (Y). The output is D0 if select is 0, and D1 if select is 1. SD1D0Y00000011010001111000101011011111
+Truth Table
+Y = S’D1’D0  +  S’D1D0  +  SD1D0’  +  SD1D0Y = S’D0 (D1’ + D1)  +  SD1 (D0’ + D0)=1=1Y = S’D0 (1)  +  SD1 (1)Y = S’D0  +  SD1Section 2.8.1 of H&H
+Boolean algebra: Distribution of product over sums
+
+===== PAGE 39 =====
+The minimum you can do is write the truth table systematically and express the Boolean function using the SOP canonical formBut, remember, ...canonical form ≠ minimal form
+
+===== PAGE 40 =====
+Multiplexer: Gate-Level SchematicSD1D0Y00000011010001111000101011011111
+Y = S’D0  +  SD1
+Gate-Level Schematic
+Specification:  Design a circuit with three inputs: D0, D1, select (S); and one output (Y). The output is D0 if select is 0, and D1 if select is 1.
+
+===== PAGE 41 =====
+2:1 Multiplexer (Mux)§A 2:1 multiplexer (mux)§Two data inputs (D0 and D1)§Another input called the select signal §Output is either D0 or D1 depending on the value of select
+§We will use the high-level schematic for 2:1 mux and ignore the gate-level implementation details High-level Schematic
+
+===== PAGE 42 =====
+Multiplexer Applications§Heavily used in control circuitry§Decision making§Which of the many competing outcomes to select?§Select one of the many signals and send it to another unit§Think of if/else blocks in high-level programs
+
+===== PAGE 43 =====
+Wider (4:1) Multiplexer§A 4:1 mux has two select signals S0 and S1§A / and 2 implies a bus width of 2 to contrast with 1-bit wire or input§One option is to construct the truth table and derive the Boolean equations§How many rows will there be in the table? (tedious!)§Let’s use intuition to build a 4:1 mux from two 2:1 multiplexers
+
+===== PAGE 44 =====
+S0S1Y00D010D101D211D3
+Wider (4:1) Multiplexer
+
+===== PAGE 45 =====
+00S0S1Y00D010D101D211D3
+Wider (4:1) Multiplexer
+
+===== PAGE 46 =====
+10S0S1Y00D010D101D211D3
+Wider (4:1) Multiplexer
+
+===== PAGE 47 =====
+01S0S1Y00D010D101D211D3
+Wider (4:1) Multiplexer
+
+===== PAGE 48 =====
+11S0S1Y00D010D101D211D3
+Wider (4:1) Multiplexer
+
+===== PAGE 49 =====
+Logic using Multiplexers
+48
+
+===== PAGE 50 =====
+Logic Using Multiplexers§Any truth table can be seen as a lookup table (LUT)§Lookup 00, and we see either 0 or 1 §It is like looking up a dictionary §Muxes are used as LUTs to perform logic functions§Connect the data inputs to 0 or 1 §Use inputs (A/B) as select lines
+
+===== PAGE 51 =====
+Logic Using Multiplexers
+
+===== PAGE 52 =====
+§Multiplexers can implement logic gate§For example, we can build a 2-input AND gate from a 2:1 multiplexer§Can be (re)programmed to perform any N-input logic function §Key idea: Connect multiplexer inputs to 0 (zero/ground) or 1 (high) by inspecting the truth tableA 2N-input multiplexer can be programmed to perform any N-input logic function by applying 0’s and 1’s to the appropriate data inputs
+Logic Using Multiplexers
+
+===== PAGE 53 =====
+Multiplexer Logic: Another Example
+8:1 mux
+
+===== PAGE 54 =====
+Multiplexer Logic: AnotherExample
+4:1 mux
+
+===== PAGE 55 =====
+3-Input Lookup Table (LUT)§LUTs are building blocks of Field Programmable Gate Array (FPGA)§Many LUTs in an FPGA chip to implement logic functions with many variables§The data inputs are stored as configuration memory
+
+===== PAGE 56 =====
+3-Input Lookup Table (LUT)
+input (3 bits)
+output (1 bit)
+3
+0 0 00 0 10 1 00 1 11 0 01 0 11 1 01 1 1
+Configuration Memory
+3-bit input LUT (3-LUT)Data Input
+Multiplexer (Mux): Chooses one of the 8 data inputs that corresponds to the 3-bit select input
+
+===== PAGE 57 =====
+3-Input Lookup Table (LUT)01110011 input (3 bits)
+output (1 bit)
+3
+0 0 00 0 10 1 00 1 11 0 01 0 11 1 01 1 1
+Configuration Memory
+3-bit input LUT (3-LUT)Data Input
+Multiplexer (Mux): Chooses one of the 8 data inputs that corresponds to the 3-bit select input
+
+===== PAGE 58 =====
+Modern FPGA
+Reconfigurable interconnect
+§Each 3-LUT performs the subset of the N-input logic function §Output of LUTs are routed to other LUTs using reconfigurable connections
+
+===== PAGE 59 =====
+Modern FPGA Board
+
+===== PAGE 60 =====
+Topics Covered So Far§Binary number system§Transistor (basic building block)§Logic gates§Combinational circuits§English specification§Transformation to truth tables§Sum of Products (SOP)§Two-level implementation§Multiplexers & lookup tables
+
+===== PAGE 61 =====
+Continuing ....§More combinational circuits§Adders §ALU§Decoder§Comparator§PLA§Tri-state buffer§Timing issues in combinational circuits§Logic minimization with Boolean algebra
+
+===== PAGE 62 =====
+Adders & Timing in Combinational Circuits
+61
+
+===== PAGE 63 =====
+Half Adder
+ABCoutS0000010110011110
+Specification:  Design a circuit that adds two binary variables: A and B.  The circuit has two outputs:  sum and carry-out (Cout).  Truth TableBoolean EqSchematicS = A’B + AB’S = A ⊕ BCout = AB
+Section 5.2.1 of H&H
+
+===== PAGE 64 =====
+§Limitation of half adder:  No carry input§Problem: Adding multiple bits requires the need to add carry out from the previous column to the next column§Full adder solves the problem§Accepts three inputs, including a carry input§Signals flow from right to left reflecting the carry propagation in arithmetic circuits
+1001
+0101+
+1110
+1
+Full Adder
+
+===== PAGE 65 =====
+Full Adder: T. Table + Eq CinABCoutS0000000101010010111010001101101101011111
+Sum of products form != minimal form
+unused minterm
+
+===== PAGE 66 =====
+Full Adder: T. Table + Eq CinABCoutS0000000101010010111010001101101101011111
+S = Cin’A’B + Cin’AB’ + CinA’B’ + CinABCout = Cin’AB + CinA’B + CinAB’ + CinAB
+
+===== PAGE 67 =====
+Full Adder: T. Table + Eq CinABCoutS0000000101010010111010001101101101011111
+S = Cin’A’B + Cin’AB’ + CinA’B’ + CinABCout = Cin’AB + CinA’B + CinAB’ + CinAB
+S = A ⊕	B ⊕	CinCout = Cin(A ⊕	B) + ABSimplification via Boolean algebra
+
+===== PAGE 68 =====
+Full Adder: T. Table + Eq CinABCoutS0000000101010010111010001101101101011111
+Insight about Cout§1 when both A and B are 1§Carry Generation (G)§1 when there is a Cin and one of A and B is 1§Carry Propagation (P)
+Cout = Cin’AB + CinA’B + CinAB’ + CinAB
+
+===== PAGE 69 =====
+Full Adder: SchematicCinABCoutS0000000101010010111010001101101101011111
+S = A ⊕	B ⊕	CinCout = Cin(A ⊕	B) + AB
+Half AdderHalf Adder
+
+===== PAGE 70 =====
+§What if we want to add two N-bit numbers?Ripple Carry Adder 
+1001
+0101+
+1110
+1
+
+===== PAGE 71 =====
+Ripple Carry Adder §What if we want to add two N-bit numbers?§Connect a chain of full adders from right to left
+§Ripple carry adder has a critical drawback!
+
+===== PAGE 72 =====
+Timing in Combinational Circuits§Every combinational circuit has a delay (seconds)§The time it takes for the output to reach a final stable value when the input changes (typically nanoseconds or picoseconds)
+propagtion delay
+Section 2.9 of H&H
+
+===== PAGE 73 =====
+Examples§Inputs of the AND gate change from (0,0) to (1,1) §Output of AND gate change from 0 to 1§How long does it take to for the output to change?
+§When A, B, and Cin are inputs to a full adder §How long does it take to observe the final (and stable) S and Cout?
+
+===== PAGE 74 =====
+Examples of Timing/Delay
+tXORtINV
+ tpath1 = tpath2Each gate has a delayChain of gates: Sum the delay of each gate in the chain  2 X tINV
+Multiple paths from input to outputtpath1 = tINV1 + tANDtpath2 = tINV2 + tAND
+
+===== PAGE 75 =====
+Critical and Shortest Path§Most useful combinational circuits have multiple paths from input to output§Critical path: The slowest path (with longest delay)§Critical path limits the speed at which the circuit operates§In contrast, the shortest path is the fastest§For simplification, we will ignore the delay of nodes (wires)§Although the delay is non-trivial, it is studied best at the analog level of abstraction Section 2.9 of H&H
+
+===== PAGE 76 =====
+Example (1)
+§The propagation delay of a combinational circuit is the sum of the propagation delays through each element on the critical path
+
+===== PAGE 77 =====
+Example (2)
+Example Circuit
+Critical Path
+Shortest Path
+
+===== PAGE 78 =====
+Component-Level Delay
+tmux tadder
+§When analyzing the delay of large circuits, one can abstract component-level delay as follows
+
+===== PAGE 79 =====
+§If we abstract the delay of full adder as tFA, then what is the delay of the ripple carry adder, tripple?
+tFA
+tripple = N X tFA
+§The critical path consists of N full adders (slow when N is large)§The critical path runs through the chain of full adders§Every full adder is on the critical path
+Drawback: Ripple Carry Adder
+Section 5.2.1 of H&H
+
+===== PAGE 80 =====
+§Motivation: When the delay of a circuit grows with the number of input bits, the design is not scalable §We try to find a way to optimize the circuit to reduce the delay§Ideally, we want circuits that take constant time regardless of the input size §Optimization: We try to optimize the circuit using intuition and insight and keep the delay reasonable§There is aways a tradeoff (nothing is free ....
+Carry-Lookahead Adder
+Section 5.2.1 of H&H
+
+===== PAGE 81 =====
+§Another one in the class of carry propagate adders that accelerates carry generation§Insight of CLA: As soon as Cin is known, Cout for any k-bit ripple carry adder can be calculated§When do we have a carry out from a column?§A = 1 AND B = 1, Cout is 1 à Carry Generation§Cin = 1, A = 1 OR B = 1, Cout is 1 à Carry Propagation§Recursively combine G and P signals to compute the carry out
+Carry-Lookahead Adder (CLA)
+Section 5.2.1 of H&H
+
+===== PAGE 82 =====
+CLA Equations
+Section 5.2.1 of H&H
+one column
+4-bit block
+
+===== PAGE 83 =====
+CLA Design
+Specialized logic for fast carry generation
+Optional study:  Section 5.2.1 of H&H
+
+===== PAGE 84 =====
+CLA Design
+Optional study:  Section 5.2.1 of H&H
+
+===== PAGE 85 =====
+Things to Consider§Each CLA block is busy generating a carry for the next block simultaneously (in parallel)
+§Is there still a bottleneck in the design?  §What is the propagation delay of an N-bit carry-lookahead adder?
+
+===== PAGE 86 =====
+Lessons from CLA§Speed-Area Tradeoff: In digital systems, there is a tradeoff b/w performance (speed) and hardware cost (area/power)§CLA speeds up addition but requires extra logic gates that take up additional area and dissipate more power
+§Logic Specialization: Logic specialization for frequently used but slow tasks is often necessary§CLA uses specialized logic for fast carry generation
+
+===== PAGE 87 =====
+Decoders
+86
+
+===== PAGE 88 =====
+Decoders§N inputs and 2N outputs§For each input combination, only one of the outputs is 1 (one-hot)§It detects an input pattern and outputs a 1 corresponding to it 
+Section 2.8.2 of H&H
+
+===== PAGE 89 =====
+Decoders
+A1A0Y3Y2Y1Y0000001010010100100111000
+2:4 Decoder Truth Table
+§N inputs and 2N outputs§For each input combination, only one of the outputs is 1§The outputs are affectionately called one-hotOutputs
+Inputs
+
+===== PAGE 90 =====
+Decoders
+A1A0Y3Y2Y1Y0000001010010100100111000
+2:4 Decoder Truth Table and Boolean Equations
+Y0 = A1’A0’Y1 = A1’A0Y2 = A1A0’Y3 = A1A0
+§N inputs and 2N outputs§For each input combination, only one of the outputs is 1§The outputs are affectionately called one-hot
+
+===== PAGE 91 =====
+Decoders
+Y0 = A1’A0’Y1 = A1’A0Y2 = A1A0’Y3 = A1A0
+Y3
+Y2
+Y1
+Y0
+A0A1
+§N inputs and 2N outputs§For each input combination, only one of the outputs is 1
+
+===== PAGE 92 =====
+Decoder to Mux
+Y3
+Y2
+Y1
+Y0
+A0A1
+§N inputs and 2N outputs§For each input combination, only one of the outputs is 1
+
+===== PAGE 93 =====
+Uses of Decoders§For each input combination, only one of the outputs is 1
+Red Device 
+Violet Device
+Orange Device
+Blue Device
+EN0
+11
+
+===== PAGE 94 =====
+Uses of Decoders§For each input combination, only one of the outputs is 1
+Red Device 
+Violet Device
+Orange Device
+Blue Device
+11EN1
+
+===== PAGE 95 =====
+Uses of Decoders§For each input combination, only one of the outputs is 1
+Red Device 
+Violet Device
+Orange Device
+Blue Device
+10EN1
+
+===== PAGE 96 =====
+Uses of Decoders§For each input combination, only one of the outputs is 1
+Red Device 
+Violet Device
+Orange Device
+Blue Device
+01EN1
+
+===== PAGE 97 =====
+Uses of Decoders§For each input combination, only one of the outputs is 1
+Red Device 
+Violet Device
+Orange Device
+Blue Device
+00EN1
+
+===== PAGE 98 =====
+Uses of Decoders§Think of 00, 01, 10, and 11 codes as instructions to four different devices§Each device reacts to a specific instruction in a specific way§We have created a new 2-bit language§With an interpreter or decoder §We will need the decoder for building the control unit of our QuAC computer that decodes instructions
+
+===== PAGE 99 =====
+Logic Using Decoders§Decoders can be combined with OR gates to build logic functions
+
+===== PAGE 100 =====
+PLA
+99
+
+===== PAGE 101 =====
+Programmable Logic Array (PLA)§SOP (sum-of-products) leads to two-level logic§Example: Y = A’B’C’ + AB’C’ + AB’C
+§PLA is a common building block for implementing any collection of logic functions
+BA C
+Y
+minterm:  ABC
+minterm:  ABC
+minterm:  ABC
+A B C
+Section 5.6.1 of H&H 100
+
+===== PAGE 102 =====
+Programmable Logic Array (PLA)§An array of AND gates followed by an array of OR gates§How many AND gates?§# possible minterms§How many OR gates?§# output columns in the truth table§PLA can implement any N-input P-output function§PLA is built once in the factory and programmed later
+ABC X
+Y
+ZConnections
+Section 5.6.1 of H&H
+ 101
+
+===== PAGE 103 =====
+Programmable Logic Array (PLA)§How do we implement a logic function?§Connect the output of an AND gate to the input of an OR gate if the corresponding minterm is included in the SOP§Programming a PLA: we program the connections from AND gate outputs to OR gate inputs to implement a desired logic function
+ABC
+X
+Y
+Z
+Connections
+Section 5.6.1 of H&H102
+
+===== PAGE 104 =====
+Programmable Devices
+103
+§Programmable devices we have mentioned so far§CPU/processor (programmed using instructions stored in memory, aka, executable file) §FPGA (programmed by storing bits inside LUTS, aka, bit file)§PLA (programmed by burning fuses)
+
+===== PAGE 105 =====
+PLA Example (I)
+§M inputs, N implicants, and P outputs§Chips are manufactured in bulk with the same layout (low cost)§Programmed once to implement the required function by programming connections104
+
+===== PAGE 106 =====
+PLA Example (II)
+Section 5.6.1 of H&H
+Dot Notation
+105
+Fuse to burn
+
+===== PAGE 107 =====
+PLA Example (III)
+Implementation: Pick the literals & implicants by programming connections106
+
+===== PAGE 108 =====
+Full Adder Implementation w/t PLAai
+bi
+ci ci+1
+si
+X
+ABC XYZConnections
+ai bi Si0 0 00 1 010 0111
+carryicarryi+100001111
+01111
+000
+0111
+01101001
+Truth table of a full adder
+This input should not beconnected to any outputsWe do not needthis output
+Implementation: Pick the implicants by programming connections107
+
+===== PAGE 109 =====
+Lessons from PLA§Programmability: Programmable devices incur a cost §Some logic in PLA is redundant if a subset of minterms are needed §On the other hand, PLAs can be programmed after bulk manufacturing which is their key programmability advantage
+108
+
+===== PAGE 110 =====
+ALU
+109
+
+===== PAGE 111 =====
+Arithmetic and Logic Unit (ALU)§The circuits we have looked so far can do one useful thing§XNOR gate performs equality testing§Adder performs addition§Multiplexer performs selection§ALU is a general-purpose circuit §Performs a variety of arithmetic/logical operations§ADD, SUB, AND, OR, XOR, ....§It has a 2-bit control input§The language ALU speaks or the instructions it understands
+N-bit ALU
+Section 5.2.4 of H&H
+
+===== PAGE 112 =====
+ALU Interface/InstructionsALUControl1:0Function00Add01Subtract10AND11OR
+§N-bit data inputs and outputs§2-bit control input (ALUControl)§Specifies one of four functions§Setting ALUControl to 00, 01, 10, and 11 is giving ALU instructions§The assignment of binary codes to ALU functions is not arbitrary§It is clever (01 for Subtract in particular) as we will reveal
+
+===== PAGE 113 =====
+ALU Implementation
+ALUControl1:0Function00Add01Subtract10AND11OR
+N-bit Add-subtract circuitry
+N-bit Logic circuitryAND, OR4:1 multiplexer
+control signals
+data inputs/signals
+
+===== PAGE 114 =====
+Add-Subtract Circuitry§A + B §Normal addition§A – B §A + (–B) §In 2’s complement, –B = B’ + 1§An inverter performs B’§We send ALUControl0 as the carry input of the adder§ALUControl0 is 1 when the ALU function is Subtract
+
+===== PAGE 115 =====
+The Nature of Hardware§Parallelism: Hardware is inherently parallel§All logic gates in the ALU work in parallel when the circuit is presented with valid input §Redundancy: Generality leads to redundancy§ALU is a general-purpose circuit that can perform a variety of operations. Some work/effort is wasted§The output of OR/AND is wasted when ALUControl is 01 §Control: Control circuitry comes with a cost§ALU consumes more area than the individual functional units it combines (4:1 multiplexer is for controlling output)
+
+===== PAGE 116 =====
+ALUFLAGS§We need meta-information about the ALU result§Is the result negative (N)?§Is the result zero (Z)?§Is there a carry out (C)?§Is there an overflow (V)?§Many scientific algorithms rely on flags for the next step§If overflow: discard result, and redo§Carry out is the carry in for another operation§If the result is negative: do {...}; else do {...} 
+NZCV
+Flags are only relevant for arithmetic operations (ALUControl1 = 0)
+
+===== PAGE 117 =====
+ALUFLAGS§Negative§Check the MSB of result §Zero§NOR all bits of the result (same as invert then AND)§Carry§AND ALUControl1 with Cout from the adder §Overflow§Option # 1:  Use A and B to compute overflow§Option # 2:  Use A and the output of 2:1 multiplexer to compute overflow  
+NZCV
+
+===== PAGE 118 =====
+Option # 1 for OverflowALControl0A31B31S31Scenario # 10 (Add)001Scenario # 20 (Add)110Scenario # 31 (Subtract)011Scenario # 41 (Subtract)100Case # 1 in plain English: When doing A + B , if A and B are +ve, and the sum is –ve Case # 2: A + B, if A and B are –ve, and the sum is +ve Case # 3: A – B, if A is +ve and and B is –ve, and the sum is –ve 
+§The following scenarios generate overflow: overflow flag is 1
+Case # 4: A – B, if A is –ve and and B is +ve, and the sum is +ve
+
+===== PAGE 119 =====
+Option # 1 for OverflowALControl0A31B31S31Scenario # 10 (Add)001Scenario # 20 (Add)110Scenario # 31 (Subtract)011Scenario # 41 (Subtract)100§Overflow is 1 whenever there is an even number of 1’s among ALUControl0, A31, and B31§XNOR (ALUControl0, A31, and B31)§Overflow is 1 whenever A31 and S31 are different§XOR (A31 and S31)
+§The following scenarios generate overflow: overflow flag is 1
+
+===== PAGE 120 =====
+Option # 1 for Overflow
+
+===== PAGE 121 =====
+Option # 2§Use A and the output of 2:1 mux§B if the instruction is an Add and –B if the instruction is a subtract §Easy to reason conceptually§If A – B is the same as A + (–B) then everything is an add§There is no need to consider subtract separately when reasoning about overflow generation§The circuitry is also much simpler§Homework assignment:  Figure out the circuitry for overflow generation with option # 2
+
+===== PAGE 122 =====
+ALU Timing Analysis
+ElementDelayInvertertINV = 1 ps2:1 Muxtmux2 = 5 ps4:1 Muxtmux4 = 8 psAddertadder = 14 psANDtAND = 2 psORtOR = 2 ps
+picoseconds (10–12 seconds) = ps
+§Find tResult in ps for the four ALU functions.  (Ignore overflow generation)§Which function takes the longest time (and is the critical path)? Ignore wire delay§ Express tResult in the form of an equation for Add and Subtract.  What is the difference? 
+Homework
+
+===== PAGE 123 =====
+Comparator
+122
+
+===== PAGE 124 =====
+Comparator (Equality Checker)§Checks if two N-input values are exactly the same§Example: 4-bit Comparator
+§What about magnitude comparison (relative values of A and B)?
+
+===== PAGE 125 =====
+Tri-State Buffer
+124
+
+===== PAGE 126 =====
+Tri-State Buffer§A tri-state buffer enables gating of different signals onto a wire
+ A tri-state buffer acts like a switch but can pass both 0’s and 1’s if E is asserted
+Section 2.6.2 of H&H
+
+===== PAGE 127 =====
+Tri-State Buffer§A tri-state buffer enables gating of different signals onto a wire
+§When E is HIGH, the output Y is whatever A is§Same behavior as a regular buffer
+A tri-state bufferacts like a switch
+
+===== PAGE 128 =====
+Tri-State Buffer§A tri-state buffer enables gating of different signals onto a wire
+§When E is LOW, output is a floating signal (Z) §Floating: Signal not driven by any circuit (open circuit, floating wire)
+A tri-state bufferacts like a switch
+
+===== PAGE 129 =====
+Use of Tri-State Buffers§Imagine a wire shared by the CPU and memory or two I/O peripherals
+§At any time, only one of them can place a value on the wire, but not both
+§Use two tri-state buffers §One driven by CPU, and one driven by memory§Ensure at most one is enabled at any time
+
+===== PAGE 130 =====
+Example: Use of Tri-State BuffersCPU
+MemoryGateMem
+GateCPU
+Shared Bus
+
+===== PAGE 131 =====
+Recall: A 4:1 Multiplexer
+
+===== PAGE 132 =====
+Multiplexer Using Tri-State Buffers
+
+===== PAGE 133 =====
+Combinational  Composition Rules
+132
+
+===== PAGE 134 =====
+Combinational Composition Rules§Every circuit element is itself combinational
+§Each node is either an input to the circuit or connects to exactly one output terminal of a circuit element
+§The circuit contains no cyclic paths. Every path through the circuit visits each circuit node at most once
+
+===== PAGE 135 =====
+Which circuits are combinational?
+Assume n5 is 0 and the other input of XOR is 1
+
+===== PAGE 136 =====
+We Study Boolean Algebra for   Logic Minimization
+Because we care about minimizing area, cost, logic complexity, energy, footprint, ...135
+
+===== PAGE 137 =====
+Boolean Algebra (Logic Minimization)§The sum-of-products (SOP) canonical form does not lead to the simplest logic gate implementation §We can eliminate some minterms à Less # logic gates§We can reduce the # literals in minterms à Smaller gates§We use Boolean algebra to simplify Boolean equations§Similar in spirit to simplification in ordinary algebra except we are dealing with 0 and 1 (much easier)Section 2.2 of H&H 136
+
+===== PAGE 138 =====
+Boolean Algebra§Boolean algebra consists of§Axioms (correct by definition)§Theorems of one variable§Theorems of several variables§Any theorem can be proved via the axioms§An axiom is the ground truth and cannot be proven wrong§The Principle of Duality§If the symbols 0 and 1 and the operators AND and OR are interchanged, the statement will still be correct137
+
+===== PAGE 139 =====
+Boolean Axioms
+Dual:  Replace: • with +        0 with 1
+NumberAxiomDualNameA1B = 0 if B ≠ 1B = 1 if B ≠ 0Binary FieldA20 = 11 = 0NOTA30 • 0 = 01 + 1 = 1AND/ORA41 • 1 = 10 + 0 = 0AND/ORA50 • 1 = 1 • 0 = 01 + 0 = 0 + 1 = 1AND/OR
+138
+
+===== PAGE 140 =====
+Boolean Theorems of One VariableNumberTheoremDualNameT1B • 1 = BB + 0 = BIdentityT2B • 0 = 0B + 1 = 1Null ElementT3B • B = BB + B = BIdempotencyT4B = BInvolutionT5B • B = 0B + B = 1ComplementsDual:  Replace: • with +        0 with 1139
+
+===== PAGE 141 =====
+Theorems: Several Variable#TheoremDualNameT6B•C = C•B B+C = C+BCommutativityT7(B•C) • D = B • (C•D)(B + C) + D = B + (C + D)AssociativityT8B • (C + D) = (B•C) + (B•D)B + (C•D) = (B+C) (B+D)DistributivityT9B • (B+C) = BB + (B•C) = BCoveringT10(B•C) + (B•C) = B(B+C) • (B+C) = BCombiningT11(B•C) + (B•D) + (C•D) =(B•C) + (B•D)(B+C) • (B+D) • (C+D) =(B+C) • (B+D)Consensus
+Warning: T8’ (dual of T8) differs from traditional algebra: OR (+) distributes over AND (•)140
+
+===== PAGE 142 =====
+Proving Theorems§Method 1: Perfect induction§Proof by exhaustion: Check all possible input combinations §Two expressions are equal if they produce the same value for every possible input combination§Method 2: Use other theorems/axioms to simplify equations§As in ordinary algebra, make one side of the equation look like the other side of the equation
+141
+
+===== PAGE 143 =====
+Example: Perfect Induction
+0         00         00         01         1
+NumberTheoremNameT6B•C = C•B Commutativity
+0         00         11         01         1
+B         C       BC      CB
+142
+
+===== PAGE 144 =====
+Example: Perfect InductionNumberTheoremNameT9B• (B+C) = BCovering
+0           01         01         11         1
+0         00         11         01         1
+B         C      (B+C)      B(B+C)
+143
+
+===== PAGE 145 =====
+Method 2: T9 (Covering)NumberTheoremNameT9B• (B+C) = BCoveringMethod 2: Prove true using other axioms and theorems.B•(B+C) = B•B + B•C  T8: Distributivity   = B + B•C   T3: Idempotency   = B•(1 + C)   T8: Distributivity   = B•(1)    T2: Null element   = B     T1: Identity144
+
+===== PAGE 146 =====
+Method 2: T10 (Combining)NumberTheoremNameT10(B•C) + (B•C) = BCombining
+Prove true using other axioms and theorems:   B•C + B•C = B•(C+C)     T8: Distributivity     = B•(1)     T5’: Complements    = B      T1: Identity145
+
+===== PAGE 147 =====
+Simplifying Boolean Equations§A basic principle for simplifying sum-of-product equations§PA + PA’ = P§P is any implicant§Y = A’B + AB = B(A’+A) = B(1) = B§An equation is minimized if§it uses the fewest number of implicants§if there are multiple equations with the same number of implicants, then the one with the fewest literals
+Section 2.2 of H&H 146
+
+===== PAGE 148 =====
+Simplification Example – 1 Y = AB + AB’ Y = A  T10: Combiningor       = A(B + B’)  T8: Distributivity       = A(1)    T5’: Complements       = A     T1: Identity147
+
+===== PAGE 149 =====
+Simplification Example – 2 Y = A(AB + ABC)       = A(AB(1 + C))  T8: Distributivity       = A(AB(1))   T2’: Null Element       = A(AB)    T1: Identity    = (AA)B    T7: Associativity       = AB     T3: Idempotency148
+
+===== PAGE 150 =====
+Simplification Example – 3A Y = AB’C + ABC + A’BC       = AC(B + B’) + A’BC  T8: Distributivity      = AC(1) + A’BC   T5: Complements      = AC + A’BC         T1: Identity§The two implicants AC and BC share the minterm ABC§Are we stuck with simplifying only one of the minterm pairs?149
+
+===== PAGE 151 =====
+Simplification Example – 3BY = AB’C + ABC + A’BC       = AB’C + ABC + ABC + A’BC T3’: Idempotency      = (AB’C+ABC) + (ABC+A’BC) T7’: Associativity      = AC + BC      T10: Combining§The two implicants AC and BC are called prime implicants§They cannot be combined with any other implicants in the equation to get a new implicant with fewer literals150
+
+===== PAGE 152 =====
+Simplification Example – 4 Y = A’B’C’ + AB’C’ + AB’C 
+151
+
+===== PAGE 153 =====
+De Morgan’s Theorem#TheoremDualNameT12B0•B1•B2… = B0+B1+B2…B0+B1+B2… = B0•B1•B2…DeMorgan’s Theorem§The complement of the product is the sum of the complements§Dual: The complement of the sum is the product of the complementsSection 2.2 of H&H 152
+
+===== PAGE 154 =====
+De Morgan’s TheoremA
+B
+Y
+A
+B
+Y
+A
+B
+Y
+A
+B
+Y
+§Y = AB = A + B
+§Y = A + B = A   B 153
+
+===== PAGE 155 =====
+Bubble Pushing Rules§Pushing bubbles backward/forward changes the body of the gate from AND/OR to OR/AND§Pushing a bubble from output back to inputs put bubbles on all gate inputs§Pushing bubbles on all gate inputs forward towards the output puts a bubble on the output
+Section 2.5.1 and 2.5.2 of H&H154
+
+===== PAGE 156 =====
+Bubble Pushing ExampleA
+B
+C Y
+D
+A
+B
+C
+D
+Y
+bubble on
+input and outputA
+B
+C
+D
+Y
+A
+B
+C Y
+D
+Y = ABC + D
+no output
+bubble
+no bubble on
+input and output
+155
+
+===== PAGE 157 =====
+Priority Circuit
+156
+
+===== PAGE 158 =====
+Priority Circuit
+§Priority circuit§Inputs: “Requestors” with priority levels§Outputs: “Grant” signal for each requestor§Example: n-bit priority circuit§Room reservation system§Computer bus demanded by four CPUs
+Example 2.7 of H&H
+RequestorsGrant Signals
+157
+
+===== PAGE 159 =====
+Priority Circuit
+Y3 = A3Y2 = A3’A2Y1 = A3’A2’A1Y0 = A3’A2’A1’A0
+X (Don’t Care) means We don’t care what the value of this input is158
+
+===== PAGE 160 =====
+Logical Completeness§Any logic function can be implemented with a PLA§PLA needs only AND, OR, and NOT gates
+§The set of gates {AND, OR, NOT} is logically complete because we can build a circuit from a truth table without needing any other gate
+159
+
+===== PAGE 161 =====
+Logical Completeness of NAND§Can we implement a NOT gate using a NAND gate?§What about implementing AND gate using NAND gate ?§What about implementing OR gate using NAND gate?§If all of above is true, then we can build computers from one gate only, the NAND gate§Prove yourself that NAND is logically complete§Most computer today are built using billion of NAND gates160
+
+===== PAGE 162 =====
+Optional Self-Study§Product of Sums (POS)§Interesting but not entirely needed if you understand SOP well§Follows from DemorganSection 2.2.3 of H&H
+161
+
+===== PAGE 163 =====
+Alternative Canonical Form: POS§Product of Sums (POS)§DeMorgan of SOP of !𝑭§Find all the input combinations (maxterms) for which the output of the function is FALSE§The function evaluates to FALSE (i.e., the output is 0) if any of the Sums (maxterms) causes the output to be 0
+162
+
+===== PAGE 164 =====
+Alternative Canonical Form: POS
+00000010010001111001101111011111
+For the given input, only the shaded sum term will equal 0 
+Anything ANDed with 0 is 0; Output F will be 0
+Product of Sums (POS)
+0  0    00  0   1sums
+product𝑭=(𝑨+𝑩+𝑪)(𝑨+𝑩+)𝑪)(𝑨+)𝑩+𝑪)
+𝑭=𝑨+𝑩+𝑪	𝑨+𝑩+)𝑪	(𝑨+)𝑩+𝑪)𝐀𝐁𝐂𝐅
+Each sum term represents one of the “zeros” of the functionThis input
+Activates this term
+𝑨+)𝑩+𝑪=𝟎+)𝟏+𝟎
+0  10
+163
+
+===== PAGE 165 =====
+Consider A=0, B=1, C=0𝐀𝐁𝐂𝐅00000010010001111001101111011111 110
+𝑭=(𝑨+𝑩+𝑪)(𝑨+𝑩+)𝑪)(𝑨+)𝑩+𝑪)
+𝑭=𝟎
+𝟎	)𝟏	𝟎𝟎	𝟏	)𝟎𝟎	𝟏	𝟎0  1  0Input
+Only one of the products will be 0, anything ANDed with 0 is 0Therefore, the output is F = 0164
+
+===== PAGE 166 =====
+Optional Self-Study§More combinational circuits§Shifters §Rotators§Multiplication§Division§FPGAsSection 5.2.5, 5.2.6, 5.2.7, 5.6.2 of H&H
+165
+
+===== PAGE 167 =====
+What We Have Done So Far§Building blocks of modern computers§Transistors§Logic gates§Combinational logic fundamentals§Boolean algebra§Using Boolean algebra to implement combinational circuits§Basic combinational logic blocks§Simplifying combinational logic circuits166

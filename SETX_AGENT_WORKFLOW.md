@@ -79,6 +79,13 @@ wkYY/
   - 计算题必须覆盖该 set 中所有可计算知识点
   - 答卷需给出结果与关键步骤
 
+### 5.5) 从past exam中抽取题目并更新exam文件
+- 读取 `pastexam` 文件夹中的所有过往考题。
+- 读取 `wkYY/setX` 文件夹中的所有学习资料，以了解 `setX` 的主题。
+- 从过去的考题中找出和 `setX` 相关的内容。
+- 将这些相关的题目，并注明出处，添加进 `wkYY/setX/exam/setX_exam_questions.tex` 文件中。
+- 将这些相关的题目的答案，添加进 `wkYY/setX/exam/setX_exam_solutions.tex` 文件中。
+
 ### 6) 渲染 PDF（exam）
 - 编译出：
   - `setX_exam_questions.pdf`

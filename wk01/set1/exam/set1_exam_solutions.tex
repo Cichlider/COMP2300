@@ -108,4 +108,63 @@
   For \(A=1,B=1\): \(\boxed{Sum=0,\ Carry=1}\).
 \end{enumerate}
 
+
+\section*{Part C: Past Exam Questions Solutions}
+
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{Digital Logic Fundamentals (from 2023 Final Exam)}
+  \begin{enumerate}
+    \item[A.] Truth Table:
+    \[
+    \begin{array}{c c c|c|c}
+    A & B & C & \text{Factorial} & \text{Div3} \\\hline
+    0 & 0 & 0 & 1 & 1 \\
+    0 & 0 & 1 & 1 & 0 \\
+    0 & 1 & 0 & 1 & 0 \\
+    0 & 1 & 1 & 0 & 1 \\
+    1 & 0 & 0 & 0 & 0 \\
+    1 & 0 & 1 & 0 & 0 \\
+    1 & 1 & 0 & 0 & 1 \\
+    1 & 1 & 1 & 0 & 0
+    \end{array}
+    \]
+    \item[B.] Factorial SOP: \(Y = A'B'C' + A'B'C + A'BC' = A'B'(C' + C) + A'BC' = A'B' + A'BC' = A'(B' + BC') = A'(B' + C')\).
+    \item[C.] Div3 SOP: \(Y = A'B'C' + A'BC + ABC'\).
+    \item[D.] Schematics would be drawn based on the SOP expressions.
+    \item[E.] Logic gates are specific to the function, offering higher performance for that function. A multiplexer is a general-purpose component that can implement any function of N variables, offering flexibility at the cost of performance and complexity.
+  \end{enumerate}
+
+  \item \textbf{Digital Logic Fundamentals (from 2023 Final Exam Supp/DA)}
+  \begin{enumerate}
+    \item[A.] Truth Table:
+    \[
+    \begin{array}{c c c|c|c}
+    A & B & C & E & O \\\hline
+    0 & 0 & 0 & 1 & 0 \\
+    0 & 0 & 1 & 0 & 1 \\
+    0 & 1 & 0 & 1 & 0 \\
+    0 & 1 & 1 & 0 & 1 \\
+    1 & 0 & 0 & 1 & 0 \\
+    1 & 0 & 1 & 0 & 1 \\
+    1 & 1 & 0 & 1 & 0 \\
+    1 & 1 & 1 & 0 & 1
+    \end{array}
+    \]
+    \item[B.] E SOP: \(E = C'\).
+    \item[C.] O SOP: \(O = C\).
+    \item[D.] Schematics would be an inverter for E and a wire for O.
+    \item[E.] A multiplexer selects one of its inputs to pass to the output. A decoder converts a binary input into a one-hot output. A decoder is generally more complex as it has 2\textasciicircum N outputs for N inputs, while a MUX has only one output.
+  \end{enumerate}
+
+  \item \textbf{Multiple Choice (from exam24px1.pdf)}
+    \begin{enumerate}
+        \item 10 bits (1 for sign, 9 for 512)
+        \item NOT gate
+        \item A NAND gate with inverted output is equivalent to an OR gate with inverted inputs
+        \item 00 and 11
+    \end{enumerate}
+
+\end{enumerate}
+
 \end{document}
+
