@@ -1,0 +1,185 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 3 Practice Exam}
+\author{Topics: Sequential Logic, Latches/Flip-Flops, Registers/Memory, FSM, Timing}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Time:} 120 minutes \hfill
+\textbf{Total:} 100 marks
+
+\vspace{0.5em}
+\noindent\textbf{Instructions}
+\begin{itemize}[leftmargin=1.5em]
+  \item Answer in English.
+  \item Part A is multiple-choice (concept-focused).
+  \item Part B is computational/design-focused. Show key steps.
+  \item Assume positive-edge triggered D flip-flops unless stated otherwise.
+\end{itemize}
+
+\section*{Part A: Multiple Choice (30 marks, 3 marks each)}
+Choose exactly one option for each question.
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item A sequential circuit differs from a combinational circuit because:
+  \begin{enumerate}[label=(\Alph*)]
+    \item It has no state.
+    \item Its output depends only on current inputs.
+    \item Its output depends on current inputs and past history.
+    \item It cannot be synchronized by a clock.
+  \end{enumerate}
+
+  \item For a NOR-based SR latch, which input combination is invalid?
+  \begin{enumerate}[label=(\Alph*)]
+    \item S=0, R=0
+    \item S=0, R=1
+    \item S=1, R=0
+    \item S=1, R=1
+  \end{enumerate}
+
+  \item A D latch is:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Edge-triggered
+    \item Level-sensitive
+    \item Asynchronous-only
+    \item Independent of the clock
+  \end{enumerate}
+
+  \item A D flip-flop copies D to Q:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Continuously when CLK=1
+    \item Only on a clock edge
+    \item Only when CLK=0
+    \item Only if both S and R are 0
+  \end{enumerate}
+
+  \item In synchronous sequential circuits, which statement is true?
+  \begin{enumerate}[label=(\Alph*)]
+    \item Cyclic paths are allowed without registers.
+    \item State updates are synchronized to clock edges.
+    \item Registers may use different clocks freely.
+    \item Output logic must be asynchronous.
+  \end{enumerate}
+
+  \item Addressability refers to:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Number of address bits
+    \item Number of memory locations
+    \item Bits stored per address
+    \item Total capacity in bytes
+  \end{enumerate}
+
+  \item A Moore FSM output depends on:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Inputs only
+    \item State only
+    \item State and inputs
+    \item Clock frequency only
+  \end{enumerate}
+
+  \item The aperture time of a flip-flop is:
+  \begin{enumerate}[label=(\Alph*)]
+    \item $t_{pcq}$
+    \item $t_{setup}$
+    \item $t_{hold}$
+    \item $t_{setup}+t_{hold}$
+  \end{enumerate}
+
+  \item Clock gating can be risky because:
+  \begin{enumerate}[label=(\Alph*)]
+    \item It always improves timing.
+    \item It can introduce glitches and delay on the clock.
+    \item It eliminates the need for flip-flops.
+    \item It converts a D flip-flop into a latch.
+  \end{enumerate}
+
+  \item One-hot state encoding typically:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Minimizes number of flip-flops.
+    \item Maximizes number of flip-flops.
+    \item Eliminates output logic.
+    \item Requires no next-state logic.
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part B: Computational and Design Problems (50 marks)}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{SR Latch behavior (8 marks)}\\
+  An NOR-based SR latch starts with $Q=0$. For each input pair $(S,R)$ below, determine $Q$ after the latch settles:
+  \[
+  (0,0),\ (1,0),\ (0,0),\ (0,1),\ (0,0),\ (1,1),\ (0,0)
+  \]
+  Indicate any invalid/indeterminate cases.
+
+  \item \textbf{D Latch timing (7 marks)}\\
+  A D latch starts with $Q=0$. The table shows $CLK$ and $D$ values over five intervals. Determine $Q$ at the end of each interval.
+  \begin{center}
+  \begin{tabular}{c|ccccc}
+  Interval & 1 & 2 & 3 & 4 & 5 \\ \hline
+  CLK & 0 & 1 & 1 & 0 & 1 \\
+  D   & 1 & 0 & 1 & 1 & 0 \\
+  \end{tabular}
+  \end{center}
+
+  \item \textbf{D Flip-Flop sampling (6 marks)}\\
+  A positive-edge D flip-flop samples $D$ at rising edges $t_1$--$t_4$ with:
+  \[
+  D(t_1)=0,\ D(t_2)=1,\ D(t_3)=1,\ D(t_4)=0
+  \]
+  If $Q$ starts at 1, list $Q$ after each rising edge.
+
+  \item \textbf{Registers and memory capacity (9 marks)}\\
+  A memory has 64K locations and is 16-bit addressable.
+  \begin{enumerate}[label=(\alph*)]
+    \item How many address bits are required?
+    \item What is the total capacity in bits and in bytes?
+    \item If the system is byte-addressable instead (8-bit addressability) with the same number of locations, what is the new capacity in bytes?
+  \end{enumerate}
+
+  \item \textbf{Timing constraints (10 marks)}\\
+  A synchronous circuit has $t_{pcq}=0.4$ ns, $t_{setup}=0.2$ ns, and the maximum combinational delay $t_{pd}=6.0$ ns.
+  \begin{enumerate}[label=(\alph*)]
+    \item Compute the minimum clock period $T_c$.
+    \item Compute the maximum clock frequency $f_{max}$.
+    \item If $t_{hold}=0.1$ ns, what is the aperture time?
+  \end{enumerate}
+
+  \item \textbf{Pipeline throughput (10 marks)}\\
+  A 3-stage pipeline has stage delays 4 ns, 3 ns, and 5 ns. Flip-flops have $t_{pcq}=0.3$ ns and $t_{setup}=0.2$ ns.
+  \begin{enumerate}[label=(\alph*)]
+    \item Compute the clock period.
+    \item How long to process 20 inputs?
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions (Source-Tagged) (20 marks)}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{Moore FSM concept (Source: exam24px2.pdf, Q3)}\\
+  What is a Moore FSM? Discuss with one suitable example.
+
+  \item \textbf{FSM design (Source: exam24r.pdf, Q4, adapted)}\\
+  Design a Moore FSM with one input $A$ and one output $X$. The output $X$ should be 1 if $A$ has been 1 for three consecutive clock cycles; otherwise $X=0$.
+  \begin{enumerate}[label=(\alph*)]
+    \item Draw the Moore state transition diagram.
+    \item Provide an encoded state transition table.
+    \item Derive simplified next-state and output equations.
+    \item Draw the high-level FSM schematic.
+  \end{enumerate}
+
+  \item \textbf{Pipeline timing (Source: 2023\_Final\_Exam.pdf, adapted)}\\
+  A 3-stage pipeline has delays: Stage 1 = 3.4 ns, Stage 2 = 3.3 ns, Stage 3 = 3.7 ns. Flip-flops have $t_{pcq}=0.2$ ns and $t_{setup}=0.1$ ns, with $t_{hold}=0$.
+  \begin{enumerate}[label=(\alph*)]
+    \item What is the clock period?
+    \item How long to process 12 tokens on one pipeline?
+    \item How long to process $10^9$ tokens on one pipeline?
+    \item If four identical pipelines split the work evenly, how long for $10^9$ tokens total?
+  \end{enumerate}
+\end{enumerate}
+
+\end{document}

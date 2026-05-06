@@ -1,0 +1,106 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 3 Practice Exam Solutions}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Part A: Multiple Choice}
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item C
+  \item D
+  \item B
+  \item B
+  \item B
+  \item C
+  \item B
+  \item D
+  \item B
+  \item B
+\end{enumerate}
+
+\section*{Part B: Computational and Design Problems}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{SR Latch}\\
+  Using NOR SR latch rules:
+  \begin{itemize}[leftmargin=*]
+    \item (0,0): hold $Q=0$
+    \item (1,0): set $Q=1$
+    \item (0,0): hold $Q=1$
+    \item (0,1): reset $Q=0$
+    \item (0,0): hold $Q=0$
+    \item (1,1): invalid (both outputs forced low)
+    \item (0,0): indeterminate due to prior invalid state
+  \end{itemize}
+
+  \item \textbf{D Latch}\\
+  Transparent when CLK=1; hold when CLK=0.
+  \begin{center}
+  \begin{tabular}{c|ccccc}
+  Interval & 1 & 2 & 3 & 4 & 5 \\ \hline
+  CLK & 0 & 1 & 1 & 0 & 1 \\
+  D   & 1 & 0 & 1 & 1 & 0 \\
+  Q   & 0 & 0 & 1 & 1 & 0 \\
+  \end{tabular}
+  \end{center}
+
+  \item \textbf{D Flip-Flop}\\
+  Samples on rising edges. Starting $Q=1$:
+  \[
+  Q(t_1)=0,\ Q(t_2)=1,\ Q(t_3)=1,\ Q(t_4)=0
+  \]
+
+  \item \textbf{Registers and Memory}\\
+  \begin{enumerate}[label=(\alph*)]
+    \item $\log_2(64\text{K})=16$ address bits.
+    \item Capacity $= 64\text{K} \times 16$ bits $= 1,048,576$ bits $= 131,072$ bytes (128 KiB).
+    \item Byte-addressable capacity $= 64\text{K} \times 8$ bits $= 524,288$ bits $= 65,536$ bytes (64 KiB).
+  \end{enumerate}
+
+  \item \textbf{Timing constraints}\\
+  \begin{enumerate}[label=(\alph*)]
+    \item $T_c = t_{pcq} + t_{pd} + t_{setup} = 0.4 + 6.0 + 0.2 = 6.6$ ns.
+    \item $f_{max} = 1/T_c \approx 1/6.6\text{ ns} = 151.5$ MHz.
+    \item Aperture time $= t_{setup}+t_{hold} = 0.2 + 0.1 = 0.3$ ns.
+  \end{enumerate}
+
+  \item \textbf{Pipeline throughput}\\
+  \begin{enumerate}[label=(\alph*)]
+    \item $T_c = 0.3 + \max(4,3,5) + 0.2 = 5.5$ ns.
+    \item Cycles $= K + (N-1) = 3 + 19 = 22$. Time $= 22 \times 5.5$ ns $= 121$ ns.
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{Moore FSM concept}\\
+  A Moore FSM is a finite state machine whose outputs depend only on the current state, not directly on inputs. Example: a traffic light controller where each state encodes the light color.
+
+  \item \textbf{FSM design (three consecutive 1s)}\\
+  \begin{enumerate}[label=(\alph*)]
+    \item States represent count of consecutive 1s: $S_0$ (0), $S_1$ (1), $S_2$ (2), $S_3$ (3 or more). Output $X=1$ only in $S_3$.
+    Transitions: on $A=1$, $S_0\to S_1\to S_2\to S_3\to S_3$; on $A=0$, any state $\to S_0$.
+    \item Example encoding: $S_0=00$, $S_1=01$, $S_2=10$, $S_3=11$.
+    \item Next-state equations (one valid set):
+    \[
+    D_1 = A \cdot (Q_1 + Q_0),\quad D_0 = A \cdot (Q_1 + \overline{Q_0})
+    \]
+    Output: $X=Q_1 Q_0$.
+    \item Schematic: input $A$ into next-state logic; state register is two D flip-flops; outputs from register feed output logic for $X$.
+  \end{enumerate}
+
+  \item \textbf{Pipeline timing}\\
+  \begin{enumerate}[label=(\alph*)]
+    \item $T_c = 0.2 + \max(3.4,3.3,3.7) + 0.1 = 4.0$ ns.
+    \item $K=3$, $N=12$ cycles $= 3 + 11 = 14$. Time $= 14 \times 4.0$ ns $= 56$ ns.
+    \item $N=10^9$ cycles $= 10^9 + 2$. Time $\approx 4.0\text{ ns} \times (10^9+2) \approx 4.000000008$ s.
+    \item Four pipelines: $2.5\times 10^8$ tokens each. Time $\approx 4.0\text{ ns} \times (2.5\times 10^8 + 2) \approx 1.000000008$ s.
+  \end{enumerate}
+\end{enumerate}
+
+\end{document}

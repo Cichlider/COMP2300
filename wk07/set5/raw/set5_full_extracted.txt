@@ -1,0 +1,544 @@
+===== PAGE 1 =====
+Convener: Shoaib Akram shoaib.akram@anu.edu.au
+
+===== PAGE 2 =====
+Multi-Cycle Microarchitecture
+2
+Section 7.4 of H&HAcknowledgement: Selection of Slides from Digital Design and Computer Architecture, Onur Mutlu, ETH Zurich, Spring 2022
+
+===== PAGE 3 =====
+nEach instruction takes a single clock cycle to executenOnly combinational logic is used to implement instruction execution qNo intermediate, programmer-invisible state updatesAS = Architectural (programmer visible) state at the beginning of a clock cycleProcess instruction in one clock cycleAS’ = Architectural (programmer visible) state at the end of a clock cycle3
+Recall: Single-Cycle Microarchitecture (Very Basic)
+
+===== PAGE 4 =====
+Recall: The Instruction Processing “Cycle” in Single-Cycle MicroarchitectureqFETCHqDECODE + Register Read qEVALUATE ADDRESS/ExecuteqFETCH OPERANDS (Mem Access)qSTORE RESULT (Writeback)
+4
+
+===== PAGE 5 =====
+Instruction Processing “Cycle” vs. Machine Clock CyclenSingle-cycle machine: qAll phases of the instruction processing cycle take a single machine clock cycle to complete
+nMulti-cycle machine: qEach phase of the instruction processing cycle can take multiple machine clock cycles to complete
+5
+
+===== PAGE 6 =====
+Recall: Single-Cycle MachinenSingle-cycle machine
+6
+ASSequentialLogic (State)CombinationalLogicAS’ 
+AS: Architectural State
+
+===== PAGE 7 =====
+Recall: Datapath and Control LogicnAn instruction processing engine consists of two componentsqDatapath: Consists of hardware elements that deal with and transform data signalsnfunctional units that operate on datanhardware structures (e.g., wires, muxes, decoders, tri-state bufs) that enable the flow of data into the functional units and registersnstorage units that store data (e.g., registers)qControl logic: Consists of hardware elements that determine control signals, i.e., signals that specify what the datapath elements should do to the data
+7
+
+===== PAGE 8 =====
+A Single-Cycle Microarchitecture: AnalysisnEvery instruction takes 1 cycle to executeqCPI (Cycles per instruction) is strictly 1nHow long each instruction takes is determined by how long the slowest instruction takes to executeqEven though many instructions do not need that long to executenClock cycle time of the microarchitecture is determined by how long it takes to complete the slowest instructionqCritical path of the design is determined by the processing time of the slowest instruction
+8
+
+===== PAGE 9 =====
+What is the Slowest Instruction to Process?nLet’s go back to the basicsnAll phases of the instruction processing cycle take a single machine clock cycle to completeqInstruction Fetch (IF)qInstruction Decode and Register Read (ID/RF)qExecute (EX)qMemory Access (MEM)qWriteback (WB)nDoes every instruction take the same time (latency) to complete?9
+
+===== PAGE 10 =====
+What is Really the Slowest Instruction to Process?nReal world: Memory is slow (not magic)nWhat if memory sometimes takes 150ns to access?nDoes it make sense to have a simple register to register add or jump to take {150ns + all else to perform a memory operation}?nAnd, what if you need to access memory more than once to process an instruction?qWhich instructions require this?qDo you provide multiple ports to memory?10
+
+===== PAGE 11 =====
+nContrived qAll instructions run as slow as the slowest instructionnInefficientqAll instructions run as slow as the slowest instructionqMust provide worst-case combinational resources in parallel as required by any instructionqNeed to replicate a resource if it is needed more than once by an instruction during different parts of the instruction processing cyclenNot necessarily the simplest way to implement an ISAqTough for complex instructions, e.g., REP MOVS (x86) or INDEX (VAX)nNot easy to optimize/improve performanceqOptimizing the common case (frequent instructions) does not work qNeed to optimize the worst case all the time11
+Single-Cycle uArch: Complexity
+
+===== PAGE 12 =====
+nGoal: Let each instruction take (close to) only as much time it really needsnIdeaqDetermine clock cycle time independently of instruction processing timeqEach instruction takes as many clock cycles as it needs to takenMultiple state transitions per instructionnThe states followed by each instruction is different
+12
+Multi-Cycle Microarchitectures
+
+===== PAGE 13 =====
+nISA specifies abstractly what AS’ should be, given an instruction and ASqIt defines an abstract finite state machine wherenState = programmer-visible state nNext-state logic = instruction execution specificationqFrom ISA point of view, there are no “intermediate states” between AS and AS’ during instruction executionnOne state transition per instructionnMicroarchitecture implements how AS is transformed to AS’qThere are many choices in implementation qWe can have programmer-invisible state to optimize the speed of instruction execution: multiple state transitions per instructionnChoice 1: AS à AS’ (transform AS to AS’ in a single clock cycle)nChoice 2: AS à AS+MS1 à AS+MS2 à AS+MS3 à AS’ (take multiple clock cycles to transform AS to AS’) 13
+Recall: The “Process Instruction” Step
+
+===== PAGE 14 =====
+AS = Architectural (programmer visible) state at the beginning of an instructionStep 1: Process part of instruction in one clock cycle
+Step 2: Process part of instruction in the next clock cycle
+  …AS’ = Architectural (programmer visible) state at the end of a clock cycle14
+Multi-Cycle Microarchitecture
+
+===== PAGE 15 =====
+nCritical path designqCan keep reducing the critical path independently of the worst-case processing time of any instructionnCan optimize the common caseqCan optimize the number of states it takes to execute “important” instructions that make up much of the execution timenEfficient/balanced designqNo need to provide more capability or resources than really needed nAn instruction that needs resource X multiple times does not require multiple X’s to be implementednLeads to more efficient hardware: Can reuse hardware components needed multiple times for an instruction15
+Benefits of  Multi-Cycle Design
+
+===== PAGE 16 =====
+nNeed to store the intermediate results at the end of each clock cycleqHardware overhead for microarchitectural registersqRegister setup/hold overhead (i.e., sequencing overhead) is paid multiple times for an instruction
+16
+Downsides of  Multi-Cycle Design
+
+===== PAGE 17 =====
+nSingle-cycle microarchitecture performance qCPI = 1qClock cycle time = long
+nMulti-cycle microarchitecture performanceqCPI = different for each instructionnAverage CPI à hopefully smallqClock cycle time = short
+17
+In multi-cycle, we have two degrees of freedomto optimize independently
+Remember: Performance Analysis
+
+===== PAGE 18 =====
+nKey Idea for RealizationqOne can implement the “process instruction” step as a finite state machine that sequences between states and eventually returns back to the “fetch instruction” stateqA state is defined by the control signals asserted in itqControl signals for the next state are determined in current state
+18
+Multi-Cycle Microarchitectures
+
+===== PAGE 19 =====
+nInstruction processing cycle divided into “states”nA stage in the instruction processing cycle can take multiple statesnA multi-cycle microarchitecture sequences from state to state to process an instruction nThe behavior of the machine in a state is completely determined by control signals in that statenThe behavior of the entire processor is specified fully by a finite state machinenIn a state (clock cycle), control signals control two things:nHow the datapath should process the datanHow to generate the control signals for the (next) clock cycle19
+A Basic Multi-Cycle Microarchitecture
+
+===== PAGE 20 =====
+§Single-cycle microarchitecture:§-- cycle time limited by longest instruction (LDR) à low clock frequency §We want multi-cycle to determine clock cycle time independently of instruction processing time à higher clock frequency§Divide instruction execution into multiple stages (cycles)§Simpler instructions take only a few cycles§Complex instructions take more cycles than simpler instructions§-- three adders/ALUs and two memories à high hardware cost§We want multi-cycle to use a single ALU and memory (lower cost)§Multi-cycle requires the same design steps as single cycle: §datapath §control logic20
+Summary: Why do we Want Multi-Cycle?
+
+===== PAGE 21 =====
+21
+Remember the Single-Cycle Uarch
+
+===== PAGE 22 =====
+Overview: Multicycle ARM Processor
+Only one memory Only one ALU/adderExtra registers not needed in a single-cycle design 22
+
+===== PAGE 23 =====
+Let’s Construct the Multi-Cycle Datapath for 32-bit ARM
+23
+
+===== PAGE 24 =====
+§LDR R0, [R1, #32]§We need to:§Read the instruction from memory§Then read R1 from the register file§Add the immediate value (#32) to calculate the memory address§Read the value at this memory address §Write to the register R0 this value
+Consider the LDR Instruction
+24
+
+===== PAGE 25 =====
+Replace Instruction and Data memories with a single unified memory – more realistic
+Multicycle State Elements
+25
+
+===== PAGE 26 =====
+STEP 1: Fetch instruction
+LDR Rd, [Rn, imm12]
+Multicycle Datapath: Instruction fetch
+31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+26
+
+===== PAGE 27 =====
+STEP 2: Read source operands from RF
+Multicycle Datapath: LDR Register Read
+LDR Rd, [Rn, imm12]
+31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+27
+
+===== PAGE 28 =====
+STEP 3: Compute the memory address
+Multicycle Datapath: LDR Address
+LDR Rd, [Rn, imm12]
+31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+28
+
+===== PAGE 29 =====
+Multicycle Datapath: LDR Memory ReadSTEP 4: Read data from memory
+Multicycle Datapath: LDR Memory Read
+LDR Rd, [Rn, imm12]
+31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+29
+
+===== PAGE 30 =====
+STEP 5: Write data back to register file
+Multicycle Datapath: LDR Write Register
+LDR Rd, [Rn, imm12]
+31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+30
+
+===== PAGE 31 =====
+Multicycle Datapath: Increment PCSTEP 6: Increment PC
+Multicycle Datapath: Increment PC
+31
+
+===== PAGE 32 =====
+PC can be read/written by instruction•Read: R15 (PC+8) available in Register File
+Multicycle Datapath: Access to PC
+32
+
+===== PAGE 33 =====
+Example: ADD R1, R15, R2Multicycle Datapath: Read to PC (R15)
+33
+
+===== PAGE 34 =====
+Example: ADD R1, R15, R2•R15 needs to be read as PC+8 from Register File (RF) in 2nd step•So (also in 2nd step) PC + 8 is produced by ALU and routed to R15 input of RF
+Multicycle Datapath: Read to PC (R15)
+34
+
+===== PAGE 35 =====
+Example: ADD R1, R15, R2•R15 needs to be read as PC+8 from Register File (RF) in 2nd step•So (also in 2nd step) PC + 8 is produced by ALU and routed to R15 input of RF–SrcA = PC (which was already updated in step 1 to PC+4)–SrcB = 4–ALUResult = PC + 8 •ALUResult is fed to R15 input port of RF in 2nd step (which is then routed to RD1 output of RF)
+Multicycle Datapath: Read to PC (R15)
+35
+
+===== PAGE 36 =====
+PC can be read/written by instruction•Read: R15 (PC+8) available in Register File•Write: Be able to write result of instruction to PC
+Multicycle Datapath: Access to PC
+36
+
+===== PAGE 37 =====
+Example:  SUB R15, R8, R3Multicycle Datapath: Write to PC (R15)
+37
+
+===== PAGE 38 =====
+Example:  SUB R15, R8, R3•Result of instruction needs to be written to the PC register•ALUResult already routed to the PC register, just assert PCWrite
+Multicycle Datapath: Write to PC (R15)
+38
+
+===== PAGE 39 =====
+Example:  SUB R15, R8, R3•Result of instruction needs to be written to the PC register•ALUResult already routed to the PC register, just assert PCWrite
+Multicycle Datapath: Write to PC (R15)
+39
+
+===== PAGE 40 =====
+Write data in Rn to memory
+Multicycle Datapath: STR
+40
+
+===== PAGE 41 =====
+With immediate addressing (i.e., an immediate Src2), no additional changes needed for datapath
+Multicycle Datapath: Data-Processing
+41
+
+===== PAGE 42 =====
+With register addressing (register Src2): Read from Rn and Rm
+Multicycle Datapath: Data-Processing
+42
+
+===== PAGE 43 =====
+Calculate branch target address:         BTA = (ExtImm) + (PC+8) ExtImm = Imm24 << 2 and sign-extended 
+Multicycle Datapath: B
+43
+
+===== PAGE 44 =====
+Multicycle ARM Processor
+44
+
+===== PAGE 45 =====
+•First, discuss Decoder•Then, Conditional Logic
+Multicycle Control
+45
+
+===== PAGE 46 =====
+Decoder
+Multicycle Control: Decoder
+46
+
+===== PAGE 47 =====
+RegSrc0 = (Op == 102)RegSrc1 = (Op == 012)ImmSrc1:0 = Op
+ImmSrc 1 :0
+RegSrc 1 :0
+Instr
+Decod er
+Op 1 :0
+InstructionOpFunct5Funct0RegSrc0RegSrc1ImmSrc1:0LDR01X10X01STR01X00101DP immediate001X0X00DP register000X0000B10XX1X10
+Multicycle Control: Instr Decoder
+47
+
+===== PAGE 48 =====
+Decoder
+Multicycle Control: Main FSM
+48
+
+===== PAGE 49 =====
+Main Controller FSM: Fetch
+49
+
+===== PAGE 50 =====
+Main Controller FSM: Decode
+50
+
+===== PAGE 51 =====
+Main Controller FSM: Address
+51
+
+===== PAGE 52 =====
+Main Controller FSM: Read Memory
+52
+
+===== PAGE 53 =====
+Main Controller FSM: LDR
+53
+
+===== PAGE 54 =====
+Main Controller FSM: STR
+54
+
+===== PAGE 55 =====
+Main Controller FSM: Data-Processing
+55
+
+===== PAGE 56 =====
+Main Controller FSM: Data-Processing
+56
+
+===== PAGE 57 =====
+Main Controller FSM
+57
+
+===== PAGE 58 =====
+•First, discuss Decoder•Then, Conditional Logic
+Main Controller
+58
+
+===== PAGE 59 =====
+•Instructions take different number of cycles.Multicycle Processor Performance
+59
+
+===== PAGE 60 =====
+Multicycle Controller FSM
+60
+
+===== PAGE 61 =====
+•Instructions take different number of cycles:–3 cycles: B–4 cycles: DP , STR–5 cycles: LDR
+Multicycle Processor Performance
+61
+
+===== PAGE 62 =====
+•Instructions take different number of cycles:–3 cycles: B–4 cycles: DP , STR–5 cycles: LDR•CPI is weighted average•SPECINT2000 benchmark suite: –25% loads–10% stores –13% branches–52% R-type
+Multicycle Processor Performance
+62
+
+===== PAGE 63 =====
+•Instructions take different number of cycles:–3 cycles: B–4 cycles: DP , STR–5 cycles: LDR•CPI is weighted average•SPECINT2000 benchmark: –25% loads–10% stores –13% branches–52% R-typeAverage CPI = (0.13)(3) + (0.52 + 0.10)(4) + (0.25)(5) = 4.12
+Multicycle Processor Performance
+63
+
+===== PAGE 64 =====
+Multicycle critical path:•Assumptions:•RF is faster than memory•writing memory is faster than reading memoryTc2 = tpcq + 2tmux + max(tALU + tmux, tmem) + tsetup  
+Multicycle Processor Performance
+64
+
+===== PAGE 65 =====
+Tc2 = ?
+ElementParameterDelay (ps)Register clock-to-Qtpcq_PC40Register setuptsetup50Multiplexertmux25ALUtALU120Decodertdec 70Memory readtmem200Register file readtRFread100Register file setuptRFsetup60
+Multicycle Performance Example
+65
+
+===== PAGE 66 =====
+Tc2 = tpcq + 2tmux + max[tALU + tmux, tmem] + tsetup     = [40 + 2(25) + 200 + 50] ps = 340 ps
+ElementParameterDelay (ps)Register clock-to-Qtpcq_PC40Register setuptsetup50Multiplexertmux25ALUtALU120Decodertdec 70Memory readtmem200Register file readtRFread100Register file setuptRFsetup60
+Multicycle Performance Example
+66
+
+===== PAGE 67 =====
+For a program with 100 billion instructions executing on a multicycle ARM processor–CPI = 4.12 cycles/instruction–Clock cycle time: Tc2 = 340 psExecution Time = ? 
+Multicycle Performance Example
+67
+
+===== PAGE 68 =====
+For a program with 100 billion instructions executing on a multicycle ARM processor–CPI = 4.12 cycles/instruction–Clock cycle time: Tc2 = 340 psExecution Time = (# instructions) × CPI × Tc                   = (100 × 109)(4.12)(340  × 10-12)                   = 140 seconds
+ 
+Multicycle Performance Example
+68
+
+===== PAGE 69 =====
+For a program with 100 billion instructions executing on a multicycle ARM processor–CPI = 4.12 cycles/instruction–Clock cycle time: Tc2 = 340 psExecution Time = (# instructions) × CPI × Tc                   = (100 × 109)(4.12)(340  × 10-12)                   = 140 seconds
+ 
+Multicycle Performance Example
+69
+
+===== PAGE 70 =====
+ExtImm
+CLK
+A RD
+Instructi on
+Me mory
++
+4
+A1
+A3
+WD 3
+RD2
+RD1
+WE 3
+A2
+CLK
+Regist er
+File
+0
+1
+A RD
+Data
+Me mory
+WD
+WE
+1
+0
+PC1
+0
+PC'
+Instr
+19:16
+15:12
+23:0
+25:20
+SrcB
+ALUR esult ReadData
+Wr iteD ata
+SrcA
+PCPlu s 4
+ 
+Resul t
+27:26
+ImmSrc
+PCSrc
+Me mW rite
+Me mto Reg
+AL USrc
+RegW rite
+Op
+Funct
+Cont rol
+Unit
+AL UFla gs
+CLK
+AL UCo ntro l
+ALU
+PCP lu s 8
+R15
+3:0
+Cond
+31:28
+Flags
+15:12
+Rd+
+4
+15
+RA1
+RA2
+0 1
+Ext end
+0
+1
+0
+1
+RegSrc
+Review: Single-Cycle Processor
+70
+
+===== PAGE 71 =====
+Review: Multicycle ARM Processor
+Only one memory Only one ALU/adderExtra registers not needed in a single-cycle design 71
+
+===== PAGE 72 =====
+72
+Quiz: Multicycle ARM Processor1.Why do we need each of the non-architectural registers?2.Explain why do we need the path colored red (pick a path)? 3.Explain the ALUResult bypassing the 3-input mux?4.Why are there two muxes in front of RF?5.What is the purpose of PCWrite and IRWrite and MemWrite and RegWrite?6.What is the purpose of AdrSrc (signal) and Adr (mux)?7.Why do we store the instruction/data in a non-architectural register?8.What if we don’t have a register at the output of RF?9.Analyze the critical path of the multicycle processor (page 424 of book)§Hint: PC update, Memory read
+
+===== PAGE 73 =====
+Microprogramming
+73
+
+===== PAGE 74 =====
+Microprogrammed ControlnMulti-cycle microarchitecture enables a key new abstraction called microprogrammingnHardwired controlqPhysically connect the control lines to the actual machine instructionsqInstructions are divided into fields, and bits in the field are connected to input lines that drive various digital logic componentsnMicroprogrammed control qEmploys software consisting of microinstructions that carry out instruction’s microoperations (each step in the instruction processing)qMicroinstructions are stored in memory (control store)qEach microinstruction specifies the values of control signals
+74
+
+===== PAGE 75 =====
+An Elegant Multi-Cycle Processor DesignnMaurice Wilkes, “The Best Way to Design an Automatic Calculating Machine,” Manchester Univ. Computer Inaugural Conf., 1951.
+nAn elegant implementation:qThe concept of microcoded/microprogrammed machines75
+
+===== PAGE 76 =====
+Microprogrammed Control TerminologynControl signals associated with the current stateqMicroinstructionnAct of transitioning from one state to anotherqDetermining the next state and the microinstruction for the next stateqMicrosequencingnControl store stores control signals for every possible stateqStore for microinstructions for the entire FSMnMicrosequencer determines which set of control signals will be used in the next clock cycle (i.e., next state)76
+
+===== PAGE 77 =====
+77
+MicrosequencerNext State Logic
+Control Store
+Microinstruction
+op0op1Funct0Funct1
+4
+12
+current state
+Microprogrammed ARM
+
+===== PAGE 78 =====
+78
+RegWMemWIRWriteNextPCAdrSrcResultSrc1ResultSrc0ALUSrcAALUSrcB1ALUSrcB0BranchALUOp FetchDecodeMemAdrMemReadMemWBMemWriteExecuteRExecuteIALUWBBranch
+Control Store
+next_state_generate
+Unused_1Unused_2
+nMicroinstruction: control signals that control the datapath  and help determine the next state
+ nEach microinstruction is stored in a unique location in the control store qUnique location: address of the state corresponding to the microinstructionqEach state in the FSM corresponds to one microinstruction
+
+===== PAGE 79 =====
+What Happens In A Clock Cycle?nThe control signals (microinstruction) for the current state control two things:qProcessing in the data pathqGeneration of control signals (microinstruction) for the next cyclenDatapath and microsequencer operate concurrently
+79
+
+===== PAGE 80 =====
+Microprogrammed Control StructurenThree components: Microinstruction, Control store, MicrosequencernMicroinstruction: control signals that control the datapath  and help determine the next state nEach microinstruction is stored in a unique location in the control store (a special memory structure)qUnique location: address of the state corresponding to the microinstructionqEach state in the FSM corresponds to one microinstructionnMicrosequencer determines the address of the next microinstruction (i.e., next state)80
+
+===== PAGE 81 =====
+A Simple Datapath Can Become Very Powerful by Enabling a New Level of Programmability Post-Fabrication
+81
+Microprogrammed Control Structure
+
+===== PAGE 82 =====
+The Power of AbstractionnThe concept of a control store of microinstructions enables the hardware designer with a new abstraction: microprogrammingnThe designer can translate any desired operation to a sequence of microinstructionsnAll the designer needs to provide is qThe sequence of microinstructions needed to implement the desired operationqThe ability for the control logic to correctly sequence through the microinstructionsqAny additional datapath elements and control signals needed (no need if the operation can be “translated” into existing control signals)82
+
+===== PAGE 83 =====
+How to Change the Semantic Gap Tradeoffs?nTranslate from one ISA into a different “implementation” ISA
+83
+HLL
+HWControl Signals
+Small Semantic Gap
+Implementation ISA withSimple Inst& Data Types& Addressing Modes
+Software or Hardware TranslatorISA withComplex Inst& Data Types& Addressing Modes
+X86-64
+ARM v8.4
+
+===== PAGE 84 =====
+Recall: How to Change the Semantic Gap TradeoffsnTranslate from one ISA into a different “implementation” ISA
+84
+HLL
+HWControl Signals
+Small Semantic Gap
+Implementation ISA withSimple Inst& Data Types& Addressing Modes
+Software or Hardware TranslatorISA withComplex Inst& Data Types& Addressing Modes
+X86-64
+ARM v8.4
+
+===== PAGE 85 =====
+How to Change the Semantic Gap TradeoffsnTranslate from one ISA into a different “implementation” ISA
+85
+HLL
+HWControl Signals
+Small Semantic Gap
+Implementation ISA withSimple Inst& Data Types& Addressing Modes
+Hardware Translator(Microsequencer)
+ISA withComplex Inst& Data Types& Addressing Modes
+ISA
+Microinstructions
+
+===== PAGE 86 =====
+Advantages of Microprogrammed ControlnAllows a very simple design to do powerful computation by controlling the datapath (using a sequencer)qHigh-level ISA translated into microcode (sequence of u-instructions)qMicrocode (u-code) enables a minimal datapath to emulate an ISAqMicroinstructions can be thought of as a user-invisible ISA (u-ISA)nEnables easy extensibility of the ISAqCan support a new instruction by changing the microcodeqCan support complex instructions as a sequence of simple microinstructions (e.g., MultiDimensional Array Updates)
+nEnables update of machine behaviorqA buggy implementation of an instruction can be fixed by changing the microcode in the fieldnEasier if datapath provides ability to do the same thing in different ways86
+
+===== PAGE 87 =====
+Update of Machine BehaviornThe ability to update/patch microcode in the field (after a processor is shipped) enables qAbility to add new instructions without changing the processor!qAbility to “fix” buggy hardware implementationsnHistorical ExamplesqIBM 370 Model 145: microcode stored in main memory, can be updated after a rebootqIBM System z: Similar to 370/145.nHeller and Farrell, “Millicode in an IBM zSeries processor,” IBM JR&D, May/Jul 2004.qB1700 microcode can be updated while the processor is runningnUser-microprogrammable machine!nWilner, “Microprogramming environment on the Burroughs B1700”, CompCon 1972.qSystems today use microcode patches to fix HW bugs/issues 87
+
+===== PAGE 88 =====
+88
+Can We Do Better?
+
+===== PAGE 89 =====
+nWhat limitations do you see with the multi-cycle design?nLimited concurrencyqSome hardware resources are idle during different phases of instruction processing cycleq“Fetch” logic is idle when an instruction is being “decoded” or “executed”qMost of the datapath is idle when a memory access is happening
+89
+Can We Do Better?
+
+===== PAGE 90 =====
+nGoal: More concurrency à Higher instruction throughput (i.e., more “work” completed in one cycle)nIdea: When an instruction is using some resources in its processing phase, process other instructions on idle resources not needed by that instructionqE.g., when an instruction is being decoded, fetch the next instructionqE.g., when an instruction is being executed, decode another instructionqE.g., when an instruction is accessing data memory (ld/st), execute the next instructionqE.g., when an instruction is writing its result into the register file, access data memory for the next instruction90
+Can We Use the Idle Hardware to Improve Concurrency?
+
+===== PAGE 91 =====
+qInstruction Fetch (IF)qInstruction Decode and Register Read (ID/RF)qExecute (EX)qMemory Access (MEM)qWriteback (WB)
+91
+Can Have Different Instructions in Different Stages
+
+===== PAGE 92 =====
+92Of course, we need to be more careful than this!
+Can Have Different Instructions in Different Stages
+
+===== PAGE 93 =====
+93
+Pipelining
+
+===== PAGE 94 =====
+nMore systematically:qPipeline the execution of multiple instructionsqAnalogy: “Assembly line processing” of instructionsnIdea:qDivide the instruction processing cycle into distinct “stages” of processingqEnsure there are enough hardware resources to process one instruction in each stageqProcess a different instruction in each stagenInstructions consecutive in program order are processed in consecutive stagesnBenefit: Increases instruction processing throughput (1/CPI)nDownside: Start thinking about this…94
+Pipelining: Basic Idea

@@ -1,0 +1,1788 @@
+===== PAGE 1 =====
+Convener: Shoaib Akram shoaib.akram@anu.edu.au
+===== PAGE 2 =====
+Our Status§We are done with digital logic fundamentals that we need to understand and build a CPU§We are now (+ next week) at§Architecture layer §Then §Microarchitecture layer
+1
+===== PAGE 3 =====
+ISA then microarchitecture 
+2
+===== PAGE 4 =====
+Von Neumann Model
+3
+===== PAGE 5 =====
+Main Memory
+§Key resources: CPU, memory, and Input/Output (I/O) devices§CPU (microprocessor) does the actual processing (computation)§Memory stores temporary data and forms a hierarchy (registers, SRAM, DRAM, ...)§Some fast (small capacity) memory called register file is close to the CPU and rest is far§Storage disk is an I/O device (much slower than memory, stores persistent data)§Memory is volatile, while disk is non-volatile (data is retained after a shutdown) §Other peripherals such as keyboard and network card are accessories to processing
+Storage
+Recall: A Computer System
+I/O Peripherals
+===== PAGE 6 =====
+Another View: What is a Computer?
+ProcessingMain Memory1.Program2.DataInput/Output (I/O)Control(Sequencing)Datapath
+§Basic computer model proposed in the 1940s
+§We will cover all three components 5
+===== PAGE 7 =====
+§In past lectures, we learned how to design§Combinational logic structures§Sequential logic structures§With logic structures, we can build§Execution units§Decision units§Memory/storage units§Communication units§All are basic elements of a computer§We will raise our abstraction level today§Use logic structures to construct a basic computer model
+Building up a Basic Computer Model
+MicroarchitectureISA (Architecture)
+Program in C/JavaAlgorithmProblem
+LogicDevices
+Runtime System(Operating system)
+Electrons6
+===== PAGE 8 =====
+Building up a Basic Computer Model
+MicroarchitectureISA (Architecture)
+Program in C/JavaAlgorithmProblem
+LogicDevices
+Runtime System(Operating system)
+Electrons
+§ISA: Specification of the instructions computer can perform§An interface between the programs and hardware§Programmer needs to know ISA to be able to convey his wishes (instructions) to the hardware§Hardware builder (computer architect) needs to know the ISA to be able to build and organize circuits to carry out the instructions
+§Microarchitecture: Implementation of the specification (organization + hardware)§An important aspect to ponder: Not every implementation detail is relevant to the programmer!§Just enough to be able to program the computer (as we will see)7
+===== PAGE 9 =====
+ISA vs. Microarchitecture§What is part of ISA vs. microarchitecture?§Gas pedal: interface for “acceleration”§Internals of the engine: implement “acceleration” §Aspects of ISA§The different instructions and their binary codes§Semantics (meaning) of each instruction§Word size, number of registers, memory addressability§Aspects of implementation§Ripple-carry vs. carry-lookahead adder§Mux or tristate buffers§Canonical SOP or minimal Boolean expression for implementation§NAND gates only vs. AND/OR/NOT combination
+8
+===== PAGE 10 =====
+ISA vs. Microarchitecture§One ISA can have many microarchitectures§One microarchitecture per student, but the QuAC ISA is the same on the course webpage§ISA is usually a one-time effort with incremental changes to enable new applications§Only a few ISAs in the world but many microarchitectures§Microarchitecture changes faster than ISA§Key insight: ISA can enable simple vs. complex logic gate circuitry at the microarchitecture level (more in coming weeks ....9
+===== PAGE 11 =====
+ISA: Another View§Most people don’t write programs in the computer’s own machine language (lowest level)§They prefer high-level languages such as C++, Java, or Python§A compiler translates C++ or Java code into the computer’s machine language§ISA specifies everything in the computer that a compiler writer who wishes to translate programs fromC, C++, Rust, etc. to machine language need to know10
+===== PAGE 12 =====
+ISAs are a Good Bedtime Reading!
+11
+===== PAGE 13 =====
+ISAs You Will Encounter @ ANU§QuAC§An ISA for educational purposes developed at ANU§Mainly covered in tutorials and required for assignment 1§MIPS§Pioneering RISC ISA developed by John Hennessy at         MIPS computer systems§Microprocessors without Interlocked Pipelined Stages§Briefly covered in today’s lecture for breadth §ARM §A popular RISC ISA developed by Arm Ltd. §Advanced RISC Machines§De facto choice for portable hand-held devices§Covered extensively in lectures and required for assignment 2§LC-3§Little Computer 3 is an educational ISA developed by Yale N. Patt at UT-Austin§Briefly covered in today’s lecture for breadth§x86-64§A CISC ISA developed by Intel Corporation§Most influential ISA in the world and de facto choice for high-performance computing§Covered extensively in COMP2310
+•Ex-President of Stanford University•Chairman of Alphabet•Founder of MIPS Technologies•Turing Award Winner
+12
+===== PAGE 14 =====
+§To get a task done by a (general-purpose) computer, we need§A computer program§That specifies what the computer must do§The computer itself§To carry out the specified task§Program: A set of instructions§Each instruction specifies a well-defined piece of work for the computer to carry out§Instruction: the smallest piece of specified work in a program§Instruction set: All possible instructions that a computer is designed to be able to carry out
+What is a Computer?
+13
+===== PAGE 15 =====
+§In order to build a computer, we need an execution model for processing computer programs§John von Neumann proposed a fundamental model in 1946§The von Neumann Model consists of 5 components§Memory (stores the program and data)§Processing unit§Input§Output§Control unit (controls the order in which instructions are carried out)
+Burks, Goldstein, von Neumann, “Preliminary discussion of the logical design of an electronic computing instrument,” 1946.
+All general-purpose computers today use the von Neumann model
+The Von Neumann Model
+14
+===== PAGE 16 =====
+CONTROL UNITPC or IPInst Register
+PROCESSING UNITALUTEMP
+MEMORYMem Addr RegMem Data Reg
+INPUTKeyboard,Mouse,Disk…
+OUTPUTMonitor, Printer, Disk…
+The Von Neumann Model
+15
+===== PAGE 17 =====
+CONTROL UNITPC or IPInst Register
+PROCESSING UNITALUTEMP
+MEMORYMem Addr RegMem Data Reg
+INPUTKeyboard,Mouse,Disk…
+OUTPUTMonitor, Printer, Disk…
+The Von Neumann Model
+16
+===== PAGE 18 =====
+17
+Recall: A Memory Array (4 locations X 3 bits)
+===== PAGE 19 =====
+Di[2]Di[1]Di[0]
+D[2]D[1]D[0]
+Addr[1:0]WE
+Address DecoderMultiplexer18
+===== PAGE 20 =====
+Recall: Memory Array Organization§Decoder drives the wordline HIGH based on the address§Data on the selected row appears on the bitlines wordline 311
+10
+2:4
+Decoder
+Address
+01
+00
+stored
+bit = 0
+wordline 2
+wordline 1
+wordline 0
+stored
+bit = 1
+stored
+bit = 0
+stored
+bit = 1
+stored
+bit = 0
+stored
+bit = 0
+stored
+bit = 1
+stored
+bit = 1
+stored
+bit = 0
+stored
+bit = 0
+stored
+bit = 1
+stored
+bit = 1
+bitline 2
+bitline 1
+bitline 0
+Data2
+Data1
+Data0
+2
+19
+===== PAGE 21 =====
+Recall: Memory Ports§Each memory port gives read or write access to one memory address§Multiported memories can access multiple addresses simultaneously §Example of three-ported memory§Port 1 reads the data from address A1 onto the read data output RD1§Port 2 reads the data from address A2 onto the read data output RD2§Port 3 writes the data from the write data input WD3 into address A3 on the rising clock edge if WE3 is TRUE
+ 20
+===== PAGE 22 =====
+§Memory stores §Programs§Data§Memory contains bits§Bits are logically grouped into bytes (8 bits) and words (e.g., 8, 16, 32 bits)§Address space: Total number of uniquely identifiable locations§In MIPS, the address space is 232§32-bit addressesqIn ARM, the address space is 232 or 248§32-bit or 48-bit addresses§In x86-64, the address space is (up to) 248§48-bit addresses§Addressability: How many bits are stored in each location (address)§E.g., 8-bit addressable (or byte-addressable)§E.g., word-addressable§A given instruction can operate on a byte or a word
+Memory
+21
+===== PAGE 23 =====
+§A representation of memory with 8 locations§Each location contains 8 bits (one byte)§Byte addressable memory with an address space of 8§Value 6 is stored in address 4 & value 4 is stored in address 6
+AddressData ValueQuestion:How can we make same-size memory bit addressable?Answer: 64 locationsEach location stores 1 bit
+A Simple Example
+22
+===== PAGE 24 =====
+§Each data word has a unique address§In MIPS, a unique address for each 32-bit data word (not word-addressable)§In QuAC, a unique address for each 16-bit data word (word addressable)
+00000000000000010000000200000003.  .  .Word Address
+8 9 A B C D E F F 2 F 1 F 0 F 71 3 C 8 1 7 5 5D 1 6 1 7 A 1 C Word 3Word 2Word 1Word 0
+.  .  .
+.  .  .DataWord Number
+Word-Addressable Memory
+23
+===== PAGE 25 =====
+§Each byte has a unique address§MIPS is actually byte-addressable§ARM is also byte-addressable
+Word 3Word 2Word 1Word 0
+.  .  .
+.  .  .Data
+8 9A BC DE FF 2F 1F 0F 71 3C 81 75 5D 16 17 A1 C
+Word Number
+0000000000000004000000080000000C.  .  .Byte Address of the Word
+How are these four bytes ordered?Which of the four bytes is most vs. least significant?
+Byte-Addressable Memory
+24
+===== PAGE 26 =====
+§Jonathan Swift’s Gulliver’s Travels§Big Endians broke their eggs on the big end of the egg§Little Endians broke their eggs on the little end of the egg
+Big Endian vs. Little Endian
+25
+===== PAGE 27 =====
+048C.  .  .
+Word Address
+.  .  .Byte Address
+32107654BA98FEDC
+.  .  .Byte Address
+0123456789ABCDEF
+Big EndianLittle Endian
+MSBLSBMSB(Most Significant Byte)LSB(Least Significant Byte)
+LSB in higher byte addressLSB in lower byte address
+Big Endian vs. Little Endian
+26
+===== PAGE 28 =====
+§0x01234567§Memory addresses start at 0x100Big Endian vs. Little Endian
+27
+===== PAGE 29 =====
+048C.  .  .
+Word Address
+.  .  .Byte Address
+32107654BA98FEDC
+.  .  .Byte Address
+0123456789ABCDEF
+Big EndianLittle Endian
+MSBLSB
+Does this really matter?
+Answer: No, it is a conventionQualified answer: No, except when one big-endian system and one little-endian system have to share or exchange dataMSB(Most Significant Byte)LSB(Least Significant Byte)LSB in higher byte addressLSB in lower byte address
+Big Endian vs. Little Endian
+28
+===== PAGE 30 =====
+§There are two ways of accessing memory§Reading or loading data from a memory location§Writing or storing data to a memory location§Two registers are usually used to access memory§Memory Address Register (MAR)§Memory Data Register (MDR)§To read§Step 1: Load the MAR with the address we wish to read from§Step 2: Data in the corresponding location gets placed in MDR§To write§Step 1: Load the MAR with the address and the MDR with the data we wish to write§Step 2: Activate Write Enable signal à value in MDR is written to address specified by MAR
+Accessing Memory: MAR and MDR
+29
+===== PAGE 31 =====
+Learn to Distinguish Address from Data
+30
+===== PAGE 32 =====
+CONTROL UNITPC or IPInst Register
+PROCESSING UNITALUTEMP
+MEMORYMem Addr RegMem Data Reg
+INPUTKeyboard,Mouse,Disk…
+OUTPUTMonitor, Printer, Disk…
+The Von Neumann Model
+31
+===== PAGE 33 =====
+§Performs the actual computation(s) §The processing unit can consist of many functional units§We start with a simple Arithmetic and Logic Unit (ALU), which executes computation and logic operations §ARM: ADD, AND, NOT, SUB§MIPS: add, sub, mult, and, nor, sll, slr, slt…§The ALU processes quantities that are referred to as words§Word length in ARMv4 is 32 bits (v8 is 64 bits)§Word length in MIPS is 32 bits§Word length in QuAC is 16 bits
+Processing Unit
+32
+===== PAGE 34 =====
+§Combines a variety of arithmetic and logical operations into a single unit (that performs only one function at a time)§Usually denoted with this symbol:
+Recall: Arithmetic & Logic Unit (ALU)
+33
+===== PAGE 35 =====
+Recall: Arithmetic & Logic Unit (ALU)
+34
+===== PAGE 36 =====
+§It is almost always the case that a computer provides a small amount of storage very close to ALU§Purpose: to store temporary values and quickly access them later§E.g., to calculate ((A+B)*C)/D, the intermediate result of A+B can be stored in temporary storage§Why? It is too slow to store each ALU result in memory & then retrieve it again for future use§A memory access is much slower than an addition, multiplication or division§Ditto for the intermediate result of ((A+B)*C)§This temporary storage is usually a set of registers §Called Register File
+Processing Unit: Fast Temporary Storage
+35
+===== PAGE 37 =====
+§Memory is large but slow§Registers in the Processing Unit§Ensure fast access to values to be processed in the ALU§Typically one register contains one word (same as word length)§Register Set or Register File§Set of registers that can be manipulated by instructions§ARM has 16 general purpose registers (GPRs)§R0 to R15: 4-bit register number§Register size = Word length = 32 bits§MIPS has 32 general purpose registers§More elaborate naming scheme: 5-bit register number (or Register ID)§Register size = Word length = 32 bits§QuAC has 8 general purpose registers (one undefined)
+Registers: Fast Temporary Storage
+36
+===== PAGE 38 =====
+Recall: Register§How can we use flipflops to store more than one bit? §Principle of modularity:  Use more flipflops!§A single CLK to simultaneously write to all flipflops
+§Register: A structure that stores more than one bit of information and can be read from and written to§This register holds 4 bits, and its data is referenced as Q[3:0]
+37
+===== PAGE 39 =====
+Recall: 4-bit Register
+CLK
+D Q
+Q
+CLK
+D Q
+Q
+Q
+Q
+D N1
+CLK
+L1 L2
+CLK
+D Q
+Q
+CLK
+D Q
+Q
+Q
+Q
+D N1
+CLK
+L1 L2
+CLK
+D Q
+Q
+CLK
+D Q
+Q
+Q
+Q
+D N1
+CLK
+L1 L2
+CLK
+D Q
+Q
+CLK
+D Q
+Q
+Q
+Q
+D N1
+CLK
+L1 L2
+CLK
+D3 D2 D1 D0
+4-bit RegisterQ0Q1Q2Q3
+To build an N-bit register, use a bank of N flipflops with a shared CLK38
+===== PAGE 40 =====
+Recall: 4-bit RegisterCLK
+D Q
+D Q
+D Q
+D Q
+D0
+D1
+D2
+D3
+Q0
+Q1
+Q2
+Q3
+D
+3:0
+4 4
+CLK
+Q
+3:0
+This register stores 4 bitsThis line represents 4 wires
+Condensed
+39
+oHere we have a register, or a structure that stores more than one bit and can be read from and written tooThis register holds 4 bits, and its data is referenced as Q[3:0]
+===== PAGE 41 =====
+40
+§A single WE signal for all flip-flops for simultaneous writes
+Register x (Rx)
+D3:0
+Q3:0
+WE4
+4
+More Realistic Register
+Enabled Flip-Flop
+===== PAGE 42 =====
+How Registers are Addressed?§Each ISA gives a set of general-purpose registers with special names§So, an assembly programmer can use convenient names §Their binary addresses are specified in the ISA§Their storage technology is up to implementation (SRAM or flip-flops)§Let’s see 41
+===== PAGE 43 =====
+NameRegister NumberUsage$00 the constant value 0$at1 assembler temporary$v0-$v12-3 function return value$a0-$a34-7 function arguments$t0-$t78-15temporary variables$s0-$s716-23saved variables$t8-$t924-25temporary variables$k0-$k126-27OS temporaries$gp28global pointer$sp29stack pointer$fp30frame pointer$ra31function return address
+MIPS Register File
+42
+===== PAGE 44 =====
+ARM Register File
+43
+===== PAGE 45 =====
+LC-3 Register File (with Contents)
+44
+===== PAGE 46 =====
+QuAC Register File
+45
+===== PAGE 47 =====
+CONTROL UNITPC or IPInst Register
+PROCESSING UNITALUTEMP
+MEMORYMem Addr RegMem Data Reg
+INPUTKeyboard,Mouse,Disk…
+OUTPUTMonitor, Printer, Disk…
+The Von Neumann Model
+46
+===== PAGE 48 =====
+§Enable information to get into and out of a computer§Many devices can be used for input and output§They are called peripherals§Input§Keyboard§Mouse§Scanner§Disks§Etc.§Output§Monitor§Printer§Disks§Etc.
+Input and Output
+47
+===== PAGE 49 =====
+Input and Output
+48
+===== PAGE 50 =====
+Keyboard and Monitor§The simplest keyboard has two registers§Keyboard data register (KBDR) for holding the ASCII code of keys struck§Keyboard status register (KBSR) for maintaining status information about the keys struck§The simplest monitor has two registers§Display data register (DDR) for holding the ASCII code of something to be displayed on the screen§Display status register (DSR) for maintaining associated status information49
+===== PAGE 51 =====
+ASCII Encoding 
+§ASCII stands for American Standard Code for Information Interchange §It ranges from 0 to 255 in Decimal or 00 to FF in Hexadecimal§All characters on an English keyboard can be represented using 8-bit codes 50
+===== PAGE 52 =====
+CONTROL UNITPC or IPInst Register
+PROCESSING UNITALUTEMP
+MEMORYMem Addr RegMem Data Reg
+INPUTKeyboard,Mouse,Disk…
+OUTPUTMonitor, Printer, Disk…
+The Von Neumann Model
+51
+===== PAGE 53 =====
+§The control unit is like the conductor of an orchestra§It conducts the step-by-step process of executing (every instruction in) a program§It keeps track of which instruction being     processed, via§Instruction Register (IR), which contains the instruction§It also keeps track of which instruction to process next, via§Program Counter (PC) or Instruction Pointer (IP), another register that contains the address of the (next) instruction to process
+Control Unit
+52
+===== PAGE 54 =====
+M[0]M[1]M[2]M[3]M[4]
+M[N-1]Memoryarray of storage locationsindexed by an addressProgram Countermemory addressof the current (or next) instruction
+Registers-  given special names in the ISA     (as opposed to addresses)-  general vs. special purpose
+Instructions (and programs) specify how to transform             the values of programmer visible state
+Programmer Visible (Architectural) State
+53
+===== PAGE 55 =====
+CONTROL UNITPC or IPInst Register
+PROCESSING UNITALUTEMP
+MEMORYMem Addr RegMem Data Reg
+INPUTKeyboard,Mouse,Disk…
+OUTPUTMonitor, Printer, Disk…
+The Von Neumann Model
+54
+===== PAGE 56 =====
+§Von Neumann model is also called stored program computer (instructions in memory). It has two key properties:§Stored program§Instructions stored in a linear memory array§Memory is unified between instructions and data§The interpretation of a stored value depends on the control signals§Sequential instruction processing§One instruction processed (fetched, executed, completed) at a time§Program counter (instruction pointer) identifies the current instruction§Program counter is advanced sequentially except for control transfer instructions
+Von Neumann Model: Two Key Properties
+55
+===== PAGE 57 =====
+CONTROL UNITPC or IPInst Register
+PROCESSING UNITALUTEMP
+MEMORY
+INPUTKeyboard,Mouse,Disk…
+OUTPUTMonitor, Printer, Disk…
+The Von Neumann Model00100101 010010101111111100000000
+56
+===== PAGE 58 =====
+Examples of   von Neumann Machines
+57
+===== PAGE 59 =====
+Scanned by CamScanner
+Control signalsData
+ALU: 2 inputs, 1 output
+Memory Data RegisterMemory AddressRegister16-bit addressable
+KeyboardKBDR (data), KBSR (status)Monitor (Display)DDR (data), DSR (status)
+8 General Purpose Registers (GPR)
+Finite State Machine (for Generating Control Signals)Instruction Register
+Program Counter
+ALU operationGateALU
+Clock
+LC-3: A von Neumann Machine
+58
+===== PAGE 60 =====
+LC-3: A von Neumann Machine
+59
+===== PAGE 61 =====
+Source: https://www.anandtech.com/show/16252/mac-mini-apple-m1-tested 
+Apple M1,2021
+Another Von Neumann Machine
+60
+===== PAGE 62 =====
+Source: https://twitter.com/Locuza_/status/1454152714930331652 
+Intel Alder Lake,2021
+Another Von Neumann Machine
+61
+===== PAGE 63 =====
+https://wccftech.com/amd-ryzen-5000-zen-3-vermeer-undressed-high-res-die-shots-close-ups-pictured-detailed/AMD Ryzen 5000, 2020
+Core Count:8 cores/16 threads
+L1 Caches: 32 KB per coreL2 Caches:512 KB per coreL3 Cache:32 MB shared
+Another Von Neumann Machine
+62
+===== PAGE 64 =====
+https://www.it-techblog.de/ibm-power10-prozessor-mehr-speicher-mehr-tempo-mehr-sicherheit/09/2020/
+IBM POWER10,2020
+Cores:15-16 cores,8 threads/core
+L2 Caches:2 MB per coreL3 Cache:120 MB shared
+Another Von Neumann Machine
+63
+===== PAGE 65 =====
+ARMv4 (Single-Cycle) 32-bit
+64
+===== PAGE 66 =====
+ARMv4 (Multi-Cycle) 32-bit
+65
+===== PAGE 67 =====
+ARMv4 32-bit with Pipelining
+66
+===== PAGE 68 =====
+SignImm
+CLK
+A RD
+Instruction
+Memory
++
+4
+A1
+A3
+WD3
+RD2
+RD1
+WE3
+A2
+CLK
+Sign Extend
+Register
+File
+0
+1
+0
+1
+A RD
+Data
+Memory
+WD
+WE
+0
+1
+PC0
+1
+PC' Instr
+25:21
+20:16
+15:0
+5:0
+SrcB
+20:16
+15:11
+<<2
++
+ALUResult ReadData
+WriteData
+SrcA
+PCPlus4
+PCBranch
+WriteReg 4:0
+Result
+31:26
+RegDst
+Branch
+MemWrite
+MemtoReg
+ALUSrc
+RegWrite
+Op
+Funct
+Control
+Unit
+Zero
+PCSrc
+CLK
+ALUControl 2:0
+ALU
+MIPS (Single-Cycle) 32-bit
+===== PAGE 69 =====
+SignImmE
+CLK
+A RD
+Instruction
+Memory
++
+4
+A1
+A3
+WD3
+RD2
+RD1
+WE3
+A2
+CLK
+Sign
+Extend
+Register
+File
+0
+1
+0
+1
+A RD
+Data
+Memory
+WD
+WE
+1
+0
+PCF0
+1
+PC' InstrD
+25:21
+20:16
+15:0
+5:0
+SrcBE
+25:21
+15:11
+RsE
+RdE
+<<2
++
+ALUOutM
+ALUOutW
+ReadDataW
+WriteDataE WriteDataM
+SrcAE
+PCPlus4D
+PCBranchM
+WriteRegM 4:0
+ResultW
+PCPlus4F
+31:26
+RegDstD
+BranchD
+MemWriteD
+MemtoRegD
+ALUControlD 2:0
+ALUSrcD
+RegWriteD
+Op
+Funct
+Control
+Unit
+PCSrcM
+CLK CLK CLK
+CLK CLK
+WriteRegW 4:0
+ALUControlE 2:0
+ALU
+RegWriteE RegWriteM RegWriteW
+MemtoRegE MemtoRegM MemtoRegW
+MemWriteE MemWriteM
+RegDstE
+ALUSrcE
+WriteRegE 4:0
+00
+01
+10
+00
+01
+10
+SignImmD
+StallF
+StallD
+ForwardAE
+ForwardBE
+20:16 RtE
+RsD
+RdD
+RtD
+RegWriteM
+RegWriteW
+MemtoRegE
+Hazard Unit
+FlushE
+PCPlus4E
+BranchE BranchM
+ZeroM
+EN
+EN
+CLR
+MIPS 32-bit with Pipelining
+68
+===== PAGE 70 =====
+Basic Principles are the same!Focus is on the principles.69
+===== PAGE 71 =====
+The Concept of Sequential Execution
+70
+===== PAGE 72 =====
+§Instructions and data are stored in memory§Typically the instruction length is the word length§The processor fetches instructions from memory sequentially§Fetches one instruction§Decodes and executes the instruction§Continues with the next instruction§The address of the current instruction is stored in the program counter (PC)§If word-addressable memory, the processor increments the PC by 1 (in QuAC)§If byte-addressable memory, the processor increments the PC by the instruction length in bytes (4 in MIPS and 32-bit ARM)§Assume the PC is set to 0x00400000 (start of a program)
+Stored Program and Sequential Execution
+71
+===== PAGE 73 =====
+§A sample ARM program§4 instructions stored in consecutive words in memory§No need to understand the program now. We will get back to it
+.  .  .
+Instructions
+2 5 8 1 3 0 2 4E 1 5 1 0 0 0 2E 3 A 0 2 0 4 5E 3 A 0 1 0 6 4
+.  .  .
+0040000000400004004000080040000C.  .  .
+Word Address.  .  .
+MOV   R1,  #100MOV   R2,  #69CMP   R1,  R2STRHS R3,  [R1, #0x24]
+ARM assembly code
+0xE3A010640xE3A020450xE15100020x25813024
+Machine code (encoded instructions)← PC
+A sample ARM program stored in memory
+72
+===== PAGE 74 =====
+.  .  .
+Instructions
+8 C 0 A 0 0 2 00 2 3 2 8 0 2 02 2 6 8 F F F 40 1 6 D 4 0 2 2 
+.  .  .
+0040000000400004004000080040000C.  .  .
+Word Address.  .  .
+lw$t2, 32($0)add$s0, $s1, $s2addi$t0, $s3, -12sub$t0, $t3, $t5
+MIPS assembly
+0x8C0A00200x023280200x2268FFF40x016D4022
+Machine code (encoded instructions)← PC
+A sample program: MIPS Example§A sample MIPS program§4 instructions stored in consecutive words in memory§No need to understand the program now. We will get back to it
+73
+===== PAGE 75 =====
+§An instruction is the most basic unit of computer processing§Instructions are words in the language of a computer§Instruction Set is the vocabulary§The language of the computer can be written as§Machine language: Computer-readable representation (that is, 0s and 1s)§Assembly language: Human-readable representation§We will study ARM (in detail in lectures) and QuAC (in tutorials and assignment 1) and other ISAs for broader understanding§Principles are similar in all ISAs (x86, SPARC, RISC-V, …)
+The Instruction
+74
+===== PAGE 76 =====
+§An instruction is made up of two parts§Opcode and Operands§Opcode specifies what the instruction does§Operands specify who the instruction is to do it to§Both are specified in instruction format (or instruction encoding)§A MIPS and ARM instructions consists of 32 bits (bits [31:0])§QuAC instructions consist of 16 bits (bits [15:0])
+The Instruction: Opcode & Operands
+75
+===== PAGE 77 =====
+§MIPS example: Bits [31:26] specify the opcode à up to 64 distinct opcodes§Bits [25:11] are used to figure out where the operands are
+§QuAC example: Bits [15:12] specify the opcode à up to 16 distinct opcodes§Bits [10:0] are used to figure out where the operands are
+§ARM example: Bits [27:26] specify the opcode à up to 4 distinct opcodes§Bits [19:0] are used to figure out where the operands are
+The Instruction: Examples
+31:2827:262524:212019:1615:1211:0condopIcmdSRnRdSrc2
+===== PAGE 78 =====
+§There are three main types of instructions§Operate (data processing) instructions§Execute operations in the ALU§Data movement (memory) instructions§Read from or write to memory§Control flow (branch/jump) instructions§Change the sequence of execution (decision making)§Let us start with some example instructions
+Instruction Types
+77
+===== PAGE 79 =====
+§Addition
+§add: mnemonic to indicate the operation to perform§b, c: source operands§a: destination operand§a ← b + c
+a = b + c;adda, b, cHigh-level codeQuAC AssemblyAn Example Operate Instruction
+78
+===== PAGE 80 =====
+§We map variables to registersadda, b, cb = R1c = R2a = R0
+AssemblyARM registers
+b = r1c = r2a = r0
+QuAC registers
+Registers
+b = $s1c = $s2a = $s0
+MIPS registers
+===== PAGE 81 =====
+QuAC assembly§Addition
+§Instruction Fields
+§Machine code (Instruction Encoding)
+§Machine code in short (hexadecimal)§0x 8 0 1 2
+From Assembly to QuAC Machine Code 
+01208
+1   0     0    0       0        0   0   0  0   0  0  1   0   0 1 0   
+addr0, r1, r2
+80
+===== PAGE 82 =====
+ADD  R0, R1, R2ARM assemblyQuAC Opcodes
+01208
+1   0     0    0       0        0   0   0  0   0  0  1   0   0 1 0   
+81
+===== PAGE 83 =====
+31:2827:262524:212019:1615:1211:0condopIcmdSRnRdSrc2
+ADD  R0, R1, R2ARM assembly§Addition
+§Instruction Fields
+§Machine Code (Instruction Encoding)
+§Machine Code in short (hexadecimal)§0x E 0 9 1 0 0 0 1
+From Assembly to ARM Machine Code 
+31:2827:262524:212019:1615:1211:011100000100100010000000000000010
+82
+===== PAGE 84 =====
+83
+Instruction Format§A form of representation of an instruction composed of fields of binary numbers (we have seen already)§It is the layout of the instruction§The instruction is divided into segments, and each segment is called a field§An ISA defines a few classes or types of formats, and each class or type has many different instructions for that type 83
+===== PAGE 85 =====
+QuAC Instruction Formats
+84
+===== PAGE 86 =====
+MIPS Instruction Formats
+§Only three formats for simplicity of implementation§One can see the consistency across formats
+§We will not study MIPS ISA in this this course85
+===== PAGE 87 =====
+nMIPS R-type Instruction Format (R = Register)q3 register operands (register-based ALU operations)
+qop = opcode = 0qrs, rt = source registersqrd = destination registerqshamt = shift amount (only shift operations)qfunct = operation in R-type instructions
+0rsrtrdshamtfunct6 bits5 bits5 bits5 bits5 bits6 bits
+Instruction Format: R Type in MIPSNameRegister NumberUsage$00the constant value 0$at1assembler temporary$v0-$v12-3function return value$a0-$a34-7function arguments$t0-$t78-15temporary variables$s0-$s716-23saved variables$t8-$t924-25temporary variables$k0-$k126-27OS temporaries$gp28global pointer$sp29stack pointer$fp30frame pointer$ra31function return address
+86
+===== PAGE 88 =====
+§Rn and Rm are source registers and Rd is the destination register§Below is the instruction format (encoding)§op = opcode (what does the instruction do?)§00 means operate instruction and cmd = 0100 means ADD §Some bits are pre-set (details later)
+ADD Rd,  Rn  Rm ADD R0,  R1,  R3
+31:2827:262524:212019:1615:1211:43:01110op0cmdSRnRd00000000Rm
+Instruction Format: Data Processing (DP) in ARM
+87
+===== PAGE 89 =====
+LC-3 Instruction Formats
+88
+Such “weird” instructions will make more sense in COMP2310 as they provide support for I/O and networkingReserved for future use
+Instructions are 16-bit wordsopcode is in the same place for each instruction
+===== PAGE 90 =====
+§With operate instructions, such as addition, we tell the computer to execute arithmetic (or logic) computations in the ALU§We also need instructions to access the operands from memory§Load them from memory to registers§Store them from registers to memory§Next, we see how to read (or load) from memory§Writing (or storing) is performed in a similar way, but we will talk about that later
+Read Operands from Memory
+89
+===== PAGE 91 =====
+§ARM assembly (Load Register or LDR)
+§MIPS assembly (load word or lw)
+a = A[2];LDRR3, [R0, #8]High-level codeARM assembly
+R3 ← Memory[R0 + 8]
+a = A[2];lw$s3, 8($s0)High-level codeMIPS assembly
+$s3 ← Memory[$s0 + 8]These instructions use a particular addressing mode (i.e., the way the address is calculated), called base+offset
+Reading Byte-Addressable Memory
+90
+===== PAGE 92 =====
+§ARM assembly 
+§MIPS assembly
+nByte address is calculated as: word_address * bytes/word§4 bytes/word in MIPS and ARM§If QuAC were byte-addressable, 2 bytes/word
+LDRR3, [R0, #8]R3 ← Memory[R0 + 8]
+lw$s3, 8($s0)$s3 ← Memory[$s0 + 8]
+Load Word in MIPS and ARM
+91
+===== PAGE 93 =====
+Load Word in Word-Addressable LC-3
+92
+§LC-3 assembly (Load Register or LDR)
+§Each word in LC-3 is 16 bits§Therefore, We interrogate memory with word addresses (not byte addresses)§If LC-3 were byte-addressable, the offset would be 4
+a = A[2];LDRR3, [R0, #2]High-level codeLC-3 assembly
+R3 ← Memory[R0 + 2]
+===== PAGE 94 =====
+Hypothetical 32-bit QuAC Memory 
+93
+§If QuAC were 32-bit architecture, let’s look at its memory view §Word-addressable QuAC §We use word numbers to address memory
+00000000000000010000000200000003.  .  .Word Address
+8 9 A B C D E F F 2 F 1 F 0 F 71 3 C 8 1 7 5 5D 1 6 1 7 A 1 C Word 3Word 2Word 1Word 0
+.  .  .
+.  .  .DataWord Number
+===== PAGE 95 =====
+94
+§If QuAC were 32-bit architecture, let’s look at its memory view §Byte-addressable QuAC §We use word numbers translated to byte addresses to read memory
+0000000000000004000000080000000C.  .  .Word Address
+8 9 A B C D E F F 2 F 1 F 0 F 71 3 C 8 1 7 5 5D 1 6 1 7 A 1 C Word 3Word 2Word 1Word 0
+.  .  .
+.  .  .DataWord Number
+Hypothetical 32-bit QuAC Memory 
+===== PAGE 96 =====
+§ARM
+§MIPS
+LDRR3, [R0, #8]ARM assembly
+3516198oprsrtimm
+lw$s3, 8($s0)MIPS assembly
+Field Values
+Another Instruction Encoding31:2827:2625:2019:1615:1211:00111100103 8
+95This encoding has space for immediate values such as offsets. 
+RnRdimm
+===== PAGE 97 =====
+§It defines opcodes, operands, data types, and addressing modes§Addressing mode = Formulas for figuring out operands§Register, Immediate, Base + Offset §The datatype is the representation of the operands in 0s and 1s §ADD and LDR in ARM assembly have been our first examples
+The Instruction Set
+96
+===== PAGE 98 =====
+§What is the instruction mnemonic and opcode? §ADD (opcode = 0001 for LC-3)§What is the addressing mode?§register mode§What is the data type?§2’s complement integer§What does the instruction do?§The instruction directs the computer to perform a 2’s complement integer addition and specifies the locations (GPRs) where the computer can find source operands and the location of a GPR where the computer is to write the result
+ADD R0, R1, R2
+97
+===== PAGE 99 =====
+LDR R3, [R0, #8] §What is the opcode? §LDR (0110 for LC-3)§What is the addressing mode?§base + offset (we will study in detail later)§What is the data type?§bit vector§What does the instruction do?§The instruction directs the computer to load a destination register with the contents of a memory location, where the location can be calculated using a formula: add the contents of a GPR (R8) to a constant number (#8)98
+===== PAGE 100 =====
+§The ISA is the interface between what the software commands and what the hardware carries out§The ISA specifies§The memory organization§Address space (ARM: 232, MIPS: 232)§Addressability (ARM: 8 bits, MIPS: 8 bits, QuAC: 16 bits)§Word- or Byte-addressable§The register set§R0 to R15 in ARM§32 registers in MIPS§The instruction set§Opcodes§Operands§Addressing modes§Length and format of instructions
+MicroarchitectureISAProgramAlgorithmProblem
+CircuitsElectrons
+The Instruction Set Architecture
+99
+===== PAGE 101 =====
+§What state of the computer is visible (or exposed to) the programmer? §What state can they manipulate by writing machine code? §Answer: The Architectural State §General-purpose registers, memory, program counter§What does the ISA specify?§The memory organization§The register set§The instruction set§Meta-point: Architectural state is part of the ISA specification
+Two Questions
+100
+===== PAGE 102 =====
+Instruction (Processing) Cycle
+101
+===== PAGE 103 =====
+§By using instructions, we can speak the language of the computer§Thus, we now know how to tell the computer to§Execute computations in the ALU by using, for instance, an addition§Access operands from memory by using the load word instruction§But, how are these instructions executed on the computer?§The process of executing an instruction is called is the instruction cycle (or, instruction processing cycle)
+How are these instructions executed?
+102
+===== PAGE 104 =====
+§The instruction cycle is a sequence of steps or phases, that an instruction goes through to be executed§FETCH§DECODE§EVALUATE ADDRESS§FETCH OPERANDS§EXECUTE§STORE RESULT§Not all instructions require the six phases§LDR does not require EXECUTE§ADD does not require EVALUATE ADDRESS§Intel x86 instruction ADD [eax], edx is an example of instruction with six phases
+The Instruction Cycle
+103
+===== PAGE 105 =====
+§We will use LC-3 (Little Computer v.3) architecture as  example§ADD Operate instruction
+§Instruction for accessing memory
+LC-3 Assembly 
+ADD  R0, R1, R2
+104
+a = A[2];LDR  R3, [R0, #4]High-level codeLC-3 assembly
+R3 ← Memory[R0 + 4]
+===== PAGE 106 =====
+§FETCH§DECODE§EVALUATE ADDRESS§FETCH OPERANDS§EXECUTE§STORE RESULT
+After STORE RESULT, a NEW FETCH
+105
+===== PAGE 107 =====
+Instruction (Processing) Cycle
+106
+===== PAGE 108 =====
+§The FETCH phase obtains the instruction from memory and loads it into the Instruction Register (IR) §This phase is common to every instruction type§Complete description§Step 1: Load the MAR with the contents of the PC, and simultaneously increment the PC§Step 2: Interrogate memory. This results in the instruction being placed in the MDR by memory§Step 3: Load the IR with the contents of the MDR
+FETCH
+107
+===== PAGE 109 =====
+§Each of these steps is under the direction of the control unit§Each step takes one machine cycle §Each machine cycle takes one clock cycle (the two are the same)§Each instruction cycle consists of many machine cycles§If each instruction cycle takes one machine cycle, such a simple machine is called a single-cycle computer or microarchitecture§Single-cycle machines are much simpler to build that what we are discussing here (e.g., the control unit is not an FSM)
+Machine Cycle
+108
+===== PAGE 110 =====
+§A clock cycle is a small fraction of a second§1 GHz Intel CPU completes 1 billion clock cycles in one second§One clock cycle takes one billionths of a second§Or 1 nanoseconds (ns)§In one second, the computer can perform 1 billion machine cycles where each machine cycle executes an instruction (or part of an instruction)
+Machine Cycle
+109
+===== PAGE 111 =====
+Scanned by CamScanner
+Step 1: Load MAR and increment PCStep 2: Access memoryStep 3: Load IR with the content of MDR
+FETCH in LC-3
+110
+===== PAGE 112 =====
+§The DECODE phase identifies the instruction§Also generates the set of control signals to process the identified instruction in later phases of the instruction cycle§Recall the decoder §A 4-to-16 decoder identifies which of the 16 opcodes is going to be processed§The input is the four bits IR[15:12]§The remaining 12 bits identify what else is needed to process the instruction
+DECODE
+111
+===== PAGE 113 =====
+Scanned by CamScanner
+DECODE identifies the instruction to be processedAlso generates the set of control signals to process the instruction
+DECODE in LC-3
+112
+===== PAGE 114 =====
+§The EVALUATE ADDRESS phase computes the address of the memory location that is needed to process the instruction§This phase is necessary in LDR§It computes the address of the data word that is to be read from memory§By adding an offset to the content of a register§But not necessary in ADD
+EVALUATE ADDRESS
+113
+===== PAGE 115 =====
+Scanned by CamScanner
+LDR calculates the address by adding a register and an immediateADD
+EVALUATE ADDRESS in LC-3
+114
+===== PAGE 116 =====
+§The FETCH OPERANDS phase obtains the source operands needed to process the instruction§In LDR§Step 1: Load MAR with the address calculated in EVALUATE ADDRESS§Step 2: Read memory, placing source operand in MDR§In ADD§Obtain the source operands from the register file§In some microprocessors, operand fetch from register file can be done at the same time the instruction is being decoded
+FETCH OPERANDS
+115
+===== PAGE 117 =====
+Scanned by CamScanner
+LDR loads MAR (step 1), and places the results in MDR (step 2)
+FETCH OPERANDS in LC-3
+116
+===== PAGE 118 =====
+§The EXECUTE phase executes the instruction§In ADD, it performs addition in the ALU§In XOR, it performs bitwise XOR in the ALU§…
+EXECUTE
+117
+===== PAGE 119 =====
+Scanned by CamScanner
+ADD adds SR1 and SR2
+EXECUTE in LC-3
+118
+===== PAGE 120 =====
+§The STORE RESULT phase writes the result to the designated destination§Once STORE RESULT is completed, a new instruction cycle starts (with the FETCH phase)
+STORE RESULT
+119
+===== PAGE 121 =====
+Scanned by CamScanner
+ADD loads ALU Result into DR
+STORE RESULTS in LC-3
+120
+===== PAGE 122 =====
+Scanned by CamScanner
+LDR loads MDR into DR
+STORE RESULTS in LC-3
+121
+===== PAGE 123 =====
+§FETCH§DECODE§EVALUATE ADDRESS§FETCH OPERANDS§EXECUTE§STORE RESULT
+The Instruction Cycle
+122
+===== PAGE 124 =====
+§A computer program executes in sequence (i.e., in program order)§First instruction, second instruction, third instruction and so on§Unless we change the sequence of execution
+§Control instructions allow a program to execute out of sequence§They can change the PC by loading it during the EXECUTE phase§That wipes out the incremented PC (loaded during the FETCH phase)
+Changing the Sequence of Execution
+123
+===== PAGE 125 =====
+§Unconditional branch or jump (ARM)
+§Conditional branch or jump (ARM)
+§These instructions are encoded using a special branch format in ARM ISA§LC-3 has a jump instruction that can load a register into PC§Let’s see
+B  TARGET
+Jump (Branch) 
+BEQTARGETBNETARGET
+124
+===== PAGE 126 =====
+Scanned by CamScanner
+JMP loads SR1 into PC
+PC UPDATE in LC-3
+125
+===== PAGE 127 =====
+nState 1qThe FSM asserts GatePC and LD.MARqIt selects input (+1) in PCMUX and asserts LD.PCnState 2qMDR is loaded with the instructionnState 3qThe FSM asserts GateMDR and LD.IRnState 4qThe FSM goes to next state depending on opcodenState 63qJMP loads register into PCnFull state diagram in Patt&Pattel, Appendix C
+4.3Instruction Processing 109
+PC <– Register
+State 1
+State 2
+State 3
+State 4
+MAR <– PC
+PC <– PC + 1
+MDR <– M[MAR]
+IR <– MDR
+JMPLDRADD
+[opcode]
+Last state
+to carry out
+ADD instruction
+Last state
+to carry out
+LDR instruction
+To state 1 To state 1 To state 1
+State 63
+FETCH
+First state after
+DECODE for
+ADD instruction
+First state after
+DECODE for
+LDR instruction
+First state after
+DECODE for
+JMP instruction
+DECODE
+Figure 4.4 An abbreviated state diagram of the LC-3
+the IR to be latched at the end of the clock cycle, concluding the FETCH phase
+of the instruction.
+The DECODE phase takes one cycle. In state 4, using the extern al input
+IR, and in particular the opcode bits of the instruction, the ﬁnite state machine
+can go to the appropriate next state for processing instructi ons depending on
+the particular opcode in IR[15:12]. Processing continues cycle by cycle until the
+instruction completes execution, and the next state logic returns the ﬁnite state
+machine to state 1.
+As we mentioned earlier in this section, it is sometimes nece ssary not to
+execute the next sequential instruction but rather to jump toa n o t h e rl o c a t i o nt o
+ﬁnd the next instruction to execute. As we have said, instructions that change the
+ﬂow of instruction processing in this way are called controlinstructions. This can
+be done very easily by loading the PC during the EXECUTE phaseof the control
+instruction, as in state 63 of Figure 4.4, for example.
+This is an FSM Controlling the LC-3 Processor
+Control (FSM) of the Instruction Cycle
+126
+===== PAGE 128 =====
+§FETCH§DECODE§EVALUATE ADDRESS§FETCH OPERANDS§EXECUTE§STORE RESULT
+The Instruction Cycle
+127
+===== PAGE 129 =====
+The Instruction Cycle: Things to Note§Not all instructions need all phases§The ordering of phases in not set in stone§Some phases can be grouped as one§Some structures may not be needed in a different microarchitecture§Microarchitecture “style” dictates many details 128
+===== PAGE 130 =====
+The Instruction Cycle: Things to Note§What we have seen is a very general multi-cycle CPU§Each instruction takes multiple “machine cycles” to complete§In Labs 4 – 6  + first assignment you build a single-cycle CPU§The entire instruction (all phases) must finish in one cycle§Contrast with multi-cycle CPU as you build§One clock cycle = One machine cycle = One instruction cycle§We Will cover both single-cycle and multi-cycle ARM CPUs129
+===== PAGE 131 =====
+§Von Neumann model is also called stored program computer (instructions in memory). It has two key properties:§Stored program§Instructions stored in a linear memory array§Memory is unified between instructions and data§The interpretation of a stored value depends on the control signals§Sequential instruction processing§One instruction processed (fetched, executed, completed) at a time§Program counter (instruction pointer) identifies the current instruction§Program counter is advanced sequentially except for control transfer instructions
+Von Neumann Model: Two Key Properties
+130
+===== PAGE 132 =====
+ARM and QuAC Instruction Set Architectures
+131
+(ISAs)ARM (Chapter 6 of H&H + Assignment 2) and QuAC (Assignment 1)
+===== PAGE 133 =====
+Revision of Concepts§Steps of Transformation§From high-level language code to assembly code (compiler or human)§From assembly code to machine code (assembler or human)§Instruction set architecture§Instruction set§Opcodes and operands§Data types§Addressing modes§Instruction formats§Architectural state§Memory §Register set§Program counter132
+===== PAGE 134 =====
+§There are three main types of instructions§Operate (data processing) instructions§Execute operations in the ALU§Data movement (memory) instructions§Read from or write to memory§Control flow (branch/jump) instructions§Change the sequence of execution (decision making)
+Recall: Instruction Types
+133
+===== PAGE 135 =====
+Data Processing Instructions
+134
+===== PAGE 136 =====
+ARM Data Processing (DP) Instructions§a = b + c – d§We can use two ARM instructions to do the computation
+§ADD and SUB are instruction mnemonics§Instructions operate on operands (a, b, c)§Computers operate on binary data not variable names§We need to specify the physical location of operands§We have registers, memory, constants in instructions
+ADDt,b,cSUBa,t,d
+135
+===== PAGE 137 =====
+Registers as Operands§Instructions need fast access to operands, but memory is slow§Keep a small set of registers close to the CPU in a register file§ARM architecture uses 16 registers§32-bit architecture means 32-bit registers§a = b + c - d§R0 = a, R1 = b, R2 = c, R3 = d, R4 = tADDt,b,cSUBa,t,dADDR4,R1,R2SUBR0,R4,R3
+Mapping is chosen by human, or a tool called compiler that translates high-level code to assembly
+136
+===== PAGE 138 =====
+Aside: Compiler vs. Assembler§Compiler translates§high-level language code into  §assembly code (human readable)
+§Assembler translates§assembly code into §machine code (1s and 0s)
+137
+===== PAGE 139 =====
+Source/Destination Operand§Instructions operate on one or more source operands and store the result after execution in a destination operand
+§R1 and R2 are the source operands for the ADD instruction§R4 is the destination operand for the ADD instruction
+ADDR4,R1,R2SUBR0,R4,R3
+138
+===== PAGE 140 =====
+Another Example
+SUBR0,R1,R2ADDR8,R4,R5ADDR9,R6,R7SUBR3,R8,R9
+§a = b – c§f = (g + h) – (i + j)§Variables a – c are held in registers R0 – R2 and f – j are held in registers R3 – R7 
+139
+===== PAGE 141 =====
+Design Principle # 1 §Regularity leads to simpler hardware§Instructions with a consistent number of operands (2 sources, 1 destination) are easier to encode and handle in hardware
+140
+===== PAGE 142 =====
+Design Principle # 1 §Regularity leads to simpler hardware§Instructions with a consistent number of operands (2 sources, 1 destination) are easier to encode and handle in hardware§QuAC also follows the same principle!141
+===== PAGE 143 =====
+The Register Set (File)§ARM defines 16 architectural registers§The register set is part of the ISA specification
+§R0 – R12 are used for storing variables
+§R13 – R15 have special uses  
+142
+===== PAGE 144 =====
+Design Principle # 2 §Smaller is Faster§Reading data from a small register file is faster than reading from a large file
+143
+===== PAGE 145 =====
+Constant & Immediate in Instruction§ARM instructions can use constant or immediate operands§The value is available immediately from the instruction§Advantage: No register or memory access §Disadvantage: Immediate can be 8 – 12 bits because limited bits in the encoding (instruction format)§In the following example, assume R7 = a, R8 = b
+ADDR7,R7,#4SUBR8,R7,#0xCHigh-Level code   a = a + 4 b = a – 12 ARM Assembly Code
+Observation: 98% of all the constants in a program would fit in 13 bits
+144
+===== PAGE 146 =====
+Design Principle # 3 §Good design demands good compromises§To encode immediate instructions in QuAC, we need a new format§Same with ARM although encoding is more complex145
+===== PAGE 147 =====
+Design Principle # 3 §Good design demands good compromises §To encode immediate in instructions we need to move away from R format and use a new format.
+146
+§We follow the same principle in QuAC
+===== PAGE 148 =====
+MOV Instruction§MOV is a useful instruction for initializing register values§MOV can also take a register source operand§MOV R1, R7 copies the contents of register R7 into R1§In the following example, assume R4 = i, R5 = x
+MOVR4,#0MOVR5,#0xFF0
+High-Level code i = 0; x = 4080;ARM Assembly Code
+147
+===== PAGE 149 =====
+Instruction Format – 1: Data Processing
+§Operands§Rn [19:16]: first source operand register (0000, 0001, ..., 1111)§Src2 [11:0]: second source register or unsigned immediate§Rd [15:12]: destination register
+31:2827:2625:2019:1615:1211:0condopfunctRnRdSrc2
+§Control fields§cond [31:28]: specifies conditional execution (1110 for unconditional)§op [27:26]: the operation code or opcode (00 for data processing)§funct [25:20]: the specific function/operation to perform148
+===== PAGE 150 =====
+Breaking down funct Field31:2827:2625:2019:1615:1211:0condopfunctRnRdSrc2
+31:2827:262524:212019:1615:1211:0cond00IcmdSRnRdSrc2§cmd [24:21]: specifies the specific DP instruction (0100 for ADD; 0010 for SUB)§I-bit [25]: informs the control unit about Src2§I = 0: Src2 is a register§I = 1: Src2 is an immediate§S-bit [20]: 1 if the instruction sets the condition flags149
+===== PAGE 151 =====
+Two DP Formats (Src2 Variations)31:2827:262524:212019:1615:1211:87:0cond001cmdSRnRd0000imm8
+31:2827:262524:212019:1615:1211:43:0cond000cmdSRnRd00000000Rm
+Register (assume 11:4 are 0 for now)
+Immediate (assume 11:8 are 0 for now)
+150
+===== PAGE 152 =====
+DP with Src2 as Immediate §Bit 25 (I) informs the CPU how to interpret Src2§I = 1, CPU interprets Src2[7:0] as an unsigned 8-bit constant
+31:2827:262524:212019:1615:1211:87:0cond001cmdSRnRd0000imm8
+§Format (Src2 = immediate) ADD R0,  R1,  #16 ADD Rd,  Rn,  #imm8
+151
+===== PAGE 153 =====
+DP with Src2 as Register §Format (Src2 = Register) ADD R0,  R1,  R3 ADD Rd,  Rn,  Rm31:2827:262524:212019:1615:1211:43:0cond000cmdSRnRd00000000Rm
+§Bit 25 (I) informs the CPU how to interpret Src2§I = 0, CPU interprets Src2[3:0] as a register
+152
+===== PAGE 154 =====
+§AND§ORR (OR)§EOR (XOR)
+§BIC (Bit Clear)
+§MVN (MoVe and Not)
+More Data Processing Insts.
+153
+===== PAGE 155 =====
+§Bit Clear (BIC)§Used for bit masking bits and forcing unwanted bits to 0
+§BIC R6, R1, R2§R2 is the mask §The bits we want to CLEAR or ZERO in R1 are set to TRUE in R2§The instruction stores the result of  R1 AND (NOT R2) in R6
+The Bit Clear Instruction
+154
+===== PAGE 156 =====
+Example of Data Processing
+155
+===== PAGE 157 =====
+Design Principle # 4 §Make the common case fast§ARM architecture includes only simple, commonly used instructions§The number of instructions is kept small, so the hardware required for decoding is simple, small, and fast§More elaborate operations are performed using sequences of multiple simple instructions156
+===== PAGE 158 =====
+§Reduced Instruction Set Computer (RISC)§Provide a small set of simple instructions §Minimizes hardware complexity (high clock rate, power-efficient)§Requires many instructions to solve a complex problem§Examples: ARM, MIPS, QuAC, RISC-V §Complex Instruction Set Computer (CISC)§Provides many complex instructions§Complex hardware (longer critical paths, lower clock frequency)§Each instruction is more complex so fewer instructions to solve a problem§Example: Intel x86
+RISC vs. CISC Architectures
+157
+===== PAGE 159 =====
+Another RISC ISA: QuAC
+§Fixed width instructions make decoding easy and simple§A small number of crucial instructions (fewer opcodes save instruction real-estate)
+§Few general-purpose registers§Space for constants in the ISA§Easy to convert to hexadecimal§The only way to access memory is via a dedicated set of instructions§Conditional execution + general-purpose PC = Conditional branch instructions
+§Two formats and regularity in the ISA (across formats)§rd in same place (Instr10:8)§opcode in the same place§seth: somewhat complex
+158
+===== PAGE 160 =====
+Data Movement Instructions
+159
+===== PAGE 161 =====
+Data Movement Instructions§Real programs need to operate on more data than can fit in the register file§Most data resides in (slow) memory§Fetched from memory into the register file when needed§Moved to memory from the register file to free up a register
+160
+===== PAGE 162 =====
+161
+Motivation
+Small and Fast Registers are inside the CPU close to the ALULarge and Slow External Main Memory is outside the CPU, andphysically separated from the CPU
+Data Movement Instructions move data to and from registers and memory
+===== PAGE 163 =====
+Data Movement Instructions§Two instructions to facilitate data movement§The LDR instruction: Bring data word from memory into the register file §LoaD Register
+§The STR instruction: Store data word from the register file into memory§STore Register
+162
+===== PAGE 164 =====
+Memory View (32 bits = 4 bytes)
+C D1 9A 65 BWord 44 0F 30 78 8Word 30 1E E2 84 2Word 2F 2F 1A C0 7Word 1A BC DE F7 8Word 0
+13121110FEDCBA9876543210
+Word Number......Data
+000000100000000C000000080000000400000000
+Word Address......Byte Address
+MSBLSB 4 Bytes
+§Byte-addressable memory (each box is a byte & each row is a word)§Byte addresses (left) and 8-bit byte data (right, 1 byte = 2 Hex digits)
+Little-Endian View 163
+===== PAGE 165 =====
+Memory View (32 bits = 4 bytes)
+C D1 9A 65 BWord 44 0F 30 78 8Word 30 1E E2 84 2Word 2F 2F 1A C0 7Word 1A BC DE F7 8Word 0
+10111213CDEF89AB45670123
+Word Number......Data
+000000100000000C000000080000000400000000
+Word Address......Byte Address
+MSBLSB 4 Bytes
+§Byte-addressable memory (each box is a byte & each row is a word)§Byte addresses (left) and 8-bit byte data (right, 1 byte = 2 Hex digits)
+Big-Endian View 164
+===== PAGE 166 =====
+Reading from Memory§Format of LoaD Register instruction LDR R0, [R1,  #12]§Address calculation (base + offset addressing)§Add base address (contents of R1) to the offset (#12)§Address = (R1 + 12)§Use any register for base address§R1 is a source (register) operand§Result§R0 holds the data at memory address [R1 + 12] after the instruction is executed§R0 is a destination (register) operand165
+===== PAGE 167 =====
+LDR Example§Read a 32-bit word of data at memory (byte) address 8 into R3.  Use R2 as the base register.  Show the contents of R3.§Let’s initialize R2 to 0, and add 8 as the offsetMOVR2,#0LDRR3,[R2, #8]C D1 9A 65 BWord 44 0F 30 78 8Word 30 1E E2 84 2Word 2F 2F 1A C0 7Word 1A BC DE F7 8Word 0
+Word Number......Data
+000000100000000C000000080000000400000000
+Word Address...
+R30x 01 EE 28 42
+166
+===== PAGE 168 =====
+Address vs. ValueLDRR3,[R2, #8]§Square brackets signify address (also called pointer in C)§If you [add the contents of register R2 to constant #8, you will get the address with which to access memory]§When presented with an address, memory obliges by returning the value stored at address given (8 in this example)§In a 32-bit computer§Width of address bus = 32 bits (address space = 232 locations)§Although memory is byte-addressable, it returns a 32-bit word to fill the entire register  
+167
+^ Base + Offset Addressing Mode 
+===== PAGE 169 =====
+Writing to Memory§Format of STore Register instruction STR R0, [R1,  #12]§Address calculation§Add base address (R1) to the offset (12)§Address = (R1 + 12)§R0 and R1 are both source (register) operands§Result§Memory address (R1 + 12) will now have the value in R0 after the instruction is executed§Destination operand is memory address computed from source operands 168
+===== PAGE 170 =====
+STR Example
+MOVR5,#0STRR7,[R5,  #0x54]
+§Store the value held in R7 into memory word 21§Let’s initialize R5 to 0, and add 84 (21 X 4) as the offset
+§The offset can be written in decimal or hexadecimal: 84 (decimal) is 0x54 (Hex)169
+===== PAGE 171 =====
+Instruction Format – 2: Memory§op = 01§Rn = base register (base address)§Rd = destination (load), source (store) §Src2 = offset (register, shifted register, immediate)§funct [25:20] = 6 control bits§I (Bit 25): Encoding of Src2§L (Bit 20): Load or Store
+31:2827:2625:2019:1615:1211:0condopIPUBWLRnRdSrc2
+170
+===== PAGE 172 =====
+LDR with Src2 as Immediate§I (Bit 25) = 1: Src2 = imm12 where imm2 is a 12-bit unsigned offset added to the value in the base register (Rn)
+31:2827:2625:2019:1615:1211:0cond01111001RnRdimm12
+§Format of LoaD Register instruction LDR R0, [R1,  #12] LDR Rd, [Rn,  #imm12]§L (Bit 20) = 1: CPU performs an LDR
+171
+===== PAGE 173 =====
+LDR Datapath31:2827:2625:2019:1615:1211:0cond01111001RnRdimm12 = 16
+Zero Extend
+ALU1. Address calculation2. Memory read
+5.3 Data Movement Instructions 127
+5.3.3 Base +oﬀset Mode
+LDR(opcode =0110) and STR(opcode =0111) specify the Base+offset
+addressing mode. The Base +offset mode is so named because the address of the
+operand is obtained by adding a sign-extended 6-bit offset to a b ase register. The
+6-bit offset is literally taken from the instruction, bits [5:0]. The base register is
+speciﬁed by bits [8:6] of the instruction.
+The Base+offset addressing uses the 6-bit value as a 2’s complement inte ger
+between −32 and+31. Thus it must ﬁrst be sign-extended to 16 bits before it is
+added to the base register.
+If R2 contains the 16-bit quantity x2345, the instruction
+15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0
+0110 00 1 010 011101
+LDR R1 R2 x1D
+loads R1 with the contents of x2362.
+Figure 5.8 shows the relevant parts of the data path required to execute this
+instruction. First the contents of R2 (x2345) are added to the sign-extended value
+contained in IR[5:0] (x001D), and the result (x2362) is loaded in to the MAR.
+Second, memory is read, and the contents of x2362 are loaded i nto the MDR.
+Suppose the value stored in memory location x2362 is x0F0F. T hird, and ﬁnally,
+the contents of the MDR (in this case, x0F0F) are loaded into R1 .
+1616
+1
+16
+2
+R0
+R1
+R2
+R3
+R4
+R5
+R6
+R7
+MAR MDRMEMORY
+ADD
+0000111100001111
+0010001101000101
+15 0
+IR 1010 011 011
+x1D
+011101 
+SEXT
+x001D
+IR[5:0]
+3
+LDR R1 R2
+Figure 5.8 Data path relevant to the execution of LDR R1, R2, x1D
+Base R
+3. Data Reg is loadedData R
+R0R1R2R3R4R5R6R7R8R9R10R11R12R13R14R15
+LDR R11, [R5,  #16]
+172
+===== PAGE 174 =====
+STR with Src2 as Immediate§I (Bit 25) = 1: Src2 = imm12 where imm2 is a 12-bit unsigned offset added to the value in the base register (Rn)
+31:2827:2625:2019:1615:1211:0cond01111000RnRdimm12
+§Format of STore Register instruction STR R0, [R1,  #12] STR Rd, [Rn,  #imm12]§L (Bit 20) = 0: CPU performs an STR
+173
+===== PAGE 175 =====
+REGISTER can hold memory address[R1] : R1 is a pointer (à) to DataMemory Load returns Data or ValueData is Stored in memory.  Address is INPUTSame Memory Stores Instructions and Data[PC] à Instruction174
+===== PAGE 176 =====
+Conditional Execution
+175
+===== PAGE 177 =====
+Conditional Execution§ALU operations set the condition (status) flags (zero, negative, carry, overflow)§They are contained in a register called the Current Program Status Register (CPSR) …. part of architectural state
+§We can execute instructions conditionally based on a specific condition flag being TRUE or FALSE
+176
+===== PAGE 178 =====
+Conditional Execution§ARM allows conditional execution in two steps§Step 1:  Instruction sets the condition flags  (Negative, Zero, Carry, Overflow)§Step 2:  Subsequent instructions execute based on the state of the condition flags 
+177
+===== PAGE 179 =====
+Setting the Condition Flags§Method 1: Use the COMPARE instruction
+§The instruction subtracts the second source operand from the first operand (R5 – R6)§The instruction does not save any result§Flags are set as follows§Is 0,           Z = 1§Is negative,     N = 1§Causes a carry out,   C = 1§Causes a signed overflow,  V = 1
+CMPR5,R6
+178
+===== PAGE 180 =====
+Setting the Condition Flags§Method 2: Append the instruction mnemonic with S
+§The instruction adds source operands R2 and R3§It sets the flags (S)§It saves the result in R1
+ADDSR1,R2,R3
+179
+===== PAGE 181 =====
+Condition Mnemonics§We can execute instructions conditionally based on the status of the flags register§Condition for execution is encoded as a condition mnemonic appended to the instruction mnemonic
+§NE and EQ are condition mnemonics§SUB executes only if R1 is not equal to R2 (meaning Z = 0)
+CMPR1,R2SUBNER3,R5,R8ADDEQR1,R2,R3
+180
+===== PAGE 182 =====
+Condition Mnemonics
+181
+===== PAGE 183 =====
+Instructions that affect condition flags
+182
+===== PAGE 184 =====
+Example§R5 = 17 and R9 = 23§Will the SUBEQ and ORRMI instructions execute?
+§N Z C V = ?CMPR5,R9SUBEQR1,R2,R3ORRMIR4,R0,R9183
+===== PAGE 185 =====
+Another Example (page 307-308 of book) §R2 = 0x80000000 and R3 = 0x00000001§Which instructions will execute?§N Z C V = ?CMPR2,R3ADDEQR4,R5,#78ANDHSR7,R8,R9ORRMIR10,R11,R12EORLTR12,R7,R10184
+===== PAGE 186 =====
+Conditional Execution in QuAC
+§Bit 11 is associated with a condition code
+§ALU instructions set the status flags.  See Flags in QuAC ISA§The CPU uses that information to determine whether to execute the current instruction or not (e.g., store result into register file or memory)
+§If cond field (Instr11) is TRUE, then §Execute the instruction only if he last ALU instruction set the Z flag to TRUE§Otherwise, do not execute the instruction (depart from the usual control flow)§The default encoding of the cond field is 0 (execute the instruction)§add   r1, r2, r3 (cond = FALSE) §addeq r1, r2, r3   (cond = TRUE) 185
+===== PAGE 187 =====
+Conditional Execution in QuAC
+§addeq r1, r2, r3   (cond = TRUE)
+§What is the relationship between eq and Z flag?§A comparison of two registers shows they are equal (i.e., their difference is 0)
+186
+1
+===== PAGE 188 =====
+Branch Instructions
+187
+===== PAGE 189 =====
+Program Counter (PC) points to (contains the address of) next instruction to execute
+188
+.  .  .
+Instructions
+2 5 8 1 3 0 2 4E 1 5 1 0 0 0 2E 3 A 0 2 0 4 5E 3 A 0 1 0 6 4
+.  .  .
+0040000000400004004000080040000C.  .  .
+Byte Address.  .  .
+← PC
+===== PAGE 190 =====
+§32-Bit ISA with Byte-Addressable Memory§PC = PC + 4 §64-Bit ISA with Byte-Addressable Memory§PC = PC + 8 §32-Bit ISA with Word-Addressable Memory§PC = PC + 1 189
+Normal (Sequential) Execution
+===== PAGE 191 =====
+190
+Normal (Sequential) ExecutionIncrement PC during instruction FETCH to prepare to execute the NEXT InstructionHowever: It is often useful to break this sequence
+===== PAGE 192 =====
+(1) Altering the PC differently can break the sequential flow of program execution(2) Branch instructions alter the program counter to break the sequential flow of exeuction191
+===== PAGE 193 =====
+Scanned by CamScanner
+JMP loads SR1 into PC
+Recall: PC UPDATE in LC-3
+192
+===== PAGE 194 =====
+Program Counter (PC)
+.  .  .
+Instructions
+2 5 8 1 3 0 2 4E 1 5 1 0 0 0 2E 3 A 0 2 0 4 5E 3 A 0 1 0 6 4
+.  .  .
+0040000000400004004000080040000C.  .  .
+Byte Address.  .  .← PC
+§Program Counter (PC): Contains the address of (or points to) the next instruction to be executed§Incremented by 4 (= 4 bytes or 32 bits) in the FETCH phase
+§PC = PC + 4 to execute the next       sequential instruction in memory
+193
+===== PAGE 195 =====
+Program Counter (PC)
+.  .  .
+Instructions
+2 5 8 1 3 0 2 4E 1 5 1 0 0 0 2E 3 A 0 2 0 4 5E 3 A 0 1 0 6 4
+.  .  .
+0040000000400004004000080040000C.  .  .
+Byte Address.  .  .
+§PC = PC + 4 to execute the next     sequential instruction in memory
+194
+← PC
+===== PAGE 196 =====
+Program Counter (PC)
+.  .  .
+Instructions
+2 5 8 1 3 0 2 4E 1 5 1 0 0 0 2E 3 A 0 2 0 4 5E 3 A 0 1 0 6 4
+.  .  .
+0040000000400004004000080040000C.  .  .
+Byte Address.  .  .
+← PC
+§PC = PC + 4 to execute the next     sequential instruction in memory
+195
+===== PAGE 197 =====
+Program Counter (PC)
+.  .  .
+Instructions
+2 5 8 1 3 0 2 4E 1 5 1 0 0 0 2E 3 A 0 2 0 4 5E 3 A 0 1 0 6 4
+.  .  .
+0040000000400004004000080040000C.  .  .
+Byte Address.  .  .
+← PC
+196
+§PC = PC + 4 to execute the next     sequential instruction in memory
+===== PAGE 198 =====
+Program Counter (PC)
+.  .  .
+Instructions
+2 5 8 1 3 0 2 4E 1 5 1 0 0 0 2E 3 A 0 2 0 4 5E 3 A 0 1 0 6 4
+.  .  .
+0040000000400004004000080040000C.  .  .
+Byte Address.  .  .
+← PC
+197
+§PC = PC + 4 to execute the next     sequential instruction in memory
+===== PAGE 199 =====
+Program Counter (PC)
+.  .  .
+Instructions
+2 5 8 1 3 0 2 4E 1 5 1 0 0 0 2E 3 A 0 2 0 4 5E 3 A 0 1 0 6 4
+.  .  .
+0040000000400004004000080040000C.  .  .
+Byte Address.  .  .
+← PC
+198
+§PC = PC + 4 to execute the next     sequential instruction in memory
+===== PAGE 200 =====
+Branch Instructions and PC
+.  .  .
+Instructions
+2 5 8 1 3 0 2 4E 1 5 1 0 0 0 2E 3 A 0 2 0 4 5E 3 A 0 1 0 6 4
+.  .  .
+0040000000400004004000080040000C.  .  .
+Byte Address.  .  .
+§Branch instructions change the PC to point to a different instruction than the next sequential instruction in memory§Updated by a different address in the EXECUTE phase§New address PC points to is determined by formula (addressing mode)  
+199
+← PC
+===== PAGE 201 =====
+Branch Instructions and PC
+.  .  .
+Instructions
+2 5 8 1 3 0 2 4E 1 5 1 0 0 0 2E 3 A 0 2 0 4 5E 3 A 0 1 0 6 4
+.  .  .
+0040000000400004004000080040000C.  .  .
+Byte Address.  .  . 200
+§Update PC to re-execute the four instruction sequence again (for loop) ← PC
+===== PAGE 202 =====
+Branch Instructions and PC
+.  .  .
+Instructions
+2 5 8 1 3 0 2 4E 1 5 1 0 0 0 2E 3 A 0 2 0 4 5E 3 A 0 1 0 6 4
+.  .  .
+0040000000400004004000080040000C.  .  .
+Byte Address.  .  .← PC
+201
+§Update PC to re-execute the four instruction sequence again (for loop)
+===== PAGE 203 =====
+Branch Instructions§Typically, a computer program is executed in sequence§First instruction is executed, then the second, then the third, and so on §Decision making is an important advantage of computers§if and if-else statements§for and while loops§switch-case statements§ARM provides branch instructions to skip and repeat code202
+===== PAGE 204 =====
+Type of Branches§Branch (B)§Branches to another TARGET instruction§Unconditional branch: always executes the target instruction§Conditional branch: either executes the TARGET instruction or the next sequential instruction in memory based on a condition§BEQ (Branch if the Zero flag is set)§BNE (Branch if the Zero flag is not set)§Branch and Link (BL)   §A special branch to provide support for functions in C++ or Java§Architectural support for high-level language needs203
+===== PAGE 205 =====
+Unconditional BranchAssembly code:     ADD  R1,  R2,  #17   B    TARGET   ORR  R1,  R1,  R3   AND  R3,  R1,  #0xFFTARGET   SUB  R1,  R1,  #78
+§The Branch in this example is unconditional and always TAKEN (T)
+§After encountering B, the CPU executes SUB instead of ORR§The label TARGET is a memory address in human readable form§TARGET is transformed into a memory address by a tool called assembler §Assemblers transform assembly code into machine code (0s and 1s)204
+===== PAGE 206 =====
+Assembly language let us give meaningful (human-readable and easy to differentiate) symbolic names (labels) to memory locations, such as TARGET, rather than use binary addresses
+We call these names Symbolic Addresses205
+===== PAGE 207 =====
+Conditional Branch§Conditional branch uses condition mnemonics
+§Recall conditional execution and condition mnemonics
+206
+===== PAGE 208 =====
+Recall: ARM Condition Mnemonics
+207
+===== PAGE 209 =====
+Conditional Branch§Conditional branch uses condition mnemonics
+§CMP subtracts R1 from R0 and sets all flags§Z flag is FALSE because R0 – R1 is not 0 §The branch BEQ evaluates to FALSE §Branch is NOT TAKEN (NT)§The next instruction executed is the ORR instruction
+Assembly code:     MOV  R0,  #4   ADD  R1,  R0,  R0   CMP  R0,  R1   BEQ  THERE   ORR  R1,  R1,  R1THERE   ADD  R1,  R1,  #78
+208
+===== PAGE 210 =====
+Instruction Format – 3: Branch§op = 10§imm24 = 24-bit signed immediate§The two bits [25:24] form the funct field §Bit 25 is always 1§L bit: L = 0 for B (Branch)§L bit: L = 1 for BL (Branch and Link)
+31:2827:2625:24 23:0condop1L imm24
+§Format B  TARGET B  imm24
+209
+===== PAGE 211 =====
+Branch with L = 0 31:2827:2625:24 23:0cond1010 imm24
+§Branch with L bit (Bit 24) as 0 is a regular branch
+§Branch Target Address (BTA): The address of the next instruction to execute if the  branch is taken §How is BTA calculated?1.Shift left imm24 by 2 (to convert words to bytes)2.Sign-extend (copy Instruction[23] into Instruction[24:31] )3.Add PC + 8 210
+===== PAGE 212 =====
+BTA Calculation Example
+PCPC + 4PC + 83 instructions= 12 Bytes
+address
+31:2827:2625:24 23:0cond1010imm24 = 3 (000000000000000000000011)
+suppose PC points here à BLT  THERE   ADD  R0,  R1,  R2   SUB  R0,  R0,  R9   ADD  R3,  R0,  R1   ORR  R3,  R2,  R1THERE   ADD  R1,  R1,  #78   ADD  R3,  R3,  #0x5
+0x80A00x80A40x80A80x80AC0x80B00x80B40x80B8
+§Instruction encodes the distance from PC + 8 as 3 32-bit words
+211
+===== PAGE 213 =====
+BTA Calculation Summary The processor calculates the BTA in three steps1.Shift left imm24 by 2 (to convert words to bytes)2.Sign-extend (copy Instr23 into Instr31:24)3.Add PC + 800000000000000000000001100000000000000000000000000001100= 3= 12
+212
+===== PAGE 214 =====
+Branch-Related Terminology§Two main types of branches§Conditional branch: Executes the next sequential instruction or TARGET instruction based on a condition§Unconditional branch: Always (unconditionally) executes the TARGET instruction§Branch Target§Memory address of the TARGET instruction§Branch Condition §Condition which if TRUE branch jumps to the TARGET instruction§Branch Resolution/Evaluation§The act of evaluating the branch condition§Two outcomes of branch resolution are:§Taken Branch (T): branch condition evaluates to TRUE§Untaken (Not Taken or NT) Branch: branch evaluates to FALSE§Branch behavior§Strongly (most of times) Taken/Untaken OR Weakly (some of the times) Taken/Untaken§Always Taken OR Always Untaken§Branch Prediction§In high-performance CPUs, branches prevent the CPU from doing useful work§Modern CPUs use a branch predictor to predict the branch direction (T/NT) and branch TARGET213
+===== PAGE 215 =====
+if and if-else
+214
+§We will study high-level language (C) to assembly transformation in this course
+===== PAGE 216 =====
+The Three Program Constructs§We will see three basic constructs used in structured programs (construct comes from constructing a program)§Sequential  ✓§One subtask, followed by other, never going back to first§Conditional§One of the two subtasks but not both, depending on some condition§Iterative§Doing a subtask a number of times215
+===== PAGE 217 =====
+216
+Conditional Statements§ If the condition is TRUE, do one subtask. Otherwise, do a different subtask§A subtask or block of code may do nothing§We call it a conditional construct§All languages provide conditional constructs
+===== PAGE 218 =====
+if StatementC code:     if (apples == oranges)   f = i + 1;   f = f – i;
+Assembly code:  ; R0 = apples; R1 = oranges; R2 = f; R3 = i   CMP  R0,  R1   BNE  L1   ADD  R2,  R3,  #1L1   SUB  R2,  R2,  R3
+§apples == oranges?§if yes, branch to L1§if no, add 1 to i§Subtract i from f
+§The assembly code checks for the opposite condition in C code§Skips the if block when the condition is not satisfied§If the branch is NOT TAKEN, the if block is executed217
+===== PAGE 219 =====
+§It is very rarely the case that computer programs can be written only one way
+§Use the BEQ instruction instead of BNE§Using conditional execution (next)
+if Statement
+218
+===== PAGE 220 =====
+if StatementC code:     if (apples == oranges)   f = i + 1;   f = f – i;
+Assembly code:  ; R0 = apples; R1 = oranges; R2 = f; R3 = i   CMP  R0,  R1   BEQ  L1   B    L2L1   ADD  R2,  R3,  #1L2   SUB  R2,  R2,  R3
+§apples == oranges?§if yes, branch to L1§if no, add 1 to i§Subtract i from f
+§More faithfully translates the high-level code§If the branch is TAKEN, the if block is executed§There is an extra branch instruction hence worst performance219
+===== PAGE 221 =====
+if with Conditional ExecutionC code:     if (apples == oranges)   f = i + 1;   f = f – i;
+Assembly code:  ; R0 = apples; R1 = oranges; R2 = f; R3 = i   CMP    R0,  R1   ADDEQ  R2,  R3,  #1   SUB  R2,  R2,  R3§apples == oranges?§if yes, add 1 to i§Subtract i from f§This solution is shorter and faster (one fewer instruction)§If the if block is long, it is tedious to write conditional mnemonics§Conditional execution requires NEEDLESS fetching of instructions from memory§In high-performance CPUs, branch instructions introduce extra delay if the branch predictor makes a mistake (branch misprediction) 220
+===== PAGE 222 =====
+if-else
+221
+===== PAGE 223 =====
+C code:     if (apples == oranges)   f = i + 1;   else   f = f – i;
+Assembly code:  ; R0 = apples; R1 = oranges; R2 = f; R3 = i   CMP  R0,  R1   BNE  L1   ADD  R2,  R3,  #1   B    L2L1   SUB  R2,  R2,  R3L2
+§apples == oranges?§if yes, branch to L1§if no, add 1 to i§Branch to L2§Subtract i from f
+if-else Statement
+222
+===== PAGE 224 =====
+C code:     if (apples == oranges)   f = i + 1;   else   f = f – i;   ...
+Assembly code:  ; R0 = apples; R1 = oranges; R2 = f; R3 = i   CMP  R0,  R1   BNE  L1   ADD  R2,  R3,  #1   B    L2L1   SUB  R2,  R2,  R3L2
+§apples == oranges?§if yes, branch to L1§if no, add 1 to i§Branch to L2§Subtract i from f
+if-else Statement
+223
+===== PAGE 225 =====
+C code:     if (apples == oranges)   f = i + 1;   else   f = f – i;   ...
+Assembly code:  ; R0 = apples; R1 = oranges; R2 = f; R3 = i   CMP  R0,  R1   BNE  L1   ADD  R2,  R3,  #1   B    L2L1   SUB  R2,  R2,  R3L2
+§apples == oranges?§if yes, branch to L1§if no, add 1 to i§Branch to L2§Subtract i from f
+if-else Statement
+224
+===== PAGE 226 =====
+C code:     if (apples == oranges)   f = i + 1;   else   f = f – i;   ...
+Assembly code:  ; R0 = apples; R1 = oranges; R2 = f; R3 = i   CMP  R0,  R1   BNE  L1   ADD  R2,  R3,  #1   B    L2L1   SUB  R2,  R2,  R3L2
+§apples == oranges?§if yes, branch to L1§if no, add 1 to i§Branch to L2§Subtract i from f
+if-else Statement
+225
+===== PAGE 227 =====
+C code:     if (apples == oranges)   f = i + 1;   else   f = f – i;   ...
+Assembly code:  ; R0 = apples; R1 = oranges; R2 = f; R3 = i   CMP  R0,  R1   BNE  L1   ADD  R2,  R3,  #1   B    L2L1   SUB  R2,  R2,  R3L2
+§apples == oranges?§if yes, branch to L1§if no, add 1 to i§Branch to L2§Subtract i from f
+if-else Statement
+226
+===== PAGE 228 =====
+C code:     if (apples == oranges)   f = i + 1;   else   f = f – i;   ...
+Assembly code:  ; R0 = apples; R1 = oranges; R2 = f; R3 = i   CMP  R0,  R1   BNE  L1   ADD  R2,  R3,  #1   B    L2L1   SUB  R2,  R2,  R3L2
+§apples == oranges?§if yes, branch to L1§if no, add 1 to i§Branch to L2§Subtract i from f
+if-else Statement
+227
+===== PAGE 229 =====
+C code:     if (apples == oranges)   f = i + 1;   else   f = f – i;   ...
+Assembly code:  ; R0 = apples; R1 = oranges; R2 = f; R3 = i   CMP  R0,  R1   BNE  L1   ADD  R2,  R3,  #1   B    L2L1   SUB  R2,  R2,  R3L2
+§apples == oranges?§if yes, branch to L1§if no, add 1 to i§Branch to L2§Subtract i from f
+if-else Statement
+228
+===== PAGE 230 =====
+§It is very rarely the case that computer programs can be written only one way
+§Do it yourself:  Find an alternative way to write the if-else statement
+if-else Statement
+229
+===== PAGE 231 =====
+C code:     if (apples == oranges)   f = i + 1;   else   f = f – i;
+Assembly code:  ; R0 = apples; R1 = oranges; R2 = f; R3 = i   CMP    R0,  R1   ADDEQ  R2,  R3,  #1   SUBNE  R2,  R2,  R3
+if-else with Conditional Execution
+230
+§This solution is shorter and faster (one fewer instruction)§Suppose the if block is long, it is then tedious to write conditional mnemonics§Conditional execution requires NEEDLESS fetching of instructions from memory§On the other hand, in high-performance CPUs, branch instructions introduce extra delay if the branch predictor makes a mistake (branch misprediction)
+===== PAGE 232 =====
+Switch Statement
+231
+===== PAGE 233 =====
+switch-case Statement
+§Execute one of several blocks of code (cases) depending on the condition§ Break out of the entire switch block {...} after executing a specific block§In the above example condition is the state of variable button§If no conditions are met, the default block is executed 
+C code:     switch (button) {   case 1:  atm = 20;  break;      case 2:  atm = 50;  break;      case 3:  atm = 100; break;      default: atm = 0;   break;   }
+232
+===== PAGE 234 =====
+switch-case StatementC code:     switch (button) {   case 1:  atm = 20;  break;      case 2:  atm = 50;  break;      case 3:  atm = 100; break;      default: atm = 0;   break;   }
+Assembly code:  ; R0 = button; R1 = atm   CMP   R0,  #1   MOVEQ R1,  #20   BEQ   DONE   CMP   R0,  #2   MOVEQ R1,  #50   BEQ   DONE   CMP   R0,  #3   MOVEQ R1,  #100   BEQ   DONE   MOV   R1,  #0DONE
+§Comment begins with ;§Another comment§is button == 1?§atm = 20§break out§is button == 2?§atm = 50§break out§is button == 3?§atm = 100§break out§Execute default case 
+233
+===== PAGE 235 =====
+switch-case StatementC code:     switch (button) {   case 1:  atm = 20;  break;      case 2:  atm = 50;  break;      case 3:  atm = 100; break;      default: atm = 0;   break;   }
+Assembly code:  ; R0 = button; R1 = atm   CMP   R0,  #1   MOVEQ R1,  #20   BEQ   DONE   CMP   R0,  #2   MOVEQ R1,  #50   BEQ   DONE   CMP   R0,  #3   MOVEQ R1,  #100   BEQ   DONE   MOV   R1,  #0DONE
+§Comment begins with ;§Another comment§is button == 1?§atm = 20§break out§is button == 2?§atm = 50§break out§is button == 3?§atm = 100§break out§Execute default case 
+234
+===== PAGE 236 =====
+switch-case StatementC code:     switch (button) {   case 1:  atm = 20;  break;      case 2:  atm = 50;  break;      case 3:  atm = 100; break;      default: atm = 0;   break;   }
+Assembly code:  ; R0 = button; R1 = atm   CMP   R0,  #1   MOVEQ R1,  #20   BEQ   DONE   CMP   R0,  #2   MOVEQ R1,  #50   BEQ   DONE   CMP   R0,  #3   MOVEQ R1,  #100   BEQ   DONE   MOV   R1,  #0DONE
+§Comment begins with ;§Another comment§is button == 1?§atm = 20§break out§is button == 2?§atm = 50§break out§is button == 3?§atm = 100§break out§Execute default case 
+235
+===== PAGE 237 =====
+switch-case StatementC code:     switch (button) {   case 1:  atm = 20;  break;      case 2:  atm = 50;  break;      case 3:  atm = 100; break;      default: atm = 0;   break;   }
+Assembly code:  ; R0 = button; R1 = atm   CMP   R0,  #1   MOVEQ R1,  #20   BEQ   DONE   CMP   R0,  #2   MOVEQ R1,  #50   BEQ   DONE   CMP   R0,  #3   MOVEQ R1,  #100   BEQ   DONE   MOV   R1,  #0DONE
+§Comment begins with ;§Another comment§is button == 1?§atm = 20§break out§is button == 2?§atm = 50§break out§is button == 3?§atm = 100§break out§Execute default case 
+236
+===== PAGE 329 =====
+Addressing Mode Tradeoffs§Complex addressing modes simplify high-level code to assembly translation§But they result in more complex circuits (microarchitecture) §ALU to add base and offset  §Shifter in front of ALU§Where to place the burden of optimization? Software or Hardware §Lot of simple instructions + Simple microarchitecture§Few complex instructions + Complex microarchitecture328
+===== PAGE 330 =====
+MicroarchitectureSuggested Reading: Requirements, Bottlenecks, and Good Fortune: Agents for Microprocessor EvolutionLink: https://course.ece.cmu.edu/~ece740/f13/lib/exe/fetch.php?media=r0_patt.pdf
+329
+===== PAGE 331 =====
+§There are three main types of instructions§Operate (data processing) instructions§Execute operations in the ALU§Data movement (memory) instructions§Read from or write to memory§Control flow (branch/jump) instructions§Change the sequence of execution (decision making)
+Recall: Instruction Types
+330
+===== PAGE 332 =====
+ARM Instruction Formats
+31:2827:2625:24 23:0cond1010 imm24
+DP-I
+DP-R
+Mem
+BR
+31:2827:262524:212019:1615:1211:87:0cond001cmdSRnRd0000imm831:2827:262524:212019:1615:1211:43:0cond000cmdSRnRd00000000Rm31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+331
+===== PAGE 333 =====
+Today ’s Lecture§Last few lectures§Instruction Set Architectures (ISAs):  ARM and QuAC§Assembly programming: ARM§Today: Microarchitecture§Implementation of the ISA (arrangement of registers, memories, ALU, other blocks)§Many different microarchitectures for one ISA are possible§Design Point: Set of considerations for a given problem space (ML, automotive)§Requires making tradeoffs: Performance, power, reliability, cost, complexity§Today: Design process and principles, single-cycle microarchitecture, and performance analysis§Other microarchitectures we will cover§Multi-cycle, pipelined, and out-of-order
+MicroarchitectureISAProgramAlgorithmProblem
+CircuitsElectrons
+332
+===== PAGE 334 =====
+Many ISAs, Many Microarchitectures §There can be many implementations of the same ISA§MIPS R2000, R3000, R4000, R6000, R8000, R10000, …§x86: Intel 80486, Pentium, Pentium Pro, Pentium 4, Kaby Lake, Coffee Lake, Comet Lake, Ice Lake, Golden Cove, Sapphire Rapids, …, AMD K5, K7, K9, Bulldozer, BobCat, Ryzen X, …§POWER 4, 5, 6, 7, 8, 9, 10 (IBM), …, PowerPC 604, 605, 620, …§ARM Cortex-M*,  ARM Cortex-A*, NVIDIA Denver, Apple A*, M1, …§Alpha 21064, 21164, 21264, 21364, …§RISC-V … 333
+===== PAGE 335 =====
+How do we implement an ISA?
+“Form follows function.”         Louis Sullivan
+Before we begin construction, let’s pause and ask: what is the purpose of this computer?
+In other words, how do we design a system that obeys the hardware/software interface? 
+334
+===== PAGE 336 =====
+–FETCH–DECODE–EVALUATE ADDRESS–FETCH OPERANDS–EXECUTE–STORE RESULT
+Purpose: To Process Instructions
+335
+One way to process an instruction 
+Six phases
+===== PAGE 337 =====
+–FETCH–DECODE/RF READ–EXECUTE–MEMORY ACCESS–WRITEBACK
+Purpose: To Process Instructions
+336
+Another way to process an instructions 
+Five phases
+===== PAGE 338 =====
+How does a machine process insts?§What does processing an instruction mean in von Neumann model?
+§Processing an instruction: Transforming AS to AS’ according to the ISA specification of the instruction
+AS = Architectural (programmer visible) state before an instruction is processed
+AS’ = Architectural (programmer visible) state after an instruction is processed
+Process Instruction
+337
+===== PAGE 339 =====
+Stored program
+Sequential instruction processing
+The Von Neumann Model/Architecture
+338
+===== PAGE 340 =====
+CONTROL UNITPC or IPInst Register
+PROCESSING UNITALUTEMP
+MEMORYMem Addr RegMem Data Reg
+INPUTKeyboard,Mouse,Disk…
+OUTPUTMonitor, Printer, Disk…
+The Von Neumann Model/Architecture
+339
+===== PAGE 341 =====
+M[0]M[1]M[2]M[3]M[4]
+M[N-1]Memoryarray of storage locationsindexed by an addressProgram Countermemory addressof the current (or next) instruction
+Registers-  given special names in the ISA     (as opposed to addresses)-  general vs. special purpose
+Instructions (and programs) specify how to transform             the values of programmer visible state
+Recall: Programmer Visible  (Architectural) State
+340
+===== PAGE 342 =====
+ISA = Instruction Set Architecture §Instruction Set Architecture = Instruction Set + Architectural State§Instruction Set§Opcodes §Operands§Data types (e.g., 2’s complement)§Addressing modes (e.g., base + offset)§Instruction formats (Data processing, Immediate, Memory)§Architectural state§Memory §Register set§Program counter341
+===== PAGE 343 =====
+§ISA specifies abstractly what AS’ should be, given an instruction and AS§It defines an abstract finite state machine where§State = programmer-visible state §Next-state logic = instruction execution specification§From ISA point of view, there are no “intermediate states” between AS and AS’ during instruction execution§One state transition per instruction§Microarchitecture implements how AS is transformed to AS’§There are many choices in implementation §We can have programmer-invisible state to optimize the speed of instruction execution: multiple state transitions per instruction§Choice 1: AS à AS’ (transform AS to AS’ in a single clock cycle)§Choice 2: AS à AS+MS1 à AS+MS2 à AS+MS3 à AS’ (take multiple clock cycles to transform AS to AS’)
+The “Process Instruction” Step
+342
+===== PAGE 344 =====
+§Each instruction takes a single clock cycle to execute§Only combinational logic is used to implement instruction execution §No intermediate, programmer-invisible state updates§Easy to explain and a simple control unit!
+Very Basic Instruction Processing Engine
+343
+===== PAGE 345 =====
+§Single-cycle machine
+§What is the clock cycle time determined by?§What is the critical path (i.e., longest delay path) of the combinational logic determined by?
+AS’ ASSequentialLogic (State)CombinationalLogic
+AS: Architectural State
+Basic Instruction Processing Engine
+344
+===== PAGE 346 =====
+§Single-cycle machines§Each instruction takes a single clock cycle§All state updates made at the end of an instruction’s execution§Big disadvantage: The slowest instruction determines cycle time à long clock cycle time§Multi-cycle machines §Instruction processing broken into multiple cycles/stages§State updates can be made during an instruction’s execution§Architectural state updates made at the end of an instruction’s execution§Advantage over single-cycle: The slowest “stage” determines cycle time§Both single-cycle and multi-cycle machines literally follow the von Neumann model at the microarchitecture level
+Single-Cycle vs. Multi-Cycle Machines
+345
+===== PAGE 347 =====
+§Single-cycle machineAS’ ASSequentialLogic (State)CombinationalLogic
+AS: Architectural State
+Basic Instruction Processing Engine
+346
+===== PAGE 348 =====
+ARM State (AS) Elements
+§PC: Logically part of the register file§Read and written every cycle, independently of the normal register file operation. Should it be “physically” part of the register file?§Instruction memory has a single read port.  One 32-bit address input.  One 32-bit instruction (RD) output. §Register file: 15 registers (R0 to R14) + additional input to receive R15 from PC§Two read ports 4-bit A1 and A2 and 32-bit RD1 and RD2§One write port A3 (and WD3) and a write enable input§Read of R15 returns PC + 8§Write of R15 must be handled properly if PC is outside the register file§Reads are combinational and writes happen on the rising edge of the clock
+347
+===== PAGE 349 =====
+ARM State (AS) Elements
+§Data Memory: Single read/write port§If write enable (WE) is TRUE then it writes data WD into address A on the rising edge of the clock §If the write enable is FALSE, then it reads value at address A onto RD§All reads are combinational and constant time (not realistic but Ok for now)§All writes and state updates happen on the rising edge of the clock§Synchronous sequential circuit
+348
+===== PAGE 350 =====
+Microarchitecture Division§Two interacting parts§Datapath (32-bit in our case)§Control unit§Datapath operates on words of data §Memories, registers, ALUs, and multiplexers§Control unit informs the datapath how to execute an instruction§Receives the current instruction from the datapath §Produces multiplexer selects, ALU control, register enable, and memory write signals to control the operation of the datapath349
+===== PAGE 351 =====
+Role of Control UnitCodes stored in memory control the hardware of the computer ... As a puppeteer controlling a troupe of marionettes in an exquisitively choreographed dance of arithmetic and logic. The CPU control signals are the strings.          CODE, Charles Petzold
+350
+===== PAGE 352 =====
+Design Process/1§We will add the logic for one instruction at a time§LDR (LoaD Register)§STR (STore Register)§Data Processing (DP) instructions with 2nd source operand as an immediate§DP with 2nd source operand as a register§Branch instruction§Then build the “Control Unit”351
+===== PAGE 353 =====
+§We limit ourselves to a subset of instructions§Data-processing instructions: ADD, SUB, AND, ORR (with register and immediate offsets)§Memory instructions: LDR, STR (with positive immediate offset)§Branches: B§Once you understand these you can expand the hardware to handle others352
+Design Process/2
+===== PAGE 354 =====
+§New connections are emphasized in black§Hardware already studied in gray§Control signals in blue
+353
+Design Process/3
+===== PAGE 355 =====
+LDR with Src2 as Immediate§I (Bit 25) = 1: Src2 = imm12 where imm12 is a 12-bit unsigned offset added to the value in the base register (Rn)
+31:2827:2625:2019:1615:1211:0cond01111001RnRdimm12
+§Format of LoaD Register instruction LDR R0, [R1,  #12] LDR Rd, [Rn,  #imm12]§L (Bit 20) = 1: CPU performs an LDR
+354
+===== PAGE 356 =====
+31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+The LDR DatapathStep 1: Read (Fetch) instruction from memory 
+§Remember the distinction between PC (current state) and PC’ (next state)§From this point on, CPU actions depend on the instruction fetched
+===== PAGE 357 =====
+31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+The LDR DatapathStep 2: Read source operand (base register, Rn) from register file
+§Data is read onto RD1
+===== PAGE 358 =====
+31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+The LDR DatapathStep 3: Zero-extend the immediate field stored in Instr11:0
+===== PAGE 359 =====
+Zero Extension§Appending leading zeros to make a smaller quantity equal to a bigger quantity
+§ImmExt31:12 = 0 and ImmExt11:0 = Instr11:0
+358
+===== PAGE 360 =====
+31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+The LDR DatapathStep 4: Compute memory address (ALUControl = 00)ALU can perform many operations (which one do we want: ADD)
+===== PAGE 361 =====
+31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+The LDR DatapathStep 5: Write back data from read by data memory to Rd in Reg FileWhen is the ReadData written to the register file?
+===== PAGE 362 =====
+31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+The LDR DatapathStep 6: Compute address of next instruction (PC’ = PC + 4)Recall: Hardware in inherently parallel
+PC will become PC’ the following cycle (recall photography example)
+===== PAGE 363 =====
+31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+The LDR DatapathStep 7/a: Reading register R15 returns PC + 8
+===== PAGE 364 =====
+31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+The LDR DatapathStep 7/b: Writing register R15 (PC may be an instruction’s result)
+===== PAGE 365 =====
+STR Instruction§STR instruction uses the same instruction format§LDR and STR behave differently at the machine level§Rd is a source operand (specifies the register to store to mem)§Format of STore Register instruction STR R0, [R1,  #12] STR Rd, [Rn,  #imm12]31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12364
+===== PAGE 366 =====
+31:2827:2625:2019:1615:1211:0cond0111100LRnRdimm12
+The STR DatapathStep 8: Read a second register (Rd) and write its value to memoryignored
+§ReadData is ignored because RegWrite is FALSE
+===== PAGE 367 =====
+DP Instructions: Immediate§Like the LDR instruction, but two important differences§imm8 instead of imm12§The destination register stores the result of the ALU operation instead of memory access §Format ADD R0,  R1,  #16 ADD Rd,  Rn,  #imm831:2827:262524:212019:1615:1211:87:0cond001cmdSRnRd0000imm8366
+===== PAGE 368 =====
+Adding Support for DP InstructionsALUControlFunction00ADD01SUB10AND11ORR
+§The ALU functions and encoding
+§The ALU also produces four flags that are sent to the control unit§Register file either receives data from the data memory or the ALU§Add a multiplexer to choose between ReadData and ALUResult§This multiplexer is controlled by MemtoReg§MemtoReg = 1 for LDR and 0 for data processing instructions367
+===== PAGE 369 =====
+DP-Immediate DatapathStep 9: Change extend block, and add signal to write ALU result to RF
+31:2827:262524:212019:1615:1211:87:0cond001cmdSRnRd0000imm8
+RF
+368
+===== PAGE 370 =====
+DP Instructions: Register§The second source operand is Rm instead of an immediate§Place Rm on the A2 port of the register file for DP instructions with register as the second operand §Format ADD R0,  R1,  R3 ADD Rd,  Rn,  Rm31:2827:262524:212019:1615:1211:43:0cond000cmdSRnRd00000000Rm369
+===== PAGE 371 =====
+DP-Register DatapathStep 10: Read 2nd register (Rm) from Reg File and send RD2 to ALUWe need multiplexers on the inputs of register file and ALU to select the second source register
+31:2827:262524:212019:1615:1211:43:0cond000cmdSRnRd00000000Rm370
+===== PAGE 372 =====
+Branch Instruction: Unconditional§The second source operand is Rm instead of an immediate§Place Rm on the A2 port of the register file for DP instructions with register as the second operand §Format B  TARGET B  imm2431:2827:2625:24 23:011101010 imm24371
+===== PAGE 373 =====
+Branch DatapathStep 11: Change extend block, and add a bit to RegSrc for branch
+31:2827:2625:24 23:011101010 imm24372
+===== PAGE 374 =====
+Operation of the Extend Block
+ImmSrc1:0ExtImmDescription00{24’b0, Instr7:0}Zero-extended imm801{20’b0, Instr11:0}Zero-extended imm1210{6{Instr23}, Instr23:0}00Sign-extended imm24
+§Each of the three instruction formats interpret the  immediate field differently§ImmSrc1:0 is the 2-bit control signal input to the extend block
+373
+===== PAGE 375 =====
+Datapath with Control
+374
+===== PAGE 376 =====
+Control Unit§Generate control signals based on instruction fields§Instr31:20 (cond)§Instr27:26 (opcode)§Instr25:20 (funct)§Flags (needed for conditional execution)§Destination register (to update PC properly)§Controller for single-cycle microarchitecture is purely combinational §Conditional logic must enable updates to the architectural state when the instruction should be conditionally executed§Write enables must be TRUE only if conditional instruction is in fact executed 375
+===== PAGE 377 =====
+One way to build the control unit
+376
+===== PAGE 378 =====
+One way to build the control unit
+The write enable lines that update the architectural state could be “killed”by the conditional logic
+377
+===== PAGE 379 =====
+Decoder Truth Table§Only selected signals are shown in the truth table OpFunct5
+Funct0
+TypeBranchMemtoRegMemWALUSrc
+ImmSrcRegWRegSrcALUOp
+000XDP Reg0000XX1001001XDP Imm0001001X0101X0STR0X1101010001X1LDR0101011X0011XXB1001100X10
+===== PAGE 380 =====
+Example: Generating PCSrc Signal§PCSrc is 1 when §Destination register (Rd) is R15§RegW is 1 (ADD/SUB or LDR)§Instruction is a branch §PCSrc = ((Rd == 15) & RegW) | Branch§Assuming the control unit generates a signal called Branch when opcode is 10 (B or BL)§Important: Be careful to take conditional execution into account for the assignment!379
+===== PAGE 381 =====
+Processor Operation: ORR
+380
+===== PAGE 382 =====
+Processor Operation: ORRPCSrc0MemtoReg0MemWrite0ALUControl11ALUSrc0ImmSrc0:1XXRegWrite1RegSrc0:100
+ALUControlFunction00ADD01SUB10AND11ORR
+381
+===== PAGE 383 =====
+Processor Operation: LDR
+382
+===== PAGE 384 =====
+Processor Operation: LDRPCSrc0MemtoReg1MemWrite0ALUControl00ALUSrc1ImmSrc0:101RegWrite1RegSrc0:100
+ALUControlFunction00ADD01SUB10AND11ORR
+ImmSrc1:0ExtImmDescription00{24’b0, Instr7:0}Zero-extended imm801{20’b0, Instr11:0}Zero-extended imm1210{6{Instr23}, Instr23:0}00Sign-extended imm24383
+===== PAGE 385 =====
+Drawback of Single-Cycle CPU§Is this the best way to build a CPU?§What are the critical issues?
+§Next: performance analysis basics
+384
+===== PAGE 386 =====
+Performance Analysis
+385
+===== PAGE 387 =====
+Processor Performance§Performance is quantified by the execution time
+§The time it takes for a program to execute from start to finish
+§For example, for a given ISA and technology, how long does it take to run a program on the single-cycle CPU?
+386
+===== PAGE 388 =====
+§How fast is my program?§Every program consists of a series of instructions§Each instruction needs to be executed§So how fast are my instructions?§Instructions are realized on the hardware§They can take one or more clock cycles to complete§Cycles per Instruction = CPI§How much time is one clock cycle?§The critical path determines how much time one cycle requires = clock period§1/clock period = clock frequency = how many cycles can be done each second
+Processor Performance
+387
+===== PAGE 389 =====
+Execution TimeExecution	time	=(#instructions)(!"!#$%&'%()*!(&+')	(%$!+',%!"!#$)§# instructions (N)§Depends on the ISA, skill of programmer, compiler, algorithm§cycles per instruction (CPI)§Depends on the microarchitecture§seconds per cycle (clock period, inverse is clock frequency, f)§critical path, circuit technology, type of adders, gate-level details 388

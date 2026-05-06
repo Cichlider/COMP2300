@@ -1,0 +1,222 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 5 Practice Exam}
+\author{Topics: Multi-Cycle Microarchitecture, FSM Control, Performance,\\ Microprogramming, Pipelining Intro}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Time:} 120 minutes \hfill
+\textbf{Total:} 100 marks
+
+\vspace{0.5em}
+\noindent\textbf{Instructions}
+\begin{itemize}[leftmargin=1.5em]
+  \item Answer in English.
+  \item Part A is multiple-choice (concept-focused).
+  \item Part B is computational. Show key steps.
+  \item Part C contains past exam questions with sources.
+  \item Assume 32-bit ARM unless stated otherwise.
+\end{itemize}
+
+\section*{Part A: Multiple Choice (30 marks, 3 marks each)}
+Choose exactly one option for each question.
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item The main motivation for moving from a single-cycle CPU to a multi-cycle CPU is to:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Guarantee CPI $= 1$ for every instruction
+    \item Shorten the clock period by breaking execution into states
+    \item Remove the need for a control unit
+    \item Make instruction encoding simpler
+  \end{enumerate}
+
+  \item From the ISA point of view, the intermediate states used by a multi-cycle implementation are:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Architecturally visible to the assembly programmer
+    \item Required to be stored in general-purpose registers
+    \item Programmer-invisible microarchitectural state
+    \item Part of the instruction opcode
+  \end{enumerate}
+
+  \item Which of the following is a downside of a multi-cycle design?
+  \begin{enumerate}[label=(\Alph*)]
+    \item Hardware resources cannot be reused
+    \item Additional state registers and sequencing overhead are needed
+    \item Branches cannot be implemented
+    \item CPI is fixed at 1
+  \end{enumerate}
+
+  \item In the final multi-cycle ARM controller discussed in Set 5, which instruction class takes 5 cycles?
+  \begin{enumerate}[label=(\Alph*)]
+    \item \texttt{B}
+    \item Data-processing
+    \item \texttt{STR}
+    \item \texttt{LDR}
+  \end{enumerate}
+
+  \item When \texttt{R15} is read as a source operand, the register file should provide:
+  \begin{enumerate}[label=(\Alph*)]
+    \item The current PC value
+    \item PC + 4
+    \item PC + 8
+    \item The branch target address
+  \end{enumerate}
+
+  \item For an ARM \texttt{B} instruction, \texttt{ExtImm} is formed by:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Zero-extending \texttt{imm12}
+    \item Sign-extending \texttt{imm24} after shifting left by 2
+    \item Sign-extending \texttt{imm8}
+    \item Adding 8 directly to the PC
+  \end{enumerate}
+
+  \item In microprogrammed control, the control signals for the current state are stored in a:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Branch predictor
+    \item Microinstruction
+    \item Register file entry
+    \item Cache line
+  \end{enumerate}
+
+  \item The component that determines the address of the next microinstruction is the:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Microsequencer
+    \item ALU
+    \item Data memory
+    \item Extend block
+  \end{enumerate}
+
+  \item The main limitation of a multi-cycle processor that motivates pipelining is:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Instructions become variable-width
+    \item Hardware resources are often idle, limiting concurrency
+    \item Immediate values become too small
+    \item PC can no longer be updated on branches
+  \end{enumerate}
+
+  \item Pipelining primarily improves:
+  \begin{enumerate}[label=(\Alph*)]
+    \item The ISA semantics
+    \item Throughput by overlapping different stages of different instructions
+    \item The width of immediate fields
+    \item The number of architectural registers
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part B: Computational Problems (50 marks)}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{State sequences and cycle counts (8 marks)}\\
+  In the final multi-cycle FSM, the available states include \texttt{Fetch}, \texttt{Decode}, \texttt{MemAdr}, \texttt{MemRead}, \texttt{MemWB}, \texttt{MemWrite}, \texttt{ExecuteI}, \texttt{ExecuteR}, \texttt{ALUWB}, and \texttt{Branch}.
+  \begin{enumerate}[label=(\alph*)]
+    \item Write the state sequence and cycle count for each of the following instruction classes: \texttt{LDR}, \texttt{STR}, data-processing immediate, and \texttt{B}.
+    \item How many cycles are needed to execute the following 6-instruction sequence on this processor? What is the average CPI?
+\begin{verbatim}
+LDR R0, [R1, #0]
+ADD R2, R2, #1
+STR R2, [R1, #4]
+B label
+ADD R3, R3, R4
+LDR R5, [R6, #8]
+\end{verbatim}
+  \end{enumerate}
+
+  \item \textbf{PC, R15, and branch target calculation (8 marks)}\\
+  An instruction is located at address \texttt{0x80A0}.
+  \begin{enumerate}[label=(\alph*)]
+    \item If the instruction is \texttt{ADD R1, R15, R2}, what value should be supplied when \texttt{R15} is read in the register-read step?
+    \item If the instruction is \texttt{B} with \texttt{imm24 = 0x000003}, compute \texttt{ExtImm} and the branch target address.
+  \end{enumerate}
+
+  \item \textbf{Decoder outputs (8 marks)}\\
+  The decoder uses the following relations:
+  \[
+    \texttt{RegSrc0 = (Op == 10\_2)}, \qquad
+    \texttt{RegSrc1 = (Op == 01\_2)}, \qquad
+    \texttt{ImmSrc = Op}
+  \]
+  Fill in the outputs for each instruction class below:
+  \begin{center}
+  \begin{tabular}{c|c|c|c}
+  Instruction class & \texttt{Op} & \texttt{RegSrc1:0} & \texttt{ImmSrc} \\ \hline
+  \texttt{LDR} & 01 & ? & ? \\
+  \texttt{STR} & 01 & ? & ? \\
+  DP immediate & 00 & ? & ? \\
+  DP register & 00 & ? & ? \\
+  \texttt{B} & 10 & ? & ? \\
+  \end{tabular}
+  \end{center}
+
+  \item \textbf{Average CPI and total cycles (8 marks)}\\
+  A workload contains 25\% loads, 10\% stores, 13\% branches, and 52\% data-processing instructions.
+  Assume:
+  \[
+    CPI_{LDR}=5,\quad CPI_{STR}=4,\quad CPI_B=3,\quad CPI_{DP}=4
+  \]
+  \begin{enumerate}[label=(\alph*)]
+    \item Compute the average CPI.
+    \item If the program has 50 million instructions, how many total cycles does it take?
+  \end{enumerate}
+
+  \item \textbf{Critical path and clock frequency (8 marks)}\\
+  Assume the multi-cycle critical-path formula is
+  \[
+    T_{c2} = t_{pcq} + 2t_{mux} + \max(t_{ALU} + t_{mux}, t_{mem}) + t_{setup}
+  \]
+  and the delays are:
+  \[
+    t_{pcq}=40\text{ ps},\quad t_{mux}=25\text{ ps},\quad
+    t_{ALU}=120\text{ ps},\quad t_{mem}=200\text{ ps},\quad
+    t_{setup}=50\text{ ps}
+  \]
+  \begin{enumerate}[label=(\alph*)]
+    \item Compute \(T_{c2}\).
+    \item Compute the corresponding maximum clock frequency in GHz.
+  \end{enumerate}
+
+  \item \textbf{Execution time (10 marks)}\\
+  A program executes \(100 \times 10^9\) instructions on a multi-cycle ARM processor with:
+  \[
+    CPI = 4.12,\qquad T_c = 340\text{ ps}
+  \]
+  \begin{enumerate}[label=(\alph*)]
+    \item Compute the execution time in seconds.
+    \item Suppose a revised design keeps the same CPI but reduces the clock period to \(300\) ps. What is the new execution time?
+    \item What is the speedup of the revised design over the original design?
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions (Source-Tagged) (20 marks)}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{ISA vs Microarchitecture (Source: exam24px1.pdf, Q1f--Q1i, adapted) (5 marks)}\\
+  For each item below, classify it as \textbf{ISA} or \textbf{Microarchitecture}.
+  \begin{enumerate}[label=(\alph*)]
+    \item Whether the ALU uses a ripple-carry adder or a carry-save adder
+    \item Instruction width
+    \item Whether the CPU uses branch prediction
+    \item Whether the control unit is hardwired or microprogrammed
+  \end{enumerate}
+
+  \item \textbf{Multi-Cycle Execution Time (Source: exam2025-main.pdf, Q12) (5 marks)}\\
+  A program consists of 2 billion instructions, of which 50\% are ALU instructions, 25\% are memory instructions, and 25\% are branch instructions.
+  On a 1 GHz multi-cycle CPU, an ALU instruction takes 6 cycles, each memory instruction takes 8 cycles, and each branch instruction takes 4 cycles.
+  What is the execution time in seconds?
+
+  \item \textbf{Single-Cycle vs Pipelining (Source: exam24px2.pdf, Q6, adapted) (5 marks)}\\
+  State two drawbacks of a single-cycle processor microarchitecture. Explain how instruction pipelining addresses these drawbacks. Also define instruction-level parallelism (ILP), and name two types of microarchitectures that exploit ILP.
+
+  \item \textbf{ILP Ranking (Source: 2023\_Final\_Exam.pdf, Bonus Q1, adapted) (5 marks)}\\
+  Rank the following microarchitectures from \textbf{highest} to \textbf{lowest} potential to exploit instruction-level parallelism. Briefly justify your ranking.
+  \begin{enumerate}[label=(\Alph*)]
+    \item Scalar in-order pipeline with forwarding and hazard detection
+    \item Scalar in-order pipeline without forwarding or hazard detection (compiler inserts NOPs)
+    \item Multi-cycle processor
+  \end{enumerate}
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,196 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 5 Practice Exam Solutions}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Part A: Multiple Choice}
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item B
+  \item C
+  \item B
+  \item D
+  \item C
+  \item B
+  \item B
+  \item A
+  \item B
+  \item B
+\end{enumerate}
+
+\section*{Part B: Computational Problems}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{State sequences and cycle counts}
+  \begin{enumerate}[label=(\alph*)]
+    \item
+    \begin{itemize}[leftmargin=1.5em]
+      \item \texttt{LDR}: \texttt{Fetch -> Decode -> MemAdr -> MemRead -> MemWB}, so 5 cycles.
+      \item \texttt{STR}: \texttt{Fetch -> Decode -> MemAdr -> MemWrite}, so 4 cycles.
+      \item DP immediate: \texttt{Fetch -> Decode -> ExecuteI -> ALUWB}, so 4 cycles.
+      \item \texttt{B}: \texttt{Fetch -> Decode -> Branch}, so 3 cycles.
+    \end{itemize}
+    \item The 6-instruction sequence takes:
+    \[
+      5 + 4 + 4 + 3 + 4 + 5 = 25 \text{ cycles}
+    \]
+    Average CPI:
+    \[
+      \frac{25}{6} \approx 4.17
+    \]
+  \end{enumerate}
+
+  \item \textbf{PC, R15, and branch target calculation}
+  \begin{enumerate}[label=(\alph*)]
+    \item Reading \texttt{R15} should supply \texttt{PC + 8}, so:
+    \[
+      0x80A0 + 8 = 0x80A8
+    \]
+    \item
+    \[
+      \texttt{ExtImm} = \text{sign-extend}(0x000003 \ll 2) = 0x0000000C
+    \]
+    \[
+      \texttt{BTA} = \texttt{PC+8} + \texttt{ExtImm} = 0x80A8 + 0x0000000C = 0x80B4
+    \]
+  \end{enumerate}
+
+  \item \textbf{Decoder outputs}
+  \begin{center}
+  \begin{tabular}{c|c|c|c}
+  Instruction class & \texttt{Op} & \texttt{RegSrc1:0} & \texttt{ImmSrc} \\ \hline
+  \texttt{LDR} & 01 & 10 & 01 \\
+  \texttt{STR} & 01 & 10 & 01 \\
+  DP immediate & 00 & 00 & 00 \\
+  DP register & 00 & 00 & 00 \\
+  \texttt{B} & 10 & 01 & 10 \\
+  \end{tabular}
+  \end{center}
+  Explanation:
+  \begin{itemize}[leftmargin=1.5em]
+    \item \texttt{RegSrc0 = 1} only when \texttt{Op = 10}.
+    \item \texttt{RegSrc1 = 1} only when \texttt{Op = 01}.
+    \item \texttt{ImmSrc = Op}.
+  \end{itemize}
+
+  \item \textbf{Average CPI and total cycles}
+  \begin{enumerate}[label=(\alph*)]
+    \item
+    \[
+      \text{Average CPI} = (0.25)(5) + (0.10)(4) + (0.13)(3) + (0.52)(4)
+    \]
+    \[
+      = 1.25 + 0.40 + 0.39 + 2.08 = 4.12
+    \]
+    \item Total cycles for 50 million instructions:
+    \[
+      50 \times 10^6 \times 4.12 = 206 \times 10^6
+    \]
+    So the total is 206 million cycles.
+  \end{enumerate}
+
+  \item \textbf{Critical path and clock frequency}
+  \begin{enumerate}[label=(\alph*)]
+    \item First compute:
+    \[
+      t_{ALU} + t_{mux} = 120 + 25 = 145 \text{ ps}
+    \]
+    Hence:
+    \[
+      \max(145, 200) = 200 \text{ ps}
+    \]
+    Therefore:
+    \[
+      T_{c2} = 40 + 2(25) + 200 + 50 = 340 \text{ ps}
+    \]
+    \item
+    \[
+      f_{max} = \frac{1}{340 \times 10^{-12}} \approx 2.94 \times 10^9 \text{ Hz}
+    \]
+    So:
+    \[
+      f_{max} \approx 2.94 \text{ GHz}
+    \]
+  \end{enumerate}
+
+  \item \textbf{Execution time}
+  \begin{enumerate}[label=(\alph*)]
+    \item
+    \[
+      T = N \times CPI \times T_c
+    \]
+    \[
+      = (100 \times 10^9)(4.12)(340 \times 10^{-12})
+    \]
+    \[
+      = 140.08 \text{ s} \approx 140 \text{ s}
+    \]
+    \item Revised design:
+    \[
+      T' = (100 \times 10^9)(4.12)(300 \times 10^{-12}) = 123.6 \text{ s}
+    \]
+    \item Speedup:
+    \[
+      \text{Speedup} = \frac{140.08}{123.6} \approx 1.13
+    \]
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{ISA vs Microarchitecture}
+  \begin{enumerate}[label=(\alph*)]
+    \item Ripple-carry vs carry-save adder: \textbf{Microarchitecture}
+    \item Instruction width: \textbf{ISA}
+    \item Branch prediction: \textbf{Microarchitecture}
+    \item Hardwired vs microprogrammed control: \textbf{Microarchitecture}
+  \end{enumerate}
+
+  \item \textbf{Multi-Cycle Execution Time}
+  \\[0.5ex]
+  Average CPI:
+  \[
+    (0.50)(6) + (0.25)(8) + (0.25)(4) = 3 + 2 + 1 = 6
+  \]
+  Execution time:
+  \[
+    T = \frac{2 \times 10^9 \times 6}{1 \times 10^9} = 12 \text{ s}
+  \]
+
+  \item \textbf{Single-Cycle vs Pipelining}
+  \\[0.5ex]
+  Two drawbacks of a single-cycle processor are:
+  \begin{itemize}[leftmargin=1.5em]
+    \item The clock period must be long enough for the slowest instruction.
+    \item Hardware must be provisioned for worst-case resource use, so utilization is poor.
+  \end{itemize}
+  Pipelining addresses these by overlapping different stages of different instructions, increasing throughput and making better use of otherwise idle hardware.\\
+  ILP is the ability to execute or make progress on multiple independent instructions at the same time. Two microarchitecture types that exploit ILP are \textbf{superscalar} and \textbf{VLIW}.
+
+  \item \textbf{ILP Ranking}
+  \\[0.5ex]
+  Highest to lowest ILP potential:
+  \[
+    \text{A} > \text{B} > \text{C}
+  \]
+  where:
+  \begin{itemize}[leftmargin=1.5em]
+    \item A = scalar in-order pipeline with forwarding and hazard detection
+    \item B = scalar in-order pipeline without forwarding or hazard detection
+    \item C = multi-cycle processor
+  \end{itemize}
+  Justification:
+  \begin{itemize}[leftmargin=1.5em]
+    \item A can overlap instructions while also reducing stalls via forwarding and hazard handling.
+    \item B still overlaps instructions, but extra NOPs and stalls reduce usable ILP.
+    \item C has the least ILP because it does not pipeline instruction stages across multiple instructions.
+  \end{itemize}
+\end{enumerate}
+
+\end{document}

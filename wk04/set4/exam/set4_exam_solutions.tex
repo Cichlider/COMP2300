@@ -1,0 +1,82 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 4 Practice Exam Solutions}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Part A: Multiple Choice}
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item B
+  \item C
+  \item C
+  \item B
+  \item B
+  \item A
+  \item A
+  \item B
+  \item B
+  \item C
+\end{enumerate}
+
+\section*{Part B: Computational Problems}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{Endianness and PC update}
+  \begin{enumerate}[label=(\alph*)]
+    \item Little-endian word at 0x100: 0x78563412.
+    \item Big-endian word at 0x100: 0x12345678.
+    \item Next sequential PC = 0x104.
+  \end{enumerate}
+
+  \item \textbf{Base + offset}
+  \begin{enumerate}[label=(\alph*)]
+    \item Address = 0x08, so $R3 = 0x11223344$.
+    \item Store to 0x0C, so memory[0x0C] = 0xCAFEBABE.
+  \end{enumerate}
+
+  \item \textbf{Flags and conditional execution}
+  \begin{enumerate}[label=(\alph*)]
+    \item $17-23=-6$ so $N=1$, $Z=0$, $C=0$ (borrow), $V=0$.
+    \item \texttt{SUBEQ} does not execute (Z=0). \texttt{ORRMI} executes (N=1). \texttt{BGE} does not execute (N $\neq$ V).
+  \end{enumerate}
+
+  \item \textbf{Branch target address}
+  \\[0.5ex]
+  PC+8 = 0x80A8. imm24 = 0x000003 so (imm24 $\ll$ 2) = 0x00000C.\\
+  BTA = 0x80A8 + 0x00000C = 0x80B4.
+
+  \item \textbf{Immediate extension}
+  \begin{enumerate}[label=(\alph*)]
+    \item ExtImm = 0x000000AB.
+    \item ExtImm = 0x00000345.
+    \item ExtImm = 0x0003C3C0.
+  \end{enumerate}
+
+  \item \textbf{Performance}
+  \begin{enumerate}[label=(\alph*)]
+    \item Time = $N \times CPI / f = 1.2\times 10^9 \times 1.8 / 2.4\times 10^9 = 0.9$ s.
+    \item 2 ns clock $\Rightarrow f=500$ MHz. Time = $5\times 10^8 / 5\times 10^8 = 1$ s.
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{RISC vs CISC}\\
+  RISC uses a small set of simple, typically fixed-length instructions and a load/store model; CISC uses more complex instructions and richer addressing modes. ARM is a RISC ISA. QuAC is also a RISC-style teaching ISA.
+
+  \item \textbf{Branch prediction}\\
+  B (Microarchitecture).
+
+  \item \textbf{Execution time}\\
+  $T = 2\times 10^9 \times 4 / 2\times 10^9 = 4$ seconds.
+
+  \item \textbf{Address calculation}\\
+  C. \texttt{LSL R1, R0, \#4} (multiply index by 16).
+\end{enumerate}
+
+\end{document}

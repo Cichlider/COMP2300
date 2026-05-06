@@ -1,0 +1,3103 @@
+===== PAGE 1 =====
+Convener: Shoaib Akram
+shoaib.akram@anu.edu.au
+===== PAGE 2 =====
+Broadening our horizon
+“one layer at a time”
+1
+===== PAGE 3 =====
+We Covered Combinational Blocks
+§ Computation
+§ Adders
+§ ALU
+§ Comparator
+§ Control
+§ Multiplexer
+§ Decoder
+§ Tri-state Buffer
+§ Standard form (SOP)
+§ Boolean equation to 2-level implementation
+2
+===== PAGE 4 =====
+What will we learn this week?
+§ Circuits that can store information
+§ State and clock
+§ Cross-coupled inverter
+§ SR latch
+§ D latch
+§ D flip-flop
+§ Register & Memory
+§ Synchronous sequential circuits
+§ Finite state machines
+§ Synchronous vs. Asynchronous
+sequential circuits
+3
+===== PAGE 5 =====
+Circuits that
+Store Information
+4
+===== PAGE 6 =====
+All Computers Need Memory to Work
+Apple M1,
+2021
+Source: https://www.anandtech.com/show/16252/mac-mini-apple-m1-tested 5
+===== PAGE 7 =====
+Large Portion of a System is Memory
+L2 Cache
+https://download.intel.com/newsroom/kits/40thanniversary/gallery/images/Pentium_4_6xx-die.jpg Intel Pentium 4, 2000
+6
+===== PAGE 8 =====
+Large Portion of a System is Memory
+Core Count:
+L2 Cache 8 cores/16 threads
+L1 Caches:
+32 KB per core
+L2 Caches:
+512 KB per core
+L3 Cache:
+32 MB shared
+AMD Ryzen 5000, 2020
+https://wccftech.com/amd-ryzen-5000-zen-3-vermeer-undressed-high-res-die-shots-close-ups-pictured-detailed/
+7
+===== PAGE 9 =====
+Large Portion of a System is Memory
+IBM POWER10,
+L2 Cache 2020
+Cores:
+15-16 cores,
+8 threads/core
+L2 Caches:
+2 MB per core
+L3 Cache:
+120 MB shared
+https://www.it-techblog.de/ibm-power10-prozessor-mehr-speicher-mehr-tempo-mehr-sicherheit/09/2020/
+8
+===== PAGE 10 =====
+Large Portion of a System is Memory
+Nvidia Ampere, Cores:
+2020 128 Streaming Multiprocessors
+L1 Cache or Scratchpad:
+192KB per SM
+Can be used as L1 Cache and/or
+Scratchpad
+L2 Cache:
+40 MB shared
+https://www.tomshardware.com/news/infrared-photographer-photos-nvidia-ga102-ampere-silicon
+9
+===== PAGE 11 =====
+Motivation
+§ Combinational circuit output depends only on current
+input combinations
+§ We want circuits that produce output depending on
+current and past input values ⎯ circuits with memory
+§ How can we design a circuit that stores information?
+10
+===== PAGE 12 =====
+Sequential Circuit
+Sequential Circuit
+Combinational
+Circuit
+stupni
+stuptuo
+Storage
+Element
+The output depends on the input combinations and the state of the system
+11
+===== PAGE 13 =====
+What is State?
+§ What is state?
+§ A set of bits that summarize past behavior of system
+§ The set of bits are called state variables
+§ Each bit is stored in a state or memory element
+§ The state of a system informs us everything about the
+past we need to know to predict the future
+§ The output of sequential logic depends on both the
+current input values and the state of the system
+12
+===== PAGE 14 =====
+Example of State
+§ Consider a controller for a traffic light
+§ To set the next state, the controller needs to remember
+the current state
+§ The past input values (signals from traffic sensors) are
+summarized by the “current” state stored as a 2-bit value
+§ To remember or to store the state of the system (current
+state of traffic light), we need a logic element with
+memory
+13
+===== PAGE 15 =====
+The Nature of Memory
+§ We remember the meaning of the words in time t since
+§ we remembered them in time t – 1
+§ all the way back to the point of time
+§ when we first committed them to memory
+§ How can we capture input data and persist it until the
+next input?
+14
+===== PAGE 16 =====
+Capturing and Storing One Bit
+§ One bit of information represents two possible
+states
+§ To store one bit, we need
+§ An element with two stable states (bistable element)
+§ The ability to change the state
+§ First, we will find the bistable element
+§ And then focus on the ability to change state
+15
+===== PAGE 17 =====
+Bistable element
+§ The fundamental building block of memory is a bistable
+element with two stable states
+Cross-coupled inverters: A pair of inverters connected in a loop
+Section 3.2 of H&H
+16
+===== PAGE 18 =====
+Analysis of Bistable Element
+§ How should we analyze circuits with cyclic paths?
+§ When the circuit is switched on, Q is either 0 or 1 (scenarios)
+§ Show: Output is stable (consequence – A)
+§ Show: Q and Q’ are complements of each other (consequence – B)
+§ Scenario # 1: Q = 0 (FALSE)
+§ I2 receives 0, Q’ = 1: B is satisfied
+§ Q’ = 1, Q = 0, A is satisfied
+§ Consistent with original assumption
+§ Scenario # 2: Q = 1 (TRUE)
+§ I2 receives 1, Q’ = 0: B is satisfied
+§ Q’ = 0, Q = 1, A is satisfied
+Section 3.2 of H&H
+17
+===== PAGE 19 =====
+Bistable Element: Observations
+§ Bistable element has two stable states
+§ Stores one bit of information
+§ Q reveals about past, necessary to explain the future
+§ If Q = 0, it will remain 0 forever
+§ If Q = 1, it will remain 1 forever
+§ The (initial) state of the bistable element is unpredictable
+when powered on
+§ Bistable element is not practical because the user lacks inputs to
+control its state
+§ We need something else!
+Section 3.2 of H&H
+18
+===== PAGE 20 =====
+SR Latch
+§ Two cross-coupled NOR gates
+§ The state can be controlled with S/R inputs
+§ S = Set to 1
+§ R = Reset to 0
+A B Y
+0 0 1
+§ NOR gate revision
+§ When both inputs are 0, the output is 1
+0 1 0
+§ If any of the inputs is 1, the output is 0
+1 0 0
+1 1 0
+19
+===== PAGE 21 =====
+SR Latch: Analysis
+§ SR latch has inputs unlike the cross-coupled inverter
+§ Four scenarios in the truth table (Sim = Simultaneous)
+Scenario S R Q Q’
+Sim-0 0 0
+Reset 0 1
+Set 1 0
+Sim-1 1 1
+Section 3.2.1 of H&H
+20
+===== PAGE 22 =====
+Whiteboard: SR Latch
+S R Q
+A B Y
+0 0
+0 0 1
+0 1
+0 1 0
+1 0
+1 0 0
+1 1 0 1 1
+Section 3.2.1 of H&H
+21
+===== PAGE 23 =====
+SR Latch: Analysis
+§ Scenario # 1 (Reset): R = 1, S = 0
+§ N1 sees at least one TRUE (1) input
+§ Q = FALSE (0)
+§ N2 sees both Q and S FALSE
+§ Q’ = TRUE (1)
+§ Scenario # 2 (Set): R = 0, S = 1
+§ N1 sees 0 and Q’
+§ What is Q’?
+§ N2 sees at least one TRUE input
+§ Q’ = FALSE (0)
+§ Revisit N1 (R = 0 and Q’ = 0)
+§ Q = TRUE (1)
+Section 3.2.1 of H&H
+22
+===== PAGE 24 =====
+SR Latch: Analysis
+§ Scenario # 3 (Sim-1): R = 1, S = 1
+§ N1 sees at least one TRUE (1) input
+§ Q = FALSE (0)
+§ N2 sees at least one TRUE (1) input
+§ Q’ = FALSE (0)
+§ Scenario # 4 (Sim-0): R = 0, S = 0
+§ N1 sees 0 and Q’
+§ What is Q’?
+§ N2 sees 0 and Q
+§ What is Q?
+§ We are stuck!
+§ Wait: remember the cross-coupled inverter? Q can be 0 or 1 J
+23
+===== PAGE 25 =====
+SR Latch: Analysis
+§ Scenario # 4-A (Sim-0): R = 0, S = 0, Q = 0
+§ N2 sees S = 0 and Q = 0
+§ Q’ = 1
+§ N1 sees one TRUE (1) input
+§ Q = 0 (hindsight: Q is indeed 0 as
+assumed)
+§ Scenario # 4-B (Sim-0): R = 0, S = 0, Q = 1
+§ N2 sees Q = 1
+§ Q’ = FALSE
+§ N1 receives two FALSE inputs
+§ Q = 1 (hindsight: Q is indeed 1 as
+assumed)
+24
+===== PAGE 26 =====
+SR Latch: Analysis Summary
+§ SR latch has inputs unlike the cross-coupled inverters
+§ Four scenarios in the truth table (Sim = Simultaneous)
+Scenario S R Q Q’
+Sim-0 0 0 Q Q’
+prev prev
+Reset 0 1 0 1
+Set 1 0 1 0
+Sim-1 1 1 0 0
+Section 3.2.1 of H&H
+25
+===== PAGE 27 =====
+SR Latch: Observations
+§ SR latch is a bistable element but it’s state can be controlled
+SR Latch
+§ To set a bit means to make it TRUE Symbol
+§ To reset is to make it FALSE
+R Q
+§ Q accounts for the entire history of past inputs S Q
+§ All prior set/reset patterns are irrelevant
+§ The most recent set/reset event predicts the future
+behavior of the SR latch
+§ Asserting both set/reset to 1 does not make sense
+§ Neither intuitively nor physically
+§ The circuit outputs 0 on Q and Q’ which is inconsistent
+§ We need something else!
+26
+===== PAGE 28 =====
+Next: D Latch
+First, We Will Learn to Model the
+Progression of Time
+27
+===== PAGE 29 =====
+Representing Time
+§ Physicist and philosopher's view
+§ Relentless arrow continuously progressing forward
+§ Changes in the world can be infinitesimally small
+Arrow of time
+Changes continuously
+§ Too mysterious and deep for computer scientists
+§ We prefer a discrete representation
+§ Break time into fixed-length intervals called cycles
+§ cycle 1, cycle 2, cycle 3, and so on .... Cycles are indivisible and atomic
+1
+0
+CLK
+Changes in the world occur only during cycle transitions – within cycles, the world stands still
+28
+===== PAGE 30 =====
+Time in Digital Systems
+§ Periodic square wave (clock) generated by a special circuit
+§ Used to synchronize state updates everywhere in the system
+rising edge
+1
+0
+CLK
+falling edge
+Clock period, T
+c
+Frequency = 1/T
+c
+Changes in the world occur only during cycle transitions – within cycles, the world stands still
+29
+===== PAGE 31 =====
+Time in Digital Systems
+§ Our goal is to endow logic circuits with the ability to
+§ Maintain state over time
+§ Respond to time changes
+30
+===== PAGE 32 =====
+D Latch
+§ Two drawbacks of SR latch
+§ Strange behavior when S = 1 and R = 1
+§ S and R inputs serve two roles: what the state is and when the
+state changes
+§ Designing sequential circuits is easier when we have
+control over when the state changes
+§ The D latch overcomes the two drawbacks
+§ A data input (D) controls what the next state should be
+§ The clock input (CLK) controls when the state should
+change
+Section 3.2.2 of H&H
+31
+===== PAGE 33 =====
+D Latch
+CLK
+R
+R Q Q
+D
+S
+S Q Q
+D
+§ Scenario # 1: CLK = 0, S = 0, R = 0, D = X
+Latch is opaque (blocks new
+§ The value of D is irrelevant
+data from flowing to Q)
+§ Q = Q (remember the old value)
+prev
+§ Scenario # 2: CLK = 1, D = 0, S = 0, R = 1
+Latch is transparent (acts like
+§ The latch is reset
+a buffer)
+§ Scenario # 3: CLK = 1, D = 1, S = 1, R = 0
+§ The latch is set
+32
+===== PAGE 34 =====
+Whiteboard: D Latch
+CLK
+R
+R Q Q
+D
+S
+S Q Q
+D
+S R Q
+0 0 Q
+prev
+0 1 0
+1 0 1
+1 1 0
+Section 3.2.2 of H&H
+33
+===== PAGE 35 =====
+D Latch: Truth Table
+CLK
+R
+R Q Q
+D
+S
+S Q Q
+D
+Scenario CLK D Q Q’
+Opaque 0 X Q Q’
+prev prev
+Transparent/0 1 0 0 1
+Transparent/1 1 1 1 0
+Section 3.2.2 of H&H
+34
+===== PAGE 36 =====
+D Latch: Observations
+§ D latch is a level-triggered or a level-sensitive circuit
+D Latch
+§ Reacts to the level (0 or 1) of the CLK input
+Symbol
+CLK
+§ D latch avoids the awkward case of both S/R asserted
+D Q
+Q
+§ D latch changes its state continuously when CLK = 1
+§ Designing correct & efficient sequential circuits is
+easier when
+§ the state changes only at a specific instant in time instead
+of changing continuously
+§ We need something else!
+35
+===== PAGE 37 =====
+Summary
+§ Cross-coupled inverter
+§ Two stable states but no inputs to control the state
+§ SR Latch
+§ Two control inputs: S for Set (1) and R for Reset (0)
+§ Awkward when S = 1 and R = 1
+§ The state changes instantly (need greater control over when it changes)
+§ D Latch
+§ One Data input (D) and one control input (CLK)
+§ Level-sensitive: CLK = 1 (Transparent), CLK = 0 (Opaque)
+§ Output (Q) changes continuously when CLK = 1
+36
+===== PAGE 38 =====
+D Flip-Flop
+§ Problem with D Latch: The output changes continuously
+when CLK = 1
+§ This behavior leads to timing bugs and circuits that are difficult to
+analyze
+§ D flip-flop is an edge-triggered circuit
+§ Sets its state to the data input when CLK changes from 0 to 1
+§ At all other times, the D flip-flop remembers its state
+Flip-flop samples the input at the edge of the clock
+Section 3.2.3 of H&H
+37
+===== PAGE 39 =====
+Analogy: Photography
+CLK
+§ Input: D, Output/State: Q
+§ CLK = Clock (periodic square wave)
+Sample the input just at the
+rising edge (copy D to Q)
+CLK
+Ignore D until
+the next rising
+edge
+38
+===== PAGE 40 =====
+D Flip-Flop
+§ Two back-to-back D latches controlled by complementary clocks
+§ The L1 latch is the master and L2 is the slave latch
+§ Remember that, when CLK = 0, D latch is opaque
+§ And, when CLK = 1, D latch is transparent
+CLK
+R R Q Q
+D
+CLK
+S S Q Q
+D
+D Latch
+CLK CLK
+N1
+D D Q D Q Q
+L1 Q L2 Q Q
+master slave
+39
+===== PAGE 41 =====
+D Flip-Flop: Analysis
+§ CLK = 0
+§ master: transparent
+§ slave: opaque
+CLK 0
+CLK CLK
+N1
+D D Q D Q Q
+L1 Q L2 Q Q
+master slave
+The value at D propagates through to N1, but Q is cut off from N1
+40
+===== PAGE 42 =====
+D Flip-Flop: Analysis
+§ CLK = 1
+§ master: opaque
+§ slave: transparent
+CLK 1
+CLK CLK
+N1
+D D Q D Q Q
+L1 Q L2 Q Q
+master slave
+The value at N1 propagates through to Q, but N1 is cut off from D
+41
+===== PAGE 43 =====
+D Flip-Flop: Observations
+§ The value at D immediately before the CLK rises from 0 to
+1 get copied to Q immediately after CLK rises
+§ At all other times, Q retains its old value
+§ There is an opaque latch blocking D from flowing to Q
+A D flip-flop copies D to Q on the rising/falling edge of the
+CLK, and remembers its state at all other times
+42
+===== PAGE 44 =====
+Other Names
+D Flip-Flop
+§ All names means the same
+Symbols
+§ Master-slave flip-flop
+§ Edge-triggered flip-flop
+D Q
+§ Positive edge-triggered flip-flop
+Q
+43
+===== PAGE 45 =====
+Remember the Symbols
+D Latch
+D Flip-Flop
+Symbol
+Symbols
+CLK
+D Q D Q
+Q Q
+44
+===== PAGE 46 =====
+Register
+45
+===== PAGE 47 =====
+Register
+§ How can we use flipflops to store more than one bit?
+§ Principle of modularity: Use more flipflops!
+§ A single CLK to simultaneously write to all flipflops
+§ Register: A structure that stores more than one bit of
+information and can be read from and written to
+§ This register holds 4 bits, and its data is referenced as Q[3:0]
+46
+===== PAGE 48 =====
+4-bit Register
+Q Q Q Q
+3 2 1 0
+4-bit Register
+CLK CLK CLK CLK CLK
+CLK CLK CLK CLK CLK CLK CLK CLK
+N1 N1 N1 N1
+D D Q D Q Q D D Q D Q Q D D Q D Q Q D D Q D Q Q
+L1 Q L2 Q Q L1 Q L2 Q Q L1 Q L2 Q Q L1 Q L2 Q Q
+D D D D
+3 2 1 0
+To build an N-bit register, use a bank of N flipflops with a shared CLK
+47
+===== PAGE 49 =====
+4-bit Register
+CLK
+C
+o
+n
+D D Q Q d
+e
+0 0 n
+s e CLK
+d
+D D Q Q
+4 4
+1 1
+D Q
+3:0 3:0
+D D Q Q
+2 2
+This line represents 4 wires
+D D Q Q
+3 3 This register stores 4 bits
+48
+===== PAGE 50 =====
+Register Width
+§ Register width is the number of flipflops in a register
+§ Typical register widths: 8-bit, 16-bit, 32-bit, 64-bit, ..., 512+ bits today
+§ Register width is an important parameter of any computer
+§ Why do we need wide registers with large widths?
+§ Solving large/important problems require manipulating large numbers
+§ Large numbers need large number of bits, hence more flipflops
+§ Floating point numbers (section 5.3) with decimal point require extra bits
+§ 64-bit registers in high-performance computing and financial technology
+§ 16-bit registers in microwave controller, automobile engine control unit (ECU),
+cockpit domain controller in cars
+49
+===== PAGE 51 =====
+Now, We will See
+Different Types of Flipflops
+50
+===== PAGE 52 =====
+Enabled Flip-Flops
+§ Loads a new value on a specific clock edge
+§ Inputs: CLK, D, EN
+§ The enable input (EN) controls when new data (D) is stored
+§ Function:
+§ EN = 1: D passes through to Q on clock edge
+§ EN = 0: the flip-flop retains its previous state
+Internal Circuit
+51
+===== PAGE 53 =====
+Clock Gating
+§ Doing an AND of CLK with EN is called clock gating
+§ Caution: Performing logic on clock is best avoided
+§ AND gate delays the clock
+§ If EN changes while CLK is 1, the flipflop sees a glitch
+(switch at an incorrect time)
+CLK
+EN
+52
+===== PAGE 54 =====
+Resettable Flip-Flop
+§ Add another input (RESET)
+§ Function:
+§ RESET = 1 (ignore D and reset output to 0)
+§ RESET = 0 (ordinary D flip-flop)
+§ Two types
+§ Reset on clock edge only (synchronous reset)
+§ Reset immediately (asynchronous reset) Homework
+exercise!
+53
+===== PAGE 55 =====
+Settable Flip-Flop
+§ Add another input (SET)
+§ Function:
+§ SET = 1 (Q is set to 1)
+§ SET = 0 (ordinary D flip-flop)
+Symbols
+D Q
+s
+Set
+54
+===== PAGE 56 =====
+Examples:
+Latch vs. Flipflop
+55
+===== PAGE 57 =====
+Example - I
+T0 T1 T2 T3
+CLK
+D
+Q (Latch) Q (Flipflop)
+T0 T0
+T1 T1
+T2 T2
+T3 T3
+56
+===== PAGE 58 =====
+Example - I
+T0 T1 T2 T3
+CLK
+D
+Q (Latch) Q (Flipflop)
+T0 0 FALSE T0 0 FALSE
+T1 T1
+T2 T2
+T3 T3
+57
+===== PAGE 59 =====
+Example - I
+T0 T1 T2 T3
+CLK
+D
+Q (Latch) Q (Flipflop)
+T0 0 FALSE T0 0 FALSE
+T1 1 TRUE T1 1 TRUE
+T2 T2
+T3 T3
+58
+===== PAGE 60 =====
+Example - I
+T0 T1 T2 T3
+CLK
+D
+Q (Latch) Q (Flipflop)
+T0 0 FALSE T0 0 FALSE
+T1 1 TRUE T1 1 TRUE
+T2 1 TRUE T2 1 TRUE
+T3 T3
+59
+===== PAGE 61 =====
+Example - I
+T0 T1 T2 T3
+CLK
+D
+Q (Latch) Q (Flipflop)
+T0 0 FALSE T0 0 FALSE
+T1 1 TRUE T1 1 TRUE
+T2 1 TRUE T2 1 TRUE
+T3 0 FALSE T3 1 TRUE
+60
+===== PAGE 62 =====
+Example - II
+T0 T1 T2 T3
+CLK
+D
+Q (Latch) Q (Flipflop)
+T0 T0
+T1 T1
+T2 T2
+T3 T3
+61
+===== PAGE 63 =====
+Example - II
+T0 T1 T2 T3
+CLK
+D
+Q (Latch) Q (Flipflop)
+T0 1 TRUE T0 0 FALSE
+T1 T1
+T2 T2
+T3 T3
+62
+===== PAGE 64 =====
+Example - II
+T0 T1 T2 T3
+CLK
+D
+Q (Latch) Q (Flipflop)
+T0 1 TRUE T0 0 FALSE
+T1 0 FALSE T1 1 TRUE
+T2 T2
+T3 T3
+63
+===== PAGE 65 =====
+Example - II
+T0 T1 T2 T3
+CLK
+D
+Q (Latch) Q (Flipflop)
+T0 1 TRUE T0 0 FALSE
+T1 0 FALSE T1 1 TRUE
+T2 1 TRUE T2 1 TRUE
+T3 T3
+64
+===== PAGE 66 =====
+Example - II
+T0 T1 T2 T3
+CLK
+D
+Q (Latch) Q (Flipflop)
+T0 1 TRUE T0 0 FALSE
+T1 0 FALSE T1 1 TRUE
+T2 1 TRUE T2 1 TRUE
+T3 1 TRUE T3 0 FALSE
+65
+===== PAGE 67 =====
+Memory
+66
+===== PAGE 68 =====
+Memory
+§ Houses have unique addresses
+§ In computers, everything is
+binary 0 or 1 so addresses are
+represented in binary as well
+§ Houses have stuff inside them
+§ In computers, the “only” type of
+stuff is binary data
+§ Binary data can represent
+program variables, photos,
+videos, emails, word documents
+67
+===== PAGE 69 =====
+Memory
+A huge number of uniquely
+identifiable locations each storing a
+piece of information
+68
+===== PAGE 70 =====
+Memory
+Address: Naming or identification scheme
+VS.
+Data: Information stored inside a location
+69
+===== PAGE 71 =====
+Memory
+§ How many locations?
+§ How big is the piece of information at each
+location?
+§ Which technology is used to store
+information?
+70
+===== PAGE 72 =====
+Memory
+§ Memory is made up of locations that can be written to or read
+from. An example memory array with 4 locations:
+Addr(00): 0100 1001 Addr(01): 0100 1011
+Addr(10): 0010 0010 Addr(11): 1100 1001
+§ Each unique memory location is indexed with a unique address.
+4 locations require 2 address bits (log[#locations])
+§ Addressability: the number of bits of information stored in each
+location. This example: addressability is 8 bits
+§ The entire set of unique locations in memory is referred to as
+the address space
+Section 5.5 of H&H
+71
+===== PAGE 73 =====
+Memory
+§ Memory in almost all computers today is byte addressable due
+to historical reasons (later)
+§ Typical memory is MUCH larger consisting of billions of locations
+§ Two billion locations and 8-bit (1 byte) addressability
+§ Address space is 2 GB or 2 billion 1-byte locations
+§ Uniquely identifying each byte of memory allows individual
+bytes of stored information to be changed easily
+72
+===== PAGE 74 =====
+Addressing Memory
+1 Bit
+§ Let’s implement a simple memory array with:
+§ 3-bit addressability & address space of 2 (total of 6 bits)
+§ How can we select an address to read?
+§ Two addresses so address size is log(2) = 1 bit
+6-Bit Memory Array
+Bit Bit Bit
+Addr(0)
+2 1 0
+Bit Bit Bit
+Addr(1)
+2 1 0
+73
+===== PAGE 75 =====
+Reading from Memory
+§ Each “box” is a bit cell storing one bit
+§ Can be enabled (like the enabled flip-flop with EN)
+§ Takes an input (D ) and produces an output (D)
+i
+74
+===== PAGE 76 =====
+Reading from Memory
+Addr[0]
+Wordline
+Q
+Q
+D[2] D[1] D[0]
+75
+===== PAGE 77 =====
+Reading from Memory
+Addr[0]
+Wordline
+Address Decoder
+D[2] D[1] D[0]
+76
+===== PAGE 78 =====
+Reading from Memory
+Addr[0]
+Wordline
+Address Decoder
+D[2] D[1] D[0]
+Multiplexer
+(together w/ decoder)
+77
+===== PAGE 79 =====
+Reading from Memory
+Addr[0]
+Wordline
+Address Decoder
+D[2] D[1] D[0]
+Multiplexer
+(together w/ decoder)
+78
+===== PAGE 80 =====
+Reading from Memory
+Addr[0]
+Wordline
+Address Decoder
+D[2] D[1] D[0]
+Multiplexer
+(together w/ decoder)
+79
+===== PAGE 81 =====
+Recall: Multiplexer (MUX), or Selector
+§ Selects one of the N inputs to connect it to the output
+§ based on the value of log N-bit control input called select
+2
+§ Example: 2-to-1 MUX
+80
+===== PAGE 82 =====
+Writing to Memory
+§ How can we select an address to write to it?
+§ How should we tell memory our intention to write?
+§ We assert the EN input of the enabled flip-flop
+§ How should we tell memory what data we need to write?
+§ We use the D input of the flip-flop
+i
+81
+===== PAGE 83 =====
+Writing to Memory
+§ How can we select an address to write to it?
+§ Input is indicated with D
+i
+Addr[0]
+D[2] D[1] D[0]
+i i i
+WE
+82
+===== PAGE 84 =====
+Writing to Memory
+§ How can we select an address to write to it?
+§ Input is indicated with D
+i
+Addr[0] = 0
+D[2] = 0 D[1] = 1 D[0] = 0
+i i i
+WE
+1
+D
+0 1 0
+EN
+83
+===== PAGE 85 =====
+Full Memory Array
+§ Both reading from and writing to a memory array
+Addr[0]
+D[2] D[1] D[0]
+i i i
+WE
+D[2] D[1] D[0]
+84
+===== PAGE 86 =====
+A Bigger Memory Array
+4 locations X 3 bits
+85
+===== PAGE 87 =====
+Addr[1:0]
+D[2] D[1] D[0]
+i i i
+WE
+D[2] D[1] D[0]
+86
+===== PAGE 88 =====
+Addr[1:0]
+D[2] D[1] D[0]
+i i i
+WE
+Address Decoder
+Multiplexer D[2] D[1] D[0]
+87
+===== PAGE 89 =====
+Example: Reading Location 3
+Image source: Patt and Patel, “Introduction to Computing Systems”, 3rd ed., page 78. 88
+===== PAGE 90 =====
+Recall: Decoder
+§ The decoder is useful in determining how to interpret a bit
+pattern
+A = 1
+It could be the address of a
+Ø 0
+B = 0
+location in memory, that the
+processor intends to read
+from 0
+It could be an instruction in
+Ø
+1
+the program and the
+processor needs to decide
+what action to take (based
+0
+on instruction opcode)
+89
+===== PAGE 91 =====
+Recall: A 4-to-1 Multiplexer
+90
+===== PAGE 92 =====
+Multi-Ported Memory
+§ Each port gives read/write access to one memory address
+§ Typically, we need to access many addresses simultaneously
+§ Example with two read ports (A1/RD1 and A2/RD2) and one write port
+(A3/WD3)
+91
+===== PAGE 93 =====
+Another Representation of Memory
+§ What is the memory’s addressability?
+§ How big is the address space?
+92
+===== PAGE 94 =====
+Sequential Logic Circuits
+§ Week 1 & 2: Combinational circuits that process information
+§ Week 3: Boolean algebra, & circuits that can store information, & basic
+storage elements, & memory
+§ Now, digital logic structures that can both process information (i.e.,
+make decisions) and store information
+§ The decision is based on both input combinations and their history
+93
+===== PAGE 95 =====
+Sequential Logic Circuits
+§ We have discovered circuit elements that can store information
+§ Now, we will use these elements to build circuits that remember
+past inputs
+Combinational Sequential
+Only depends on current inputs Opens depending on past inputs
+https://www.easykeys.com/228_ESP_Combination_Lock.aspx
+https://www.fosmon.com/product/tsa-approved-lock-4-dial-combo 94
+===== PAGE 96 =====
+State
+§ In order for this lock to work, it has to remember past events
+§ If passcode is R13-L22-R3, sequence of states to unlock
+A. Locked and no operations have been performed
+B. Locked but R13 completed
+C. Locked but R13 – L22 completed
+D. Unlocked and R13 – L22 – R3 completed
+§ The state of a system is a snapshot of all relevant elements of the system at
+the moment of the snapshot
+§ To open the lock, states A–D must be completed in order
+§ If anything else happens (L5 or L6), lock returns to state A
+95
+===== PAGE 97 =====
+State Diagram of Sequential Lock
+§ Completely describes the operation of the sequential lock
+Image source: Patt and Patel, “Introduction to Computing Systems”, 2nd ed., page 76.
+96
+===== PAGE 98 =====
+Another Example: Soft Drink Machine
+§ There are only three possible states
+A. The lock is open, so a bottle can be (or has been) removed
+B. The lock is not open, but 5 cents have been inserted.
+C. The lock is not open, but 10 cents have been inserted.
+Image source: Patt and Patel, “Introduction to Computing Systems”, 2nd ed., page 84. 97
+===== PAGE 99 =====
+Another Example: Soft Drink Machine
+§ One possible sequence of states is as follows
+A B C
+Image source: Patt and Patel, “Introduction to Computing Systems”, 2nd ed., page 84. 98
+===== PAGE 100 =====
+Asynchronous vs. Synchronous State Changes
+§ Sequential lock and soft drink machines are asynchronous
+§ State transition occur when they occur
+§ There is nothing that synchronizes when each state transition must occur
+§ Modern computers are synchronous machines
+§ State transitions take place after fixed units of time
+§ Controlled in part by a clock, as we will see soon
+§ These are two different design paradigms, with tradeoffs
+§ Synchronous control can be easier to get correct when the system
+consists of many components and many states
+§ Asynchronous control can be more efficient (no clock overheads)
+We will assume synchronous systems in this course
+99
+===== PAGE 101 =====
+Another Example: Traffic Light w/t Digital Ctrl
+§ There are only three possible states:
+A. Green
+B. Yellow
+C. Red
+§ The sequence of states is as follows
+A B C
+§ When does the traffic light change from one state to another?
+100
+===== PAGE 102 =====
+Changing State & The Notion of Clock
+§ When does the traffic light change state from A to B?
+§ We need a clock to dictate when to change state
+§ Clock alternates between 0 & 1
+1
+CLK:
+0
+§ At the start of a clock cycle ( ), system state changes
+§ During a clock cycle, the state stays constant
+§ The machine stays in a specific state an equal amount of time
+101
+===== PAGE 103 =====
+Changing State & The Notion of Clock
+§ Clock is a general mechanism that triggers transition from one
+state to another in a (synchronous) sequential circuit
+§ Clock synchronizes state changes across many sequential
+circuit elements
+§ Combinational logic evaluates for the length of the clock cycle
+§ Clock cycle should be chosen to accommodate maximum
+combinational delay
+102
+===== PAGE 104 =====
+"the art of directing the simultaneous
+performance of several players or singers by
+the use of gesture.” Wikipedia, Conducting
+We will assume synchronous systems in this course
+103
+===== PAGE 105 =====
+Why are Arbitrary Sequential Circuits
+a Bad Idea?
+Reading: Section 3.4 of H&H
+104
+===== PAGE 106 =====
+Arbitrary Sequential Circuits
+§ Important: We need to discipline ourselves and only build
+synchronous sequential circuits
+§ State is synchronized at the clock edges
+§ Let’s examine two arbitrary sequential circuits
+Section 3.3 of H&H
+105
+===== PAGE 107 =====
+Ring Oscillator
+§ What does the circuit below do?
+§ One output, No inputs
+§ X oscillates b/w 0 and 1 (prove it assuming X = 0)
+§ No stable state (Unstable or Astable)
+§ If the propagation delay of each inverter is 1 ns, then
+the clock period is 6 ns
+Example 3.3 of H&H
+106
+===== PAGE 108 =====
+Asynchronous D Latch
+§ What does the circuit below do?
+§ CLK = D = 1 (transparent, Q = 1)
+§ CLK = 0 (Q = Q )
+prev
+Example 3.4 (page 119) of H&H
+107
+===== PAGE 109 =====
+Asynchronous D Latch
+§ What does the circuit below do?
+§ CLK = D = 1 (transparent, Q = 1)
+§ CLK = 0 (Q = Q )
+prev
+Example 3.4 (page 119) of H&H
+108
+===== PAGE 110 =====
+Asynchronous D Latch
+§ What if t >> t and t >> t ?
+INV AND INV OR
+§ Node N1 and Q may both fall before CLK changes
+§ Q gets stuck at 0
+§ Race condition: The path through CLK to Q is faster than
+CLK to Q
+Example 3.4 (page 119) of H&H
+109
+===== PAGE 111 =====
+Takeaways
+§ When outputs are fed back directly back to inputs, these are
+called cyclic paths
+§ Combinational logic has NO cyclic paths
+§ Outputs settle after propagation delay
+§ Circuits with cyclic paths are called asynchronous circuits
+§ Difficult to analyze
+§ Timing issues (race conditions, oscillations)
+§ May work in one set of conditions but not in another
+110
+===== PAGE 112 =====
+Synchronous Sequential Circuits
+§ What is the problem with asynchronous circuits?
+§ Cyclic paths lead to races and unstable behavior
+§ Solution: Break the cyclic paths by inserting registers
+somewhere in the path
+§ Registers contain state, and synchronized to the clock
+CLK
+M
+k k N
+next state output
+logic logic
+Section 3.3.2 of H&H
+111
+===== PAGE 113 =====
+Synchronous Sequential Circuits
+General Rule: If the clock is sufficiently slow, so that
+the inputs to all registers settle before the next clock
+edge, all races are eliminated
+CLK
+M
+k k N
+next state output
+logic logic
+112
+===== PAGE 114 =====
+Composition Rules
+§ Every circuit element is either a register or a
+combinational element
+§ At least one element is a register
+§ All registers receive the same clock signal
+§ Every cyclic path contains at least one register
+113
+===== PAGE 115 =====
+Which circuits are synchronous
+sequential?
+Example 3.5 of H&H
+114
+===== PAGE 116 =====
+Finite State Machines
+Compulsory Reading: Section 3.4 of H&H
+115
+===== PAGE 117 =====
+Finite State Machines
+§ What is a Finite State Machine (FSM)?
+§ A discrete-time model of a stateful system
+§ A finite set of states a system can be in
+§ An FSM pictorially shows
+§ The set of all possible states that a system can be in
+§ How the system transitions from one state to another
+§ An FSM can model
+§ A traffic light, an elevator, microwave, microprocessor, fan
+speed, car lock
+116
+===== PAGE 118 =====
+FSMs Consist of:
+§ Five elements:
+§ A finite number of states
+§ State: snapshot of all relevant elements of the system at the time of
+the snapshot
+§ A finite number of external inputs
+§ A finite number of external outputs
+§ An explicit specification of all state transitions
+§ How to get from one state to another
+§ An explicit specification of what determines each external
+output value
+§ If state is A, then output is 10
+117
+===== PAGE 119 =====
+Finite State Machines (FSMs)
+§ Each FSM consists of three separate parts:
+§ next state logic
+§ state register
+§ output logic Moore FSM
+CLK
+M next
+next k k N
+inputs state state output
+outputs
+state
+logic
+logic
+Mealy FSM
+Section 3.4 of H&H
+118
+CLK
+M next
+next k k N
+inputs state state output
+outputs
+state
+logic
+logic
+===== PAGE 120 =====
+FSMs Consist of:
+CLK
+§ Sequential circuits
+S’ S
+§ State register(s)
+Next Current
+§ Store the current state and State State
+§ Provide the next state at the clock edge
+Next State
+§ Combinational Circuits
+Logic
+§ Next state logic C Next
+L
+State
+§ Determines what the next state will be
+§ Output logic
+Output
+Logic
+§ Generates the outputs
+C
+L Outputs
+119
+===== PAGE 121 =====
+State Register
+§ Why do we need flip-flops (NOT latches) to implement a state
+register
+§ Properties of state register
+§ We need to store data at the beginning of every clock cycle
+120
+===== PAGE 122 =====
+State Register
+§ The data must be available during the entire clock cycle
+T0 T1 T2 T3
+CLK
+Register Input
+Register Output
+121
+===== PAGE 123 =====
+State Register
+§ The data must be available during the entire clock cycle
+T0 T1 T2 T3
+CLK
+Register Input
+Register Output
+122
+===== PAGE 124 =====
+State Register
+§ The data must be available during the entire clock cycle
+T0 T1 T2 T3
+CLK
+Register Input
+Register Output
+123
+===== PAGE 125 =====
+State Register
+§ The data must be available during the entire clock cycle
+§ So combinational elements have enough time to process input
+combinations
+T0 T1 T2 T3
+CLK
+Register Input
+Register Output
+124
+===== PAGE 126 =====
+The Problem with Latches
+§ We cannot simply wire a clock to CLK input of a latch
+§ Whenever the clock is HIGH, the latch propagates D to Q
+CLK
+§ The latch is transparent R R Q Q
+D
+S S Q Q
+D
+T0
+CLK
+Register Input
+undesirable
+Register Output
+125
+===== PAGE 127 =====
+State Register uses Flip-Flops
+§ D (input) is observable at Q (output) only at the
+beginning of the next clock cycle
+§ Q is available for the full clock cycle
+126
+===== PAGE 128 =====
+Implementing FSMs
+Traffic Light Controller
+The Next Example is from H & H: Section 3.4
+Acknowledgement: Selection of Slides from Digital Design and Computer Architecture, Onur Mutlu, ETH Zurich, Spring 2022
+https://safari.ethz.ch/digitaltechnik/spring2022/doku.php?id=schedule
+127
+===== PAGE 129 =====
+Finite State Machines (FSMs)
+§ Next state is determined by the current state and the inputs
+§ Two types of finite state machines differ in the output logic:
+§ Moore FSM: outputs depend only on the current state
+§ Mealy FSM: outputs depend on the current state and inputs
+128
+===== PAGE 130 =====
+Moore & Mealy FSM
+Moore FSM
+Moore FSM
+CLK
+CLK
+M next
+M next k next k N
+next k k N
+inputs state state output
+inputs state state state output outputs
+state outputs
+logic
+logic
+logic
+logic
+Mealy FSM
+Mealy FSM
+CLK
+CLK
+M next
+M next k next k N
+next k k N
+inputs state state output
+inputs state state state output outputs
+state outputs
+logic
+logic
+logic
+logic
+129
+===== PAGE 131 =====
+§ “Smart” traffic light controller
+§ 2 inputs:
+§ Traffic sensors: T , T (TRUE when there’s traffic)
+A B
+§ 2 outputs:
+§ Lights: L , L (Red, Yellow, Green)
+A B
+L
+§ State can change every 5 seconds B
+L T
+§ Except if green and traffic, stay green A B L
+A
+Academic T T Ave.
+A A
+L
+T B
+B
+Bravado
+Blvd.
+Finite State Machine Example
+Dining
+Hall
+Dorms
+Labs
+From H&H Section 3.4.1 Fields
+130
+===== PAGE 132 =====
+Finite State Machine Example
+§ Traffic sensors are built into the road
+§ Each sensor indicates if a street is empty or there are vehicles nearby
+T = (eastbound traffic on A) OR (westbound traffic on A)
+A
+T = (northbound traffic on B) OR (southbound traffic on B)
+B
+===== PAGE 133 =====
+Finite State Machine Example
+§ Inputs T and T
+A B
+§ Returns TRUE if there are cars on the road
+§ Returns FALSE if the road is empty
+§ Outputs L and L
+A1:0 B1:0
+§ Each set of lights receive 2-bit digital inputs from the traffic light
+controller specifying whether it should be: RED, YELLOW, GREEN
+Output Encoding
+GREEN 00
+YELLOW 01
+RED 10
+===== PAGE 134 =====
+Finite State Machine Blackbox
+§ Inputs: CLK, Reset, T , T
+A B
+§ Outputs: L , L
+A B CLK
+T Traffic L
+A A
+Light
+T Controller L
+B B
+Reset
+133
+===== PAGE 135 =====
+Reset
+S0
+L : green
+A
+L : red
+L
+B
+B
+L T
+A B L
+A
+Academic T T Ave.
+A A
+L
+T B
+B
+134
+Bravado
+Blvd.
+Finite State Machine Diagram
+§ Moore FSM: outputs labeled in each state
+§ States: Circles
+§ Transitions: Arrows (Arcs)
+Dining
+Hall
+Dorms
+Labs
+Fields
+===== PAGE 136 =====
+L
+B
+L T
+A B L
+A
+Academic T T Ave.
+A A
+L T B
+B
+135
+Bravado
+Blvd.
+Finite State Machine Diagram
+§ Moore FSM: outputs labeled in each state
+§ States: Circles
+à From “current state” S0 to “next state” S1
+§ Transitions: Arrows (Arcs)
+T
+Reset A
+Dining T
+S0 A S1
+Hall
+L : green L : yellow
+A A
+L : red L : red
+B B
+Dorms S3 S2 Labs
+L : red L : red
+A A
+L : yellow L : green
+B T B
+B
+Fields T
+B
+===== PAGE 137 =====
+L
+B
+L T
+A B L
+A
+Academic T T Ave.
+A A
+L T B
+B
+136
+Bravado
+Blvd.
+Finite State Machine Diagram
+§ Moore FSM: outputs labeled in each state
+§ States: Circles
+§ Transitions: Arrows (Arcs)
+T
+Reset A
+Dining T
+S0 A S1
+Hall
+L : green L : yellow
+A A
+L : red L : red
+B B
+Dorms S3 S2 Labs
+L : red L : red
+A A
+L : yellow L : green
+B T B
+B
+Fields T
+B
+===== PAGE 138 =====
+L
+B
+L T
+A B L
+A
+Academic T T Ave.
+A A
+L T B
+B
+137
+Bravado
+Blvd.
+Finite State Machine Diagram
+§ Moore FSM: outputs labeled in each state
+§ States: Circles
+§ Transitions: Arrows (Arcs)
+T
+Reset A
+Dining T
+S0 A S1
+Hall
+L : green L : yellow
+A A
+L : red L : red
+B B
+Dorms S3 S2 Labs
+L : red L : red
+A A
+L : yellow L : green
+B T B
+B
+Fields T
+B
+===== PAGE 139 =====
+L
+B
+L T
+A B L
+A
+Academic T T Ave.
+A A
+L T B
+B
+138
+Bravado
+Blvd.
+Finite State Machine Diagram
+§ Moore FSM: outputs labeled in each state
+§ States: Circles
+§ Transitions: Arrows (Arcs)
+T
+Reset A
+Dining T
+S0 A S1
+Hall
+L : green L : yellow
+A A
+L : red L : red
+B B
+Dorms S3 S2 Labs
+L : red L : red
+A A
+L : yellow L : green
+B T B
+B
+Fields T
+B
+===== PAGE 140 =====
+Finite State Machine:
+State Transition Table
+139
+===== PAGE 141 =====
+FSM State Transition Table
+T Current State Inputs Next State
+Reset A
+T S T T S'
+S0 A S1 A B
+L : green L : yellow
+A A S0 0 X
+L : red L : red
+B B
+S0 1 X
+S1 X X
+S2 X 0
+S2 X 1
+S3 S2
+L : red L : red
+A A S3 X X
+L : yellow L : green
+B T B
+B
+T
+B
+140
+===== PAGE 142 =====
+FSM State Transition Table
+T Current State Inputs Next State
+Reset A
+T S T T S'
+S0 A S1 A B
+L : green L : yellow
+A A S0 0 X S1
+L : red L : red
+B B
+S0 1 X S0
+S1 X X S2
+S2 X 0 S3
+S2 X 1 S2
+S3 S2
+L : red L : red
+A A S3 X X S0
+L : yellow L : green
+B T B
+B
+T
+B
+141
+===== PAGE 143 =====
+FSM State Transition Table
+T Current State Inputs Next State
+Reset A
+T S T T S'
+S0 A S1 A B
+L : green L : yellow
+A A S0 0 X S1
+L : red L : red
+B B
+S0 1 X S0
+S1 X X S2
+S2 X 0 S3
+S2 X 1 S2
+S3 S2
+L : red L : red
+A A S3 X X S0
+L : yellow L : green
+B T B
+B
+State Encoding
+T
+B
+S0 00
+S1 01
+S2 10
+S3 11
+142
+===== PAGE 144 =====
+FSM State Transition Table
+T Current State Inputs Next State
+Reset A
+T S S T T S’ S’
+S0 A S1 1 0 A B 1 0
+L : green L : yellow
+A A 0 0 0 X 0 1
+L : red L : red
+B B
+0 0 1 X 0 0
+0 1 X X 1 0
+1 0 X 0 1 1
+1 0 X 1 1 0
+S3 S2
+L : red L : red
+A A 1 1 X X 0 0
+L : yellow L : green
+B T B
+B
+State Encoding
+T
+B
+S0 00
+S1 01
+S2 10
+S3 11
+143
+===== PAGE 145 =====
+FSM State Transition Table
+T Current State Inputs Next State
+Reset A
+T S S T T S’ S’
+S0 A S1 1 0 A B 1 0
+L : green L : yellow
+A A 0 0 0 X 0 1
+L : red L : red
+B B
+0 0 1 X 0 0
+0 1 X X 1 0
+1 0 X 0 1 1
+1 0 X 1 1 0
+S3 S2
+L : red L : red
+A A 1 1 X X 0 0
+L : yellow L : green
+B T B
+B
+State Encoding
+T
+B
+S0 00
+S1 01
+S’ = ?
+1
+S2 10
+S3 11
+144
+===== PAGE 146 =====
+FSM State Transition Table
+T Current State Inputs Next State
+Reset A
+T S S T T S’ S’
+S0 A S1 1 0 A B 1 0
+L : green L : yellow
+A A 0 0 0 X 0 1
+L : red L : red
+B B
+0 0 1 X 0 0
+0 1 X X 1 0
+1 0 X 0 1 1
+1 0 X 1 1 0
+S3 S2
+L : red L : red
+A A 1 1 X X 0 0
+L : yellow L : green
+B T B
+B
+State Encoding
+T
+B
+S0 00
+S1 01
+S’ = (S ∙ S ) + (S ∙ S ∙ T ) + (S ∙ S ∙ T )
+1 1 0 1 0 B 1 0 B
+S2 10
+S3 11
+145
+===== PAGE 147 =====
+FSM State Transition Table
+T Current State Inputs Next State
+Reset A
+T S S T T S’ S’
+S0 A S1 1 0 A B 1 0
+L : green L : yellow
+A A 0 0 0 X 0 1
+L : red L : red
+B B
+0 0 1 X 0 0
+0 1 X X 1 0
+1 0 X 0 1 1
+1 0 X 1 1 0
+S3 S2
+L : red L : red
+A A 1 1 X X 0 0
+L : yellow L : green
+B T B
+B
+State Encoding
+T
+B
+S0 00
+S1 01
+S’ = (S ∙ S ) + (S ∙ S ∙ T ) + (S ∙ S ∙ T )
+1 1 0 1 0 B 1 0 B
+S2 10
+S’ = ? S3 11
+0
+146
+===== PAGE 148 =====
+FSM State Transition Table
+T Current State Inputs Next State
+Reset A
+T S S T T S’ S’
+S0 A S1 1 0 A B 1 0
+L : green L : yellow
+A A 0 0 0 X 0 1
+L : red L : red
+B B
+0 0 1 X 0 0
+0 1 X X 1 0
+1 0 X 0 1 1
+1 0 X 1 1 0
+S3 S2
+L : red L : red
+A A 1 1 X X 0 0
+L : yellow L : green
+B T B
+B
+State Encoding
+T
+B
+S0 00
+S1 01
+S’ = (S ∙ S ) + (S ∙ S ∙ T ) + (S ∙ S ∙ T )
+1 1 0 1 0 B 1 0 B
+S2 10
+S’ = (S ∙ S ∙ T ) + (S ∙ S ∙ T ) S3 11
+0 1 0 A 1 0 B
+147
+===== PAGE 149 =====
+FSM State Transition Table
+T Current State Inputs Next State
+Reset A
+T S S T T S’ S’
+S0 A S1 1 0 A B 1 0
+L : green L : yellow
+A A 0 0 0 X 0 1
+L : red L : red
+B B
+0 0 1 X 0 0
+0 1 X X 1 0
+1 0 X 0 1 1
+1 0 X 1 1 0
+S3 S2
+L : red L : red
+A A 1 1 X X 0 0
+L : yellow L : green
+B T B
+B
+State Encoding
+T
+B
+S0 00
+S1 01
+S’ = S xor S (Simplified)
+1 1 0
+S2 10
+S’ = (S ∙ S ∙ T ) + (S ∙ S ∙ T ) S3 11
+0 1 0 A 1 0 B
+148
+===== PAGE 150 =====
+Finite State Machine:
+Output Table
+149
+===== PAGE 151 =====
+FSM Output Table
+T Current State Outputs
+Reset A
+T S S L L
+S0 A S1 1 0 A B
+L : green L : yellow
+A A 0 0 green red
+L : red L : red
+B B
+0 1 yellow red
+1 0 red green
+1 1 red yellow
+S3 S2
+L : red L : red
+A A
+L : yellow L : green
+B T B
+B
+T
+B
+150
+===== PAGE 152 =====
+FSM Output Table
+T Current State Outputs
+Reset A
+T S S L L
+S0 A S1 1 0 A B
+L : green L : yellow
+A A 0 0 green red
+L : red L : red
+B B
+0 1 yellow red
+1 0 red green
+1 1 red yellow
+S3 S2
+L : red L : red
+A A
+L : yellow L : green
+B T B
+B
+Output Encoding
+T
+B
+green 00
+yellow 01
+red 10
+151
+===== PAGE 153 =====
+FSM Output Table
+T Current State Outputs
+Reset A
+T S S L L L L
+S0 A S1 1 0 A1 A0 B1 B0
+L : green L : yellow
+A A 0 0 0 0 1 0
+L : red L : red
+B B
+0 1 0 1 1 0
+1 0 1 0 0 0
+1 1 1 0 0 1
+S3 S2
+L : red L : red
+A A
+L : yellow L : green
+B T B
+B
+Output Encoding
+T
+B
+green 00
+L = S
+A1 1
+yellow 01
+red 10
+152
+===== PAGE 154 =====
+FSM Output Table
+T Current State Outputs
+Reset A
+T S S L L L L
+S0 A S1 1 0 A1 A0 B1 B0
+L : green L : yellow
+A A 0 0 0 0 1 0
+L : red L : red
+B B
+0 1 0 1 1 0
+1 0 1 0 0 0
+1 1 1 0 0 1
+S3 S2
+L : red L : red
+A A
+L : yellow L : green
+B T B
+B
+Output Encoding
+T
+B
+green 00
+L = S
+A1 1
+yellow 01
+L = S ∙ S
+A0 1 0
+red 10
+153
+===== PAGE 155 =====
+FSM Output Table
+T Current State Outputs
+Reset A
+T S S L L L L
+S0 A S1 1 0 A1 A0 B1 B0
+L : green L : yellow
+A A 0 0 0 0 1 0
+L : red L : red
+B B
+0 1 0 1 1 0
+1 0 1 0 0 0
+1 1 1 0 0 1
+S3 S2
+L : red L : red
+A A
+L : yellow L : green
+B T B
+B
+Output Encoding
+T
+B
+green 00
+L = S
+A1 1
+yellow 01
+L = S ∙ S
+A0 1 0
+red 10
+L = S
+B1 1
+154
+===== PAGE 156 =====
+FSM Output Table
+T Current State Outputs
+Reset A
+T S S L L L L
+S0 A S1 1 0 A1 A0 B1 B0
+L : green L : yellow
+A A 0 0 0 0 1 0
+L : red L : red
+B B
+0 1 0 1 1 0
+1 0 1 0 0 0
+1 1 1 0 0 1
+S3 S2
+L : red L : red
+A A
+L : yellow L : green
+B T B
+B
+Output Encoding
+T
+B
+green 00
+L = S
+A1 1
+yellow 01
+L = S ∙ S
+A0 1 0
+red 10
+L = S
+B1 1
+L = S ∙ S
+B0 1 0
+155
+===== PAGE 157 =====
+Finite State Machine:
+Schematic
+156
+===== PAGE 158 =====
+FSM Overview
+157
+===== PAGE 159 =====
+FSM Schematic: State Register
+CLK
+S' S
+1 1
+S' S
+0 0
+r
+Reset
+state register
+158
+===== PAGE 160 =====
+FSM Schematic: Next State Logic
+CLK
+S' S
+1 1
+T S' S
+A 0 0
+r
+T
+Reset
+B
+S S
+1 0
+inputs next state logic state register
+S’ = S xor S
+1 1 0
+S’ = (S ∙ S ∙ T ) + (S ∙ S ∙ T )
+0 1 0 A 1 0 B
+159
+===== PAGE 161 =====
+FSM Schematic: Output Logic
+CLK L
+A1
+S' S
+1 1
+L
+A0
+T S' S
+A 0 0
+L
+r B1
+T
+Reset
+B
+S S L
+1 0 B0
+inputs next state logic state register output logic outputs
+L = S
+A1 1
+L = S ∙ S
+A0 1 0
+L = S
+B1 1
+L = S ∙ S
+B0 1 0
+160
+===== PAGE 162 =====
+FSM Timing Diagram
+T
+Reset A__
+T
+S0 A S1
+L : green L : yellow
+A A
+L : red L : red
+B B
+S3 S2
+L : red L : red
+A A
+L : yellow __ L : green
+B B
+T
+B
+T
+B
+Cycle 1 Cycle 2 Cycle 3 Cycle 4 Cycle 5 Cycle 6 Cycle 7 Cycle 8 Cycle 9 Cycle 10
+CLK
+Reset
+T
+A
+T
+B
+S' ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00) S1 (01)
+1:0
+S ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00)
+1:0
+L ?? Green (00) Yellow (01) Red (10) Green (00)
+A1:0
+L ?? Red (10) Green (00) Yellow (01) Red (10)
+B1:0
+0 5 10 15 20 25 30 35 40 45 t (sec)
+161
+===== PAGE 163 =====
+FSM Timing Diagram
+T
+Reset A__
+T
+S0 A S1
+L : green L : yellow
+A A
+L : red L : red
+B B
+S3 S2
+L : red L : red
+A A
+L : yellow __ L : green
+B B
+T
+B
+T
+B
+Cycle 1 Cycle 2 Cycle 3 Cycle 4 Cycle 5 Cycle 6 Cycle 7 Cycle 8 Cycle 9 Cycle 10
+CLK
+Reset
+T
+A
+T
+B
+S' ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00) S1 (01)
+1:0
+S ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00)
+1:0
+L ?? Green (00) Yellow (01) Red (10) Green (00)
+A1:0
+L ?? Red (10) Green (00) Yellow (01) Red (10)
+B1:0
+0 5 10 15 20 25 30 35 40 45 t (sec)
+162
+===== PAGE 164 =====
+FSM Timing Diagram
+T
+Reset A__
+T
+S0 A S1
+L : green L : yellow
+A A
+L : red L : red
+B B
+S3 S2
+L : red L : red
+A A
+L : yellow __ L : green
+B B
+T
+B
+T
+B
+Cycle 1 Cycle 2 Cycle 3 Cycle 4 Cycle 5 Cycle 6 Cycle 7 Cycle 8 Cycle 9 Cycle 10
+CLK
+Reset
+T
+A
+T
+B
+S' ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00) S1 (01)
+1:0
+S ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00)
+1:0
+L ?? Green (00) Yellow (01) Red (10) Green (00)
+A1:0
+L ?? Red (10) Green (00) Yellow (01) Red (10)
+B1:0
+0 5 10 15 20 25 30 35 40 45 t (sec)
+163
+===== PAGE 165 =====
+FSM Timing Diagram
+T
+Reset A__
+T
+S0 A S1
+L : green L : yellow
+A A
+L : red L : red
+B B
+S3 S2
+L : red L : red
+A A
+L : yellow __ L : green
+B B
+T
+B
+T
+B
+Cycle 1 Cycle 2 Cycle 3 Cycle 4 Cycle 5 Cycle 6 Cycle 7 Cycle 8 Cycle 9 Cycle 10
+CLK
+Reset
+T
+A
+T
+B
+S' ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00) S1 (01)
+1:0
+S ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00)
+1:0
+L ?? Green (00) Yellow (01) Red (10) Green (00)
+A1:0
+L ?? Red (10) Green (00) Yellow (01) Red (10)
+B1:0
+0 5 10 15 20 25 30 35 40 45 t (sec)
+164
+===== PAGE 166 =====
+FSM Timing Diagram
+T
+Reset A__
+T
+S0 A S1
+L : green L : yellow
+A A
+L : red L : red
+B B
+S3 S2
+L : red L : red
+A A
+L : yellow __ L : green
+B B
+T
+B
+T
+B
+Cycle 1 Cycle 2 Cycle 3 Cycle 4 Cycle 5 Cycle 6 Cycle 7 Cycle 8 Cycle 9 Cycle 10
+CLK
+Reset
+T
+A
+T
+B
+S' ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00) S1 (01)
+1:0
+S ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00)
+1:0
+L ?? Green (00) Yellow (01) Red (10) Green (00)
+A1:0
+L ?? Red (10) Green (00) Yellow (01) Red (10)
+B1:0
+0 5 10 15 20 25 30 35 40 45 t (sec)
+165
+===== PAGE 167 =====
+FSM Timing Diagram
+T
+Reset A__
+T
+S0 A S1
+L : green L : yellow
+A A
+L : red L : red
+B B
+S3 S2
+L : red L : red
+A A
+L : yellow __ L : green
+B B
+T
+B
+T
+B
+Cycle 1 Cycle 2 Cycle 3 Cycle 4 Cycle 5 Cycle 6 Cycle 7 Cycle 8 Cycle 9 Cycle 10
+CLK
+Reset
+T
+A
+T
+B
+S' ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00) S1 (01)
+1:0
+S ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00)
+1:0
+L ?? Green (00) Yellow (01) Red (10) Green (00)
+A1:0
+L ?? Red (10) Green (00) Yellow (01) Red (10)
+B1:0
+0 5 10 15 20 25 30 35 40 45 t (sec)
+166
+===== PAGE 168 =====
+FSM Timing Diagram
+T
+Reset A__
+T
+S0 A S1
+L : green L : yellow
+A A
+L : red L : red
+B B
+S3 S2
+L : red L : red
+A A
+L : yellow __ L : green
+B B
+T
+B
+T
+B
+Cycle 1 Cycle 2 Cycle 3 Cycle 4 Cycle 5 Cycle 6 Cycle 7 Cycle 8 Cycle 9 Cycle 10
+CLK
+Reset
+T
+A
+T
+B
+S' ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00) S1 (01)
+1:0
+S ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00)
+1:0
+L ?? Green (00) Yellow (01) Red (10) Green (00)
+A1:0
+L ?? Red (10) Green (00) Yellow (01) Red (10)
+B1:0
+0 5 10 15 20 25 30 35 40 45 t (sec)
+167
+===== PAGE 169 =====
+FSM Timing Diagram
+T
+Reset A__
+T
+S0 A S1
+L : green L : yellow
+A A
+L : red L : red
+B B
+S3 S2
+L : red L : red
+A A
+L : yellow __ L : green
+B B
+T
+B
+This is from H&H Section 3.4.1 T
+B
+Cycle 1 Cycle 2 Cycle 3 Cycle 4 Cycle 5 Cycle 6 Cycle 7 Cycle 8 Cycle 9 Cycle 10
+CLK
+Reset
+T
+A
+T
+B
+S' ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00) S1 (01)
+1:0
+S ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00)
+1:0
+L ?? Green (00) Yellow (01) Red (10) Green (00)
+A1:0
+L ?? Red (10) Green (00) Yellow (01) Red (10)
+B1:0
+0 5 10 15 20 25 30 35 40 45 t (sec)
+168
+===== PAGE 170 =====
+FSM Timing Diagram
+T
+Reset A__
+T
+S0 A S1
+L : green L : yellow
+A A
+L : red L : red
+B B
+S3 S2
+L : red L : red
+A A
+L : yellow __ L : green
+B B
+T
+B
+T
+B
+Cycle 1 Cycle 2 Cycle 3 Cycle 4 Cycle 5 Cycle 6 Cycle 7 Cycle 8 Cycle 9 Cycle 10
+CLK
+Reset
+T
+A
+T
+B
+S' ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00) S1 (01)
+1:0
+S ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00)
+1:0
+L ?? Green (00) Yellow (01) Red (10) Green (00)
+A1:0
+L ?? Red (10) Green (00) Yellow (01) Red (10)
+B1:0
+0 5 10 15 20 25 30 35 40 45 t (sec)
+169
+===== PAGE 171 =====
+FSM Timing Diagram
+T
+Reset A__
+T
+S0 A S1
+L : green L : yellow
+A A
+L : red L : red
+B B
+See H&H Chapter 3.4
+S3 S2
+L : red L : red
+A A
+L : yellow __ L : green
+B B
+T
+B
+T
+B
+Cycle 1 Cycle 2 Cycle 3 Cycle 4 Cycle 5 Cycle 6 Cycle 7 Cycle 8 Cycle 9 Cycle 10
+CLK
+Reset
+T
+A
+T
+B
+S' ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00) S1 (01)
+1:0
+S ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00)
+1:0
+L ?? Green (00) Yellow (01) Red (10) Green (00)
+A1:0
+L ?? Red (10) Green (00) Yellow (01) Red (10)
+B1:0
+0 5 10 15 20 25 30 35 40 45 t (sec)
+170
+===== PAGE 172 =====
+Synchronizers
+§ Circuits that ensure asynchronous
+inputs like ones coming from
+traffic sensors are seen at clock
+edges
+Cycle 1 Cycle 2 Cycle 3 Cycle 4 Cycle 5 Cycle 6 Cycle 7 Cycle 8 Cycle 9 Cycle 10
+CLK
+Reset
+T
+A
+T
+B
+S' ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00) S1 (01)
+1:0
+S ?? S0 (00) S1 (01) S2 (10) S3 (11) S0 (00)
+1:0
+L ?? Green (00) Yellow (01) Red (10) Green (00)
+A1:0
+L ?? Red (10) Green (00) Yellow (01) Red (10)
+B1:0
+0 5 10 15 20 25 30 35 40 45 t (sec)
+171
+===== PAGE 173 =====
+Finite State Machine:
+State Encoding
+172
+===== PAGE 174 =====
+FSM State Encoding
+§ How do we encode the state bits?
+§ Three common state binary encodings with different tradeoffs
+§ Fully Encoded
+§ 1-Hot Encoded
+§ Let’s see an example traffic light with 3 states
+§ Green, Yellow, Red
+173
+===== PAGE 175 =====
+FSM State Encoding
+1. Binary Encoding (Full Encoding):
+§ Use the minimum possible number of bits
+§ Use log (num_states) bits to represent the states
+2
+§ Example state encodings: 00, 01, 10
+§ Minimizes # flip-flops, but not necessarily output logic or next state logic
+2. One-Hot Encoding:
+§ Each bit encodes a different state
+§ Uses num_states bits to represent the states
+§ Exactly 1 bit is “hot” for a given state
+§ Example state encodings: 0001, 0010, 0100, 1000
+§ Simplest design process – very automatable
+§ Maximizes # flip-flops, minimizes next state logic
+174
+===== PAGE 176 =====
+FSM State Encoding
+1. Binary Encoding (Full Encoding):
+§ Use the minimum possible number of bits
+§ Use log (num_states) bits to represent the states
+2
+§ Example state encodings: 00, 01, 10
+The designer must carefully choose
+§ Minimizes # flip-flops, but not necessarily output logic or next state logic
+2. One-Hot Encoding:
+an encoding scheme to optimize the
+§ Each bit encodes a different state
+design under given constraints
+§ Uses num_states bits to represent the states
+§ Exactly 1 bit is “hot” for a given state
+§ Example state encodings: 0001, 0010, 0100, 1000
+§ Simplest design process – very automatable
+§ Maximizes # flip-flops, minimizes next state logic
+175
+===== PAGE 177 =====
+Example: Divide-by-N Counter
+One output and no inputs
+n
+The output Y is HIGH for one clock cycle out of every N
+n
+The output divides the frequency of the clock by N (3 in example below)
+n
+176
+===== PAGE 178 =====
+Example: Divide-by-N Counter
+State transition table
+n
+Output table
+n
+177
+===== PAGE 179 =====
+Example: Divide-by-N Counter
+One hot and binary encodings
+n
+State transition table with binary (left) and one-hot (right) encoding
+n
+178
+===== PAGE 180 =====
+Example: Divide-by-N Counter
+Output tables and equations with binary encoding (do it yourself)
+n
+Output tables and equations with one-hot encoding (do it yourself)
+n
+179
+===== PAGE 181 =====
+Example: Divide-by-N Counter
+Circuit with binary encoding
+n
+Circuit with one-hot encoding
+n
+180
+===== PAGE 182 =====
+Moore vs. Mealy Machines
+Section 3.4.3 of H&H
+181
+===== PAGE 183 =====
+Recall: Moore vs. Mealy Machines
+§ Next state is determined by the current state and the inputs
+§ Two types of FSMs differ in the output logic:
+§ Moore FSM: outputs depend only on the current state
+§ Mealy FSM: outputs depend on the current state and the inputs
+Moore FSM
+CLK
+M next
+next k k N
+inputs state state output
+state outputs
+logic
+logic
+Mealy FSM
+CLK
+M next
+next k k N
+inputs state state output
+state outputs
+logic
+logic
+Section 3.4.3 of H&H
+182
+===== PAGE 184 =====
+Moore vs. Mealy Examples
+Alyssa P. Hacker has a snail that crawls down a paper tape with 1’s and 0’s on it.
+n
+The snail smiles whenever the last two digits it has crawled over are 01.
+n
+Design Moore and Mealy FSMs of the snail’s brain.
+n
+Moore FSM
+CLK
+M next
+next k k N
+inputs state state output
+state outputs
+logic
+logic
+Mealy FSM
+CLK
+M next
+next k k N
+inputs state state output
+state outputs
+logic
+logic
+183
+===== PAGE 185 =====
+State Transition Diagrams
+What are the tradeoffs?
+184
+===== PAGE 186 =====
+Some Observations
+Mealy machine's output rises a cycle sooner because it responds to input rather than
+n
+waiting for state change
+How can we match Mealy's output to Moore's output
+n
+By delaying Mealy's ouput with a flip flop
+o
+The choice depends on when you want your outputs to respond
+n
+Mealy also requires fewer states
+n
+In the state transition diagrams of Mealy, the outputs are labeled on the arcs instead
+n
+of in the circles
+185
+===== PAGE 187 =====
+Moore Tables (1)
+186
+===== PAGE 188 =====
+Moore Tables (2)
+187
+===== PAGE 189 =====
+Mealy Tables
+188
+===== PAGE 190 =====
+FSM Schematics
+189
+===== PAGE 191 =====
+Timing Diagrams
+190
+===== PAGE 192 =====
+Deriving FSMs from Circuits
+From a circuit diagram of FSM, we can reverse engineer the FSM diagram
+n
+Which FSM does the following circuit implement?
+n
+What type of FSM is this?
+q
+Derive the next state and output equations
+q
+From the equations, build the simplified truth tables for next state and output
+q
+Guess the binary encodings and assign state lables
+q
+Derive the output table using state labels
+q
+Draw the FSM
+q
+191
+===== PAGE 193 =====
+Deriving FSMs from Circuits
+Equations
+n
+Tables
+n
+192
+===== PAGE 194 =====
+Deriving FSMs from Circuits
+Reduced tables
+n
+193
+===== PAGE 195 =====
+Deriving FSMs from Circuits
+Symbolic tables
+n
+194
+===== PAGE 196 =====
+Deriving FSMs from Circuits
+FSM Diagram
+n
+195
+===== PAGE 197 =====
+FSM Design Procedure (I)
+Step # 1: State transition diagram
+§ Formalize the specification and remove ambiguity
+Step # 2: Derive the next state logic
+§ Binary encoding for states
+§ State transition (truth) table
+§ Minimized Boolean equations for next state logic
+Step # 3: Derive the output logic
+§ Binary encoding for outputs
+§ Output table & Boolean equations
+Step # 4: Turn the Boolean equations into logic gate implementation
+§ Next state logic & output logic
+196
+===== PAGE 198 =====
+FSM Design Procedure (II)
+§ Determine all possible states of your machine
+§ Develop a state transition diagram
+§ Generally, this is done from a textual description
+§ You need to:
+§ 1) determine the inputs and outputs for each state and
+§ 2) figure out how to get from one state to another
+§ Approach
+§ Start by defining the reset state and what happens from it – this is typically an easy point to start from
+§ Then continue to add transitions and states
+§ Picking good state names is very important
+§ Building an FSM is like programming (but it is not programming!)
+§ An FSM has a sequential “control-flow” like a program with conditionals and goto’s
+§ The if-then-else construct is controlled by one or more inputs
+§ The outputs are controlled by the state or the inputs
+§ In hardware, we typically have many concurrent FSMs
+197
+===== PAGE 199 =====
+Sync. Seq. Circuits: What We Covered Until Now
+§ The concept of state
+§ State diagrams
+§ Asynchronous vs. synchronous state changes
+§ Synchronous sequential circuits
+§ FSMs
+§ Components, transition diagram, tables, equations, schematic
+§ State transition diagrams
+§ State encoding
+§ Moore vs. Mealy
+§ Design procedure
+198
+===== PAGE 200 =====
+Timing Issues in Sequential Circuits
+Reading: Section 3.5 of H&H (More detailed than what we need in this course)
+199
+===== PAGE 201 =====
+Timing in Sequential Circuits
+CLK
+§ We need to understand three aspects of
+timing specification
+D Q
+§ Clock-to-Q propagation delay
+§ Setup time
+§ Hold time
+200
+===== PAGE 202 =====
+Recall the Clock
+§ Output does not change instantly when the rising edge arrives
+§ Input needs to stay stable for some time for the flip-flop to take
+a reliable photograph
+rising edge
+1
+0
+CLK
+falling edge
+Clock period, T
+c
+Frequency = 1/T
+c
+201
+===== PAGE 203 =====
+Typical Frequencies
+§ 1 Megahertz (MHz)
+§ One million (106) cycles per second
+§ Clock period is 1 microseconds (us)
+§ 1 Gigahertz (GHz)
+§ One billion (109) cycles in one second
+§ Clock period is 1 nanoseconds (ns)
+202
+===== PAGE 204 =====
+Clock-to-Q Propagation Delay
+§ When the clock rises, the time it takes for the output to
+settle to the final value (t )
+pcq
+CLK
+CLK
+D Q
+D
+t
+pcq
+Q
+203
+===== PAGE 205 =====
+Setup Time
+§ For the circuit to sample its input correctly, the input must have
+stabilized at least some setup time, t , before the rising edge
+setup
+of the clock
+CLK
+CLK
+D Q
+t
+setup
+D
+t
+pcq
+Q
+204
+===== PAGE 206 =====
+Hold Time
+§ The input must remain stable for at least some hold time (t )
+hold
+after the rising edge of the clock
+CLK
+CLK
+t
+hold
+D Q
+t
+setup
+D
+t
+pcq
+Q
+205
+===== PAGE 207 =====
+Aperture Time
+§ The sum of the setup and hold times is called the aperture
+time of the circuit
+§ It is the total time for which the input must remain stable
+In photography, aperture can
+be defined as the opening in
+a lens through which light
+passes to enter the camera.
+206
+===== PAGE 208 =====
+Technology and Hold Time
+§ It is a reasonable assumption that modern flip-flops have a
+hold time close to zero
+§ We can ignore hold time in subsequent discussions
+207
+===== PAGE 209 =====
+Example: Calculating Clock Period
+§ What is the clock period for the circuit below for it to work correctly
+in terms of t , t , and t ?
+pd setup pcq
+T = t + t + t
+c pcq pd setup
+t
+pd CLK
+D Next State Logic Q
+208
+===== PAGE 210 =====
+Sequencing Overhead
+§ t + t is called the sequencing overhead of the flipflop
+pcq setup
+§ T = t + t + t
+c pd pcq setup
+§ Ideally, the entire clock period should be spent doing useful
+work (processing done by the combinational circuit)
+§ The sequencing overhead of the flip-flop cuts into this time
+209
+===== PAGE 211 =====
+Recall: Synchronous Sequential Circuits
+General Rule:
+If the clock is sufficiently slow, so that the
+inputs to all registers settle before the next clock edge, all
+races are eliminated
+CLK
+M
+k k N
+next state output
+logic logic
+210
+===== PAGE 212 =====
+Different Types of
+Storage Elements
+211
+===== PAGE 213 =====
+Diff. Storage Elements – Motivation
+§ Flip-flops, registers, and flip-flop-based register files make up
+synchronous sequential circuits
+§ They process information based on current and past
+combinations of inputs
+§ They have arithmetic circuits or logic elements to process inputs
+and history *stored as state*
+§ Processing happens during a clock cycle, while state changes
+happen at the edge of the clock (synchronous)
+§ Sometimes, we need to store lots of information
+§ Computer main memory, USB drives, flash drives, disks, SSDs
+§ We can build cheaper storage elements that store information
+asynchronously – and processing happens somewhere else
+synchronously
+Section 5.5 of H&H
+212
+===== PAGE 214 =====
+Example
+Just rows and
+rows of storage
+Composed using ALUs,
+elements, and
+registers, muxes, and
+no cycle-by-cycle
+decoder to process one
+processing ….
+instruction every cycle
+Just read and
+write words
+CPU
+Main Memory
+§ On-chip fast memory called a L1/L2/L3 cache
+§ Subset of recently read data from main memory
+213
+===== PAGE 215 =====
+Storage Elements
+§ Flip-flops
+§ Very fast (data is always available at the output)
+§ Very expensive (one bit costs tens of transistors)
+§ Static RAM (SRAM)
+§ Faster than DRAM
+§ Expensive (one bit costs 6 transistors)
+§ Dynamic RAM (DRAM)
+§ Slower than latches, flip-flops, and SRAM
+§ Reading destroys content, requiring a refresh operation to
+recharge the capacitor
+§ It needs a special process for manufacturing
+§ Cheap (one bit costs only one transistor plus one transistor)
+Section 5.5 of H&H
+214
+===== PAGE 216 =====
+Generalized Storage Element
+§ Stores one bit (bit cell)
+§ Wordline enables (selects) the storage element or bit cell
+§ Bit line is used to read the stored bit or write a new bit
+§ Why is it called word line?
+§ Word line addresses an entire (unique) word in a row of words
+§ We read from and write to an entire row
+Section 5.5 of H&H
+215
+===== PAGE 217 =====
+Generalized Memory Organization
+§ A decoder to decode the address
+§ A multiplexer to select an output (not shown below)
+§ Can also use tri-state buffers instead of AND/OR multiplexer
+called bitlines
+because they
+produce the
+stored bits
+§ Storage element can be of any “type”
+rightmost line
+§ Address/Data makes up a single read/write port
+is numbered 0
+Section 5.5 of H&H
+216
+===== PAGE 218 =====
+Recall a Tri-State Buffer
+§ A tri-state buffer enables gating of different signals onto a
+wire
+A tri-state buffer
+acts like a switch
+§ When E is LOW, output is a floating signal (Z)
+§ Floating: Signal not driven by any circuit (open circuit, floating wire)
+217
+===== PAGE 219 =====
+Read/Write Procedure in Detail
+§ READ
+§ A wordline is asserted, and the corresponding row of bits cells drives the
+bitlines HIGH or LOW
+§ WRITE
+§ The bitlines are driven HIGH or LOW first and then a wordline is
+asserted, allowing the bitlines values to be stored in that row of bit cells
+§ Bitlines are used for both reading the stored bit and writing a
+new bit (for example, using a pair of tristate buffers)
+Section 5.5 of H&H
+218
+===== PAGE 220 =====
+SRAM Bit Cell
+§ SRAM: Static Random Access Memory
+§ Data bit is stored in a cross-coupled inverter
+§ Each cell has two outputs: bitline and bitline and bitline
+§ When the wordline is asserted, both nMOS transistors are turned ON, and
+data values are transferred to or from the bitlines
+219
+===== PAGE 221 =====
+SRAM Bit Cell
+cross-coupled inverter
+bitline bitline
+source: https://electronics.stackexchange.com/questions/162466/how-do-the-access-transistors-in-an-sram-cell-work
+220
+===== PAGE 222 =====
+Recall: MOS NOT Gate (Inverter)
+§ We have seen a NOT gate at the transistor level
+§ If A = 0V then Y = 3V 3V
+§ If A = 3V then Y = 0V
+In (A) Out (Y)
+§ Interpretation of voltage levels
+§ Interpret 0V as logical (binary) 0 value
+§ Interpret 3V as logical (binary) 1 value
+0V
+A P N Y
+̅
+0 ON OFF 1 𝑌 = 𝐴
+1 OFF ON 0
+221
+===== PAGE 223 =====
+Random Access Memory (RAM)
+§ RAM: Random Access Memory
+§ Each byte has an address (byte-addressable)
+§ Any data word (consisting of multiple bytes) can be accessed
+independently of the other
+§ Any data word is accessed with the same delay as any other
+222
+===== PAGE 224 =====
+Another Device for Storing Information
+§ What storage medium is this?
+§ A length of magnetic tape in a plastic enclosure with one or two
+reels for controlling the motion of the tape
+§ Cassette used in tape recorders: nearby data is accessed more
+quickly than faraway data
+§ Inherently sequential device: they must be rewound and read from
+the start to load data
+223
+===== PAGE 225 =====
+Yet Another Device for Storing Information
+§ What storage medium is this?
+§ A rotational platter with magnetic coating and arm assembly inside
+a casing
+§ Hard disk used in all computers: nearby data is accessed more
+quickly than faraway data
+§ Inherently sequential device: a disk must rotate under an arm for
+data to be read
+224
+===== PAGE 226 =====
+Random vs. Sequential access storage media
+These vs. These
+225
+===== PAGE 227 =====
+DRAM Bit Cell
+§ DRAM: Dynamic Random Access Memory
+§ Stores a bit as the presence or absence of a charge on a capacitor
+§ The nMOS transistor behaves as a switch that either connects or
+disconnects the capacitor from the bitline
+§ When the wordline is asserted, the nMOS transistor turns ON, and the
+stored bit value transfers to or from the bitline
+Section 5.5.2 of H&H
+226
+===== PAGE 228 =====
+Static vs. Dynamic
+§ Recall the SRAM cell: The nMOS transistors (M5 and M6) are
+driven by cross-coupled inverter connected to supply voltage
+§ DRAM: The capacitor node is not actively driven HIGH or LOW
+by a transistor tied to supply voltage
+SRAM Cell DRAM Cell
+227
+===== PAGE 229 =====
+DRAM Reads and Writes
+§ Read: Upon a read, data values are transferred from the
+capacitor to the bitline
+§ Reading destroys the bit value stored on the capacitor, so the data word
+must be restored (rewritten) after each read
+§ Refresh: Even when DRAM is not read, the contents must be refreshed
+(read and rewritten) every few milliseconds, because the charge on the
+capacitor gradually leaks away
+§ Write: Upon a write, data values are transferred from the
+bitline to the capacitor
+228
+===== PAGE 230 =====
+DRAM Refresh
+§ Refresh: Even when DRAM is not read, the contents must be
+refreshed (read and rewritten) every few milliseconds
+because the charge on the capacitor gradually leaks away
+§ Refreshing consumes extra energy
+§ Refreshing requires costly circuitry
+§ It is a critical drawback of DRAM technology, especially at
+large capacities (many gigabytes, for example)
+229
+===== PAGE 231 =====
+Memory Comparison
+§ Latches and flip-flops (~20 transistors)
+§ Very fast
+§ Very expensive (one bit costs tens of transistors)
+§ Static RAM (SRAM) (6 transistors)
+§ Relatively fast
+§ Expensive (one bit costs 6 transistors)
+§ Dynamic RAM (DRAM) (1 transistor)
+§ Slower than latches, flip-flops, and SRAM
+§ Reading destroys content, requiring a refresh operation to
+recharge the capacitor
+§ It needs a special process for manufacturing
+§ Cheap (one bit costs only one transistor plus one transistor)
+Section 5.5 of H&H
+230
+===== PAGE 232 =====
+Memory Hierarchy
+DRAM Stick
+or DIMM
+Inside the CPU chip: SRAM and flip-flops Outside the CPU chip: DRAM
+231
+===== PAGE 233 =====
+Memory Hierarchy
+§ Large memories use SRAM and DRAM
+§ Registers inside the CPU use flip-flops
+§ Flip-flops are used in synchronous sequential circuits
+232

@@ -1,0 +1,203 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 4 Practice Exam}
+\author{Topics: ISA vs Microarchitecture, ARM/QuAC, Memory \& Addressing, Control Flow, Single-Cycle Datapath, Performance}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Time:} 120 minutes \hfill
+\textbf{Total:} 100 marks
+
+\vspace{0.5em}
+\noindent\textbf{Instructions}
+\begin{itemize}[leftmargin=1.5em]
+  \item Answer in English.
+  \item Part A is multiple-choice (concept-focused).
+  \item Part B is computational. Show key steps.
+  \item Part C contains past exam questions with sources.
+  \item Assume 32-bit ARM unless stated otherwise. Memory is byte-addressable.
+\end{itemize}
+
+\section*{Part A: Multiple Choice (30 marks, 3 marks each)}
+Choose exactly one option for each question.
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item Which of the following is part of the ISA (not microarchitecture)?
+  \begin{enumerate}[label=(\Alph*)]
+    \item Ripple-carry vs carry-lookahead adder choice
+    \item Instruction opcodes and semantics
+    \item NAND-only vs AND/OR/NOT gate implementation
+    \item Mux vs tri-state buffer choice
+  \end{enumerate}
+
+  \item Addressability refers to:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Number of address bits
+    \item Number of locations in memory
+    \item Bits stored per address
+    \item Total capacity in bytes
+  \end{enumerate}
+
+  \item In a 32-bit byte-addressable ISA, the PC increments by:
+  \begin{enumerate}[label=(\Alph*)]
+    \item 1
+    \item 2
+    \item 4
+    \item 8
+  \end{enumerate}
+
+  \item Which condition flag is set when a compare result is zero?
+  \begin{enumerate}[label=(\Alph*)]
+    \item N
+    \item Z
+    \item C
+    \item V
+  \end{enumerate}
+
+  \item Which statement best describes RISC?
+  \begin{enumerate}[label=(\Alph*)]
+    \item Many complex, variable-length instructions
+    \item Few simple instructions, simpler hardware
+    \item Optimized only for microcoded control
+    \item Identical to CISC in practice
+  \end{enumerate}
+
+  \item Base + offset addressing computes the effective address as:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Base register + (extended) offset
+    \item Base register $-$ offset
+    \item PC + offset only
+    \item Offset only
+  \end{enumerate}
+
+  \item In the ARM DP format, which bit indicates whether Src2 is an immediate?
+  \begin{enumerate}[label=(\Alph*)]
+    \item I bit (bit 25)
+    \item S bit (bit 20)
+    \item L bit (bit 20)
+    \item Rd field (bits 15:12)
+  \end{enumerate}
+
+  \item The ARM branch target address (BTA) is computed as:
+  \begin{enumerate}[label=(\Alph*)]
+    \item PC + 4 + imm24
+    \item PC + 8 + sign-extended (imm24 $\ll$ 2)
+    \item PC + imm24 $\ll$ 1
+    \item R15 + imm12
+  \end{enumerate}
+
+  \item For a single-cycle CPU, the clock period is determined by:
+  \begin{enumerate}[label=(\Alph*)]
+    \item The fastest instruction only
+    \item The slowest instruction (critical path)
+    \item The average instruction delay
+    \item The number of registers
+  \end{enumerate}
+
+  \item The architectural state includes:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Branch predictor tables only
+    \item Pipeline latches only
+    \item Programmer-visible registers, memory, and PC
+    \item Cache replacement policy
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part B: Computational Problems (50 marks)}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{Endianness and PC update (8 marks)}\\
+  Memory bytes are shown below (addresses in hex):
+  \begin{center}
+  \begin{tabular}{c|cccccccc}
+  Address & 0x100 & 0x101 & 0x102 & 0x103 & 0x104 & 0x105 & 0x106 & 0x107 \\ \hline
+  Byte    & 0x12  & 0x34  & 0x56  & 0x78  & 0x9A  & 0xBC  & 0xDE  & 0xF0 \\
+  \end{tabular}
+  \end{center}
+  \begin{enumerate}[label=(\alph*)]
+    \item If the system is little-endian, what 32-bit value does \texttt{LDR R0, [R1, \#0]} load when $R1=0x100$?
+    \item If the system is big-endian, what 32-bit value is loaded?
+    \item If $PC=0x100$ in a 32-bit byte-addressable ISA, what is the next sequential $PC$?
+  \end{enumerate}
+
+  \item \textbf{Base + offset addressing (8 marks)}\\
+  Assume the following word-addressed memory contents (each word is 32 bits):
+  \begin{center}
+  \begin{tabular}{c|cccc}
+  Address & 0x00 & 0x04 & 0x08 & 0x0C \\ \hline
+  Word    & 0xA1B2C3D4 & 0x01020304 & 0x11223344 & 0xDEADBEEF \\
+  \end{tabular}
+  \end{center}
+  Let $R2=0$.
+  \begin{enumerate}[label=(\alph*)]
+    \item What value is loaded into $R3$ by \texttt{LDR R3, [R2, \#8]}?
+    \item If $R5=0xCAFEBABE$, what is the new value at address 0x0C after \texttt{STR R5, [R2, \#12]}?
+  \end{enumerate}
+
+  \item \textbf{Flags and conditional execution (8 marks)}\\
+  Assume $R5=17$ and $R6=23$ (32-bit two's complement).
+  \begin{enumerate}[label=(\alph*)]
+    \item After \texttt{CMP R5, R6}, determine the flags $N,Z,C,V$.
+    \item Which of the following will execute: \texttt{SUBEQ}, \texttt{ORRMI}, \texttt{BGE}?
+  \end{enumerate}
+
+  \item \textbf{Branch target address (8 marks)}\\
+  An ARM \texttt{B} instruction is located at $PC=0x80A0$ with \texttt{imm24}=0x000003.
+  Compute the branch target address (BTA).
+
+  \item \textbf{Immediate extension (8 marks)}\\
+  The extend block uses \texttt{ImmSrc}:
+  \begin{itemize}[leftmargin=1.5em]
+    \item \texttt{ImmSrc=00}: zero-extend \texttt{Instr[7:0]} (imm8)
+    \item \texttt{ImmSrc=01}: zero-extend \texttt{Instr[11:0]} (imm12)
+    \item \texttt{ImmSrc=10}: sign-extend \texttt{Instr[23:0]} and append \texttt{00} (imm24 $\ll$ 2)
+  \end{itemize}
+  Compute \texttt{ExtImm} for:
+  \begin{enumerate}[label=(\alph*)]
+    \item \texttt{ImmSrc=00}, \texttt{Instr[7:0]=0xAB}
+    \item \texttt{ImmSrc=01}, \texttt{Instr[11:0]=0x345}
+    \item \texttt{ImmSrc=10}, \texttt{Instr[23:0]=0x00F0F0}
+  \end{enumerate}
+
+  \item \textbf{Performance (10 marks)}\\
+  \begin{enumerate}[label=(\alph*)]
+    \item A program has $N=1.2\times 10^9$ instructions, CPI $=1.8$, and clock frequency $f=2.4$ GHz. Compute execution time.
+    \item A single-cycle CPU has a clock period of 2 ns. For a program with $5\times 10^8$ instructions, compute execution time.
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions (Source-Tagged) (20 marks)}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{RISC vs CISC (Source: exam24px2.pdf, Q4, adapted) (5 marks)}\\
+  Explain the difference between RISC and CISC ISAs with examples. What kind of ISA is ARM? What about QuAC?
+
+  \item \textbf{Branch prediction (Source: exam24px1.pdf, Q1h) (5 marks)}\\
+  Whether or not a CPU uses branch prediction is determined by:
+  \begin{enumerate}[label=(\Alph*)]
+    \item ISA
+    \item Microarchitecture
+    \item Both ISA and microarchitecture
+    \item Neither
+  \end{enumerate}
+
+  \item \textbf{Execution time (Source: exam24px1.pdf, Q1j) (5 marks)}\\
+  What is the execution time (in seconds) of a program that executes 2 billion instructions on a CPU with a clock frequency of 2 GHz and an average CPI of 4?
+
+  \item \textbf{Address calculation (Source: exam24px1.pdf, Q1n) (5 marks)}\\
+  Register $R0$ contains the index of an element in a C array. The base address of the array is 0x0. Each element is 16 bytes.
+  Which instruction writes the memory address of the array element into $R1$?
+  \begin{enumerate}[label=(\Alph*)]
+    \item \texttt{LSL R1, R0, \#2}
+    \item \texttt{LSL R1, R0, \#3}
+    \item \texttt{LSL R1, R0, \#4}
+    \item \texttt{LSL R1, R0, \#5}
+    \item \texttt{LSL R1, R0, \#6}
+  \end{enumerate}
+\end{enumerate}
+
+\end{document}

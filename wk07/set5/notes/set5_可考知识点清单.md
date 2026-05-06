@@ -1,0 +1,53 @@
+# Set 5 可考知识点清单
+
+- 单周期处理器的两大核心缺点：
+  - 时钟周期受最慢指令限制。
+  - 为最坏情况准备并行资源，硬件利用率低且不易优化 common case。
+- 多周期设计的核心思想：把一条指令拆成多个状态执行，使时钟周期时间与“最慢指令总延迟”解耦。
+- ISA 只定义从 AS 到 AS' 的最终语义；多周期中的中间状态属于 programmer-invisible microarchitectural state。
+- 多周期的主要收益：更短关键路径、可复用硬件、不同指令走不同周期数。
+- 多周期的主要代价：需要额外中间寄存器；每个周期都要支付 sequencing overhead；CPI 不再固定为 1。
+- 多周期 ARM datapath 的结构特征：统一 memory、统一 ALU/adder、增加若干非架构寄存器保存中间值。
+- 最终多周期 FSM 中的典型周期数：
+  - `B = 3`
+  - `DP = 4`
+  - `STR = 4`
+  - `LDR = 5`
+- 典型状态序列：
+  - `LDR`: `Fetch -> Decode -> MemAdr -> MemRead -> MemWB`
+  - `STR`: `Fetch -> Decode -> MemAdr -> MemWrite`
+  - `DP immediate/register`: `Fetch -> Decode -> ExecuteI/ExecuteR -> ALUWB`
+  - `B`: `Fetch -> Decode -> Branch`
+- 读 `R15` 时应得到 `PC + 8`；写回 PC 时通过 `PCWrite` 更新。
+- 分支目标地址计算：
+  - `BTA = ExtImm + (PC + 8)`
+  - `ExtImm = sign-extend(imm24 << 2)`
+- 译码器中的关键关系：
+  - `RegSrc0 = (Op == 10_2)`
+  - `RegSrc1 = (Op == 01_2)`
+  - `ImmSrc = Op`
+- 多周期控制器是 FSM：状态由当前控制信号定义；当前状态决定下一状态。
+- 性能公式：
+  - `Execution Time = #Instructions × CPI × Clock Period`
+  - `f = 1 / Clock Period`
+- 加权平均 CPI 计算方法：
+  - `Average CPI = Σ(指令比例 × 该类指令周期数)`
+- 课件例子中的多周期平均 CPI：
+  - `0.13×3 + (0.52+0.10)×4 + 0.25×5 = 4.12`
+- 多周期关键路径公式：
+  - `Tc2 = tpcq + 2tmux + max(tALU + tmux, tmem) + tsetup`
+- 课件给出的参数代入后：
+  - `Tc2 = 340 ps`
+- 微程序控制的关键术语：
+  - `microinstruction`
+  - `microsequencing`
+  - `control store`
+  - `microsequencer`
+- `hardwired control` 与 `microprogrammed control` 都属于微体系结构实现问题，不属于 ISA 语义本身。
+- microprogramming 的考点：
+  - 用控制存储器保存每个状态的控制信号。
+  - 每个状态可对应一条微指令。
+  - 微代码可用于扩展指令、实现复杂操作、修复部分硬件问题。
+- 多周期设计的局限：并发性不足，很多硬件资源在某些阶段空闲。
+- 流水线的基本动机：让不同指令同时占用不同阶段，提高吞吐率而不是单条指令语义。
+- 流水线的经典阶段：`IF`, `ID/RF`, `EX`, `MEM`, `WB`。
