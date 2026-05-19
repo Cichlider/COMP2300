@@ -1,0 +1,157 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 7.5 Practice Exam Solutions}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Part A: Multiple Choice}
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item B
+  \item B
+  \item B
+  \item B
+  \item B
+  \item C
+  \item A
+  \item B
+  \item C
+  \item B
+\end{enumerate}
+
+\section*{Part B: Computational Problems}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{Hit and miss rates}
+  \begin{enumerate}[label=(\alph*)]
+    \item
+    \[
+      \text{Miss Rate} = \frac{40}{500} = 0.08 = 8\%
+    \]
+    \item
+    \[
+      \text{Hit Rate} = 1 - 0.08 = 0.92 = 92\%
+    \]
+  \end{enumerate}
+
+  \item \textbf{Address breakdown}
+  \begin{enumerate}[label=(\alph*)]
+    \item Block size is 8 bytes:
+    \[
+      \log_2 8 = 3
+    \]
+    So there are 3 offset bits.
+    \item Four sets require:
+    \[
+      \log_2 4 = 2
+    \]
+    So there are 2 set-index bits.
+    \item In a 16-bit address:
+    \[
+      16 - 3 - 2 = 11
+    \]
+    So 11 tag bits remain.
+  \end{enumerate}
+
+  \item \textbf{Direct-mapped placement}
+  \begin{enumerate}[label=(\alph*)]
+    \item
+    \[
+      0x34 = 0011\,0100_2
+    \]
+    Low 5 bits are:
+    \[
+      10100
+    \]
+    \item Offset is the low 3 bits:
+    \[
+      100_2
+    \]
+    \item Set index is the next 2 bits:
+    \[
+      10_2
+    \]
+    which is set 2.
+  \end{enumerate}
+
+  \item \textbf{Cache benefit calculation}
+  \begin{enumerate}[label=(\alph*)]
+    \item At 25\% hit rate:
+    \[
+      AAT = (0.25)(1) + (0.75)(4) = 0.25 + 3 = 3.25
+    \]
+    \item At 50\% hit rate:
+    \[
+      AAT = (0.50)(1) + (0.50)(4) = 0.5 + 2 = 2.5
+    \]
+    \item Compare with 3 cycles when disabled:
+    \begin{itemize}[leftmargin=1.5em]
+      \item 25\% hit rate: \(3.25 > 3\), so \textbf{not beneficial}
+      \item 50\% hit rate: \(2.5 < 3\), so \textbf{beneficial}
+    \end{itemize}
+  \end{enumerate}
+
+  \item \textbf{SRAM vs DRAM reasoning}
+  \begin{enumerate}[label=(\alph*)]
+    \item SRAM is preferred for caches because it is fast and does not need refresh, which makes it suitable for latency-critical on-chip storage.
+    \item DRAM is preferred for large main memory because it has much higher density and lower cost per bit, even though it is slower and requires refresh.
+  \end{enumerate}
+
+  \item \textbf{Write-policy comparison}
+  \begin{enumerate}[label=(\alph*)]
+    \item \textbf{write-through vs write-back}
+    \begin{itemize}[leftmargin=1.5em]
+      \item write-through advantage: lower-level memory is always up to date
+      \item write-through tradeoff: more write traffic
+      \item write-back advantage: fewer lower-level writes on repeated updates
+      \item write-back tradeoff: more complexity and dirty-line management
+    \end{itemize}
+    \item \textbf{write-allocate vs no-write-allocate}
+    \begin{itemize}[leftmargin=1.5em]
+      \item write-allocate advantage: useful if the block will be written/read again soon
+      \item write-allocate tradeoff: may bring in data that is not reused
+      \item no-write-allocate advantage: avoids filling cache on one-off write misses
+      \item no-write-allocate tradeoff: later accesses may miss again
+    \end{itemize}
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{Cache enable decision}
+  \\[0.5ex]
+  Let hit rate be \(h\). Then:
+  \[
+    AAT = h(1) + (1-h)(4) = 4 - 3h
+  \]
+  Cache is beneficial when:
+  \[
+    4 - 3h < 3
+  \]
+  \[
+    -3h < -1
+  \]
+  \[
+    h > \frac{1}{3}
+  \]
+  So the cache is beneficial when hit rate is greater than \(33.\overline{3}\%\).
+
+  \item \textbf{Levels in the memory hierarchy}
+  \\[0.5ex]
+  One reasonable ordering is:
+  \[
+    \text{Registers} \rightarrow \text{L1} \rightarrow \text{L2} \rightarrow \text{L3} \rightarrow \text{DRAM} \rightarrow \text{Disk/Flash}
+  \]
+  Lower levels are larger but slower because technology optimized for density and low cost per bit generally has longer access latency and is further from the CPU.
+
+  \item \textbf{Cache misses in pipelined execution}
+  \\[0.5ex]
+  Long-latency cache misses create large stalls if the processor can only wait in order. Later out-of-order designs try to overlap other independent instructions and even multiple memory requests while a miss is being serviced, which is why memory-level parallelism becomes valuable once cache-miss latency is significant.
+\end{enumerate}
+
+\end{document}

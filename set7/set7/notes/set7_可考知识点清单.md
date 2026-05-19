@@ -1,0 +1,79 @@
+# Set 7 可考知识点清单
+
+- 流水线的目标：
+  - 提高 throughput，而不是保证降低单条指令 latency。
+- 两类并行性：
+  - `spatial parallelism`
+  - `temporal parallelism`（pipelining）
+- 经典 5 级流水线：
+  - `F`, `D/RF`, `E`, `M`, `W`
+- pipeline registers / PPR：
+  - 保存阶段结果；
+  - 保存随指令同行的控制信号和目的寄存器编号。
+- 性能指标：
+  - `CPI = cycles / instructions`
+  - `IPC = instructions / cycles`
+- 理想单发射 5 级流水线：
+  - 长程序中理想 `IPC` 接近 1；
+  - 初始 fill 与结束 drain 会拉低短程序表现。
+- hazards 三分类：
+  - structural
+  - data
+  - control
+- 重要区分：
+  - dependence 是程序本身的性质；
+  - hazard 是微体系结构实现时暴露出来的问题。
+- 本讲最重要的数据冒险：
+  - `RAW`
+- software interlocking：
+  - 插入 `NOP`
+  - 或重排独立指令
+- forwarding / bypassing：
+  - 从 `M/W` 阶段把结果直接送回需要它的 `E` 阶段；
+  - 不必等写回寄存器文件。
+- forwarding 的典型匹配思路：
+  - 比较 `RA1E/RA2E` 与 `WA3M/WA3W`
+- `load-use hazard`：
+  - 即使有 forwarding 也常常需要 stall；
+  - 原因是 load 数据直到 `MEM` 末尾才可用。
+- stall 的效果：
+  - 停住当前阶段和前面阶段；
+  - 在后面注入一个 bubble。
+- bubble：
+  - 一条空操作占位，会继续沿流水线往后流。
+- load-use 检测思路：
+  - Decode 阶段的源寄存器是否匹配 Execute 阶段 load 的目的寄存器。
+- control hazards 的来源：
+  - branch
+  - 普通指令写 `PC`
+- 静态分支预测：
+  - always untaken
+  - always taken
+- early branch resolution：
+  - 若在 `EX` 解决 branch，可降低 misprediction penalty。
+- 课件中的典型 penalty 变化：
+  - 原始较晚解析：4 cycles
+  - 提前到 `EX`：2 cycles
+- stall / flush 逻辑常见信号：
+  - `StallF`
+  - `StallD`
+  - `FlushD`
+  - `FlushE`
+- superscalar：
+  - 一拍发射多条；
+  - 理想 `IPC` 可大于 1；
+  - 代价是更多资源复制和更高控制复杂度。
+- dynamic branch prediction：
+  - 根据近期行为预测方向。
+- `BHT`：
+  - 存分支方向历史。
+- `BTB`：
+  - 存 taken branch 的目标地址。
+- one-bit predictor：
+  - 记录最近一次 taken / untaken；
+  - 对 loop termination 容易表现不好。
+- Smith predictor / 2-bit saturating counter：
+  - `SN`, `WN`, `WT`, `ST`
+  - 通过“惯性”降低偶发方向翻转带来的误判。
+- correlating predictor：
+  - 利用不同分支之间的相关性。

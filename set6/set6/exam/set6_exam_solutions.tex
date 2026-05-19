@@ -1,0 +1,148 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 6 Practice Exam Solutions}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Part A: Multiple Choice}
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item B
+  \item C
+  \item A
+  \item C
+  \item B
+  \item C
+  \item B
+  \item C
+  \item C
+  \item B
+\end{enumerate}
+
+\section*{Part B: Computational Problems}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{Branch target address}
+  \begin{enumerate}[label=(\alph*)]
+    \item
+    \[
+      0x000005 \ll 2 = 0x000014
+    \]
+    \item Since the value is positive, sign extension leaves it unchanged:
+    \[
+      \texttt{ExtImm} = 0x00000014
+    \]
+    \item ARM branch rule:
+    \[
+      \texttt{BTA} = (\texttt{PC}+8) + \texttt{ExtImm}
+    \]
+    Hence:
+    \[
+      \texttt{PC}+8 = 0x2048
+    \]
+    \[
+      \texttt{BTA} = 0x2048 + 0x14 = 0x205C
+    \]
+  \end{enumerate}
+
+  \item \textbf{Register roles in a call}
+  \begin{enumerate}[label=(\alph*)]
+    \item \texttt{LR} holds the return address after \texttt{BL foo}.
+    \item In the lecture convention, \texttt{R0} and \texttt{R1} are caller-saved / non-preserved argument-temporary registers.
+    \item The caller must save them before the call, for example by copying them elsewhere or pushing them on the stack.
+  \end{enumerate}
+
+  \item \textbf{Stack-pointer updates}
+  \begin{enumerate}[label=(\alph*)]
+    \item Three 32-bit registers are pushed:
+    \[
+      \texttt{SP} = 0x1000 - 12 = 0x0FF4
+    \]
+    \item Two 32-bit locals require 8 more bytes:
+    \[
+      \texttt{SP} = 0x0FF4 - 8 = 0x0FEC
+    \]
+    \item Deallocate locals:
+    \[
+      0x0FEC + 8 = 0x0FF4
+    \]
+    Then pop 3 registers:
+    \[
+      0x0FF4 + 12 = 0x1000
+    \]
+    Final \texttt{SP} is \texttt{0x1000}.
+  \end{enumerate}
+
+  \item \textbf{Prologue and epilogue reasoning}
+  \begin{enumerate}[label=(\alph*)]
+    \item Because the function makes a nested call, a new \texttt{BL} will overwrite \texttt{LR}. If the current function wants to return correctly, it must preserve the old \texttt{LR}.
+    \item \texttt{R4} and \texttt{R7} are callee-saved in the course convention, so if the function modifies them, it must save and later restore them.
+    \item One possible answer is:
+\begin{verbatim}
+PUSH {R4, R7, LR}
+...
+POP  {R4, R7, LR}
+MOV  PC, LR
+\end{verbatim}
+  \end{enumerate}
+
+  \item \textbf{Stack frames in recursion}
+  \begin{enumerate}[label=(\alph*)]
+    \item Active calls for \(n=3,2,1\) means 3 active stack frames.
+    \item Each call pushes two 32-bit registers:
+    \[
+      2 \times 4 = 8 \text{ bytes per frame}
+    \]
+    Total:
+    \[
+      3 \times 8 = 24 \text{ bytes}
+    \]
+    \item
+    \[
+      \texttt{SP} = 0x8000 - 24 = 0x7FE8
+    \]
+  \end{enumerate}
+
+  \item \textbf{Caller-save vs callee-save}
+  \begin{enumerate}[label=(\alph*)]
+    \item \texttt{main} is responsible for preserving the old value of \texttt{R2}, because \texttt{R2} is a caller-saved register in the lecture convention.
+    \item \texttt{f} is responsible for preserving \texttt{R4} and \texttt{R5} if it modifies them, because they are callee-saved.
+    \item When \texttt{f} calls \texttt{g}, the new \texttt{BL} to \texttt{g} will overwrite \texttt{LR}. Therefore \texttt{f} must save its own return address first.
+    \item It is more efficient because only registers that matter to the current caller/callee interaction are saved. Many calls do not use every register, so unconditional full save/restore wastes time and stack space.
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{Functions with stack support}
+  \begin{enumerate}[label=(\alph*)]
+    \item A link register stores the return address without forcing every call to access memory immediately.
+    \item Stack push/pop support provides a structured way to save registers, locals, arguments beyond register capacity, and return information.
+    \item A branch-and-link instruction combines control transfer with return-address capture, which is exactly what function calls need.
+  \end{enumerate}
+
+  \item \textbf{Calling convention design}
+  \\[0.5ex]
+  One valid design:
+  \begin{itemize}[leftmargin=1.5em]
+    \item \texttt{r0-r1}: caller-saved / argument / return / temporaries
+    \item \texttt{r2-r3}: callee-saved
+  \end{itemize}
+  Justification:
+  \begin{itemize}[leftmargin=1.5em]
+    \item Fast-changing temporaries should be caller-saved because many small functions use them briefly.
+    \item Longer-lived values benefit from callee-saved behavior so callers do not have to save them repeatedly.
+  \end{itemize}
+  Any convention with a clear, internally consistent contract earns full credit.
+
+  \item \textbf{Returning without a link register}
+  \\[0.5ex]
+  If there is no dedicated link register, the caller (or callee prologue) must save the return address explicitly on the stack at call time. The called function then restores that saved address before returning and transfers control back to it, for example by loading it into the program counter or by branching indirectly through a general-purpose register holding the saved address.
+\end{enumerate}
+
+\end{document}

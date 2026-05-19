@@ -1,0 +1,66 @@
+# Set 6 可考知识点清单
+
+- 分支目标地址计算：
+  - `BTA = (PC + 8) + sign-extend(imm24 << 2)`
+  - `imm24` 先左移 2 位，再做符号扩展。
+- `BL`（Branch and Link）的本质：
+  - 跳转到目标地址；
+  - 把返回地址保存到 `LR`。
+- 返回的核心语义：
+  - 把 `LR` 写回 `PC`。
+  - 课程 slides 用 `MOV PC, LR` 说明这一点。
+- 参数与返回值约定：
+  - 前四个参数：`R0-R3`
+  - 返回值：`R0`
+- 常见寄存器角色：
+  - `R4-R11`：preserved / saved registers
+  - `R12`：temporary
+  - `R13`：`SP`
+  - `R14`：`LR`
+  - `R15`：`PC`
+- 为什么需要 stack：
+  - 保存/恢复寄存器
+  - 传递额外参数
+  - 存放局部变量和临时空间
+- 栈的基本抽象：
+  - `LIFO`
+  - 需要内存 + 栈指针 `SP`
+- 栈的分类：
+  - `ascending` / `descending`
+  - `full` / `empty`
+- ARM 在本课程中的栈模型：
+  - 栈向低地址增长
+  - `SP` 指向栈顶
+  - 从考试角度按 full-descending 直觉掌握最稳妥
+- 32-bit ARM 中的栈空间变化：
+  - 压入 1 个寄存器，`SP` 变化 4 字节
+  - 压入 `n` 个寄存器，`SP` 变化 `4n` 字节
+- `push` / `pop` 的底层本质：
+  - `push` = 调整 `SP` + 写内存
+  - `pop` = 读内存 + 调整 `SP`
+- `live register`：
+  - 之后还会被使用的寄存器值，调用前若可能被破坏，就必须保存。
+- calling convention 的作用：
+  - 规定 caller 与 callee 各自负责保护哪些寄存器；
+  - 让不同函数与不同编译器产出的代码能互相调用。
+- `caller-save` 规则：
+  - caller 若还需要某些 non-preserved 寄存器，必须在调用前自己保存。
+- `callee-save` 规则：
+  - callee 若要修改 preserved 寄存器，必须先保存，返回前恢复。
+- 典型函数结构：
+  - prologue：分配栈空间、保存寄存器
+  - body：执行计算
+  - epilogue：恢复寄存器、回收空间、返回
+- `stack frame` / `activation record`：
+  - 某次函数调用在栈上占用的局部空间。
+- `call stack`：
+  - 程序执行时所有活动栈帧的集合。
+- `ABI`：
+  - calling convention 不属于 ISA，而属于 ABI / procedure-call interface。
+- 递归函数：
+  - 同时是 caller 和 callee；
+  - 每次递归调用都产生新的 stack frame。
+- factorial 例子的关键理解：
+  - 递归调用前要保存 `LR`；
+  - 如果递归返回后还需要旧参数 `n`，就必须额外保存 `R0`；
+  - 每一层返回时都要按相反顺序恢复现场。

@@ -1,0 +1,188 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 6 Practice Exam}
+\author{Topics: Branch-and-Link, Calling Conventions, Stack, ABI, Recursion}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Time:} 120 minutes \hfill
+\textbf{Total:} 100 marks
+
+\vspace{0.5em}
+\noindent\textbf{Instructions}
+\begin{itemize}[leftmargin=1.5em]
+  \item Answer in English.
+  \item Part A is concept-focused multiple choice.
+  \item Part B contains computational and trace-based questions.
+  \item Part C contains adapted past-exam style questions with sources.
+  \item Assume 32-bit ARM unless stated otherwise.
+\end{itemize}
+
+\section*{Part A: Multiple Choice (30 marks, 3 marks each)}
+Choose exactly one option for each question.
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item The main extra job performed by \texttt{BL} compared with a regular branch is to:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Zero the stack pointer
+    \item Save the return address in \texttt{LR}
+    \item Save all caller registers automatically
+    \item Write the target into \texttt{R0}
+  \end{enumerate}
+
+  \item In the course convention, the first four function arguments are typically passed in:
+  \begin{enumerate}[label=(\Alph*)]
+    \item \texttt{R4-R7}
+    \item \texttt{R8-R11}
+    \item \texttt{R0-R3}
+    \item \texttt{R12-R15}
+  \end{enumerate}
+
+  \item Which register conventionally holds a function return value?
+  \begin{enumerate}[label=(\Alph*)]
+    \item \texttt{R0}
+    \item \texttt{R4}
+    \item \texttt{R12}
+    \item \texttt{LR}
+  \end{enumerate}
+
+  \item Which statement about the stack in the lecture material is correct?
+  \begin{enumerate}[label=(\Alph*)]
+    \item It is a FIFO queue
+    \item It is used only for recursion
+    \item It is used to save registers, pass extra arguments, and hold local data
+    \item It is part of the ISA but not the ABI
+  \end{enumerate}
+
+  \item Which pair best describes the division of responsibility in a calling convention?
+  \begin{enumerate}[label=(\Alph*)]
+    \item Hardware-save and software-save
+    \item Caller-save and callee-save
+    \item Decode-save and execute-save
+    \item Stack-save and heap-save
+  \end{enumerate}
+
+  \item Which register is the stack pointer?
+  \begin{enumerate}[label=(\Alph*)]
+    \item \texttt{R11}
+    \item \texttt{R12}
+    \item \texttt{R13}
+    \item \texttt{R14}
+  \end{enumerate}
+
+  \item Which statement about \texttt{ABI} is correct?
+  \begin{enumerate}[label=(\Alph*)]
+    \item It is identical to the ISA
+    \item It includes procedure-call rules such as calling convention
+    \item It is only about cache organization
+    \item It defines transistor-level behavior
+  \end{enumerate}
+
+  \item A recursive function is always:
+  \begin{enumerate}[label=(\Alph*)]
+    \item A leaf function
+    \item A function with no local variables
+    \item A non-leaf function that calls itself
+    \item A function that does not use the stack
+  \end{enumerate}
+
+  \item Which of the following is preserved across a correct function call under a calling convention?
+  \begin{enumerate}[label=(\Alph*)]
+    \item Every temporary register automatically
+    \item Every argument register automatically
+    \item Any callee-saved register that the callee uses, after it is restored
+    \item The entire data memory
+  \end{enumerate}
+
+  \item A stack frame is:
+  \begin{enumerate}[label=(\Alph*)]
+    \item The set of all registers in the CPU
+    \item The portion of stack space allocated for one active function call
+    \item The instruction encoding of \texttt{BL}
+    \item The branch target address
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part B: Computational Problems (50 marks)}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{Branch target address (8 marks)}\\
+  An instruction at address \texttt{0x2040} is a branch with \texttt{imm24 = 0x000005}.
+  \begin{enumerate}[label=(\alph*)]
+    \item Compute \texttt{imm24 << 2}.
+    \item Compute the sign-extended offset.
+    \item Compute the branch target address using the ARM rule from the lecture.
+  \end{enumerate}
+
+  \item \textbf{Register roles in a call (8 marks)}\\
+  Consider the function call:
+\begin{verbatim}
+MOV R0, #10
+MOV R1, #20
+BL foo
+\end{verbatim}
+  The caller still needs the old values of \texttt{R0} and \texttt{R1} after the call.
+  \begin{enumerate}[label=(\alph*)]
+    \item Which register holds the return address after \texttt{BL foo}?
+    \item Are \texttt{R0} and \texttt{R1} caller-saved or callee-saved in the lecture convention?
+    \item What must the caller do before the call if it still needs those values afterwards?
+  \end{enumerate}
+
+  \item \textbf{Stack-pointer updates (8 marks)}\\
+  Assume the stack is full descending and initially \texttt{SP = 0x1000}.
+  \begin{enumerate}[label=(\alph*)]
+    \item What is \texttt{SP} after \texttt{PUSH \{R4, R5, LR\}}?
+    \item What is \texttt{SP} after then executing \texttt{SUB SP, SP, \#8} for two 32-bit locals?
+    \item If the function later executes \texttt{ADD SP, SP, \#8} and \texttt{POP \{R4, R5, LR\}}, what is the final \texttt{SP}?
+  \end{enumerate}
+
+  \item \textbf{Prologue and epilogue reasoning (8 marks)}\\
+  A function uses registers \texttt{R4} and \texttt{R7}, returns in \texttt{R0}, and makes a nested function call.
+  \begin{enumerate}[label=(\alph*)]
+    \item Explain why \texttt{LR} must be preserved.
+    \item Which of \texttt{R4} and \texttt{R7} must be saved if the function modifies them?
+    \item Write a possible prologue and epilogue using \texttt{PUSH}/\texttt{POP}.
+  \end{enumerate}
+
+  \item \textbf{Stack frames in recursion (8 marks)}\\
+  A recursive function saves \texttt{R0} and \texttt{LR} using \texttt{PUSH \{R0, LR\}} on each call.
+  Assume the initial \texttt{SP = 0x8000} and the function is called with \texttt{n = 3}, leading to active calls for \texttt{n=3}, \texttt{n=2}, and \texttt{n=1}.
+  \begin{enumerate}[label=(\alph*)]
+    \item How many active stack frames exist at the deepest point?
+    \item How many bytes have been consumed by those saves alone?
+    \item What is \texttt{SP} at the deepest point?
+  \end{enumerate}
+
+  \item \textbf{Caller-save vs callee-save (10 marks)}\\
+  Suppose function \texttt{main} stores a useful temporary in \texttt{R2}, calls \texttt{f}, and later still needs the old value of \texttt{R2}. Function \texttt{f} modifies \texttt{R4}, \texttt{R5}, and \texttt{R2}, and then calls \texttt{g}.
+  \begin{enumerate}[label=(\alph*)]
+    \item Which function is responsible for preserving the old value of \texttt{R2} across the call to \texttt{f}?
+    \item Which function is responsible for preserving \texttt{R4} and \texttt{R5} if \texttt{f} changes them?
+    \item Why is \texttt{f} also responsible for preserving \texttt{LR} before calling \texttt{g}?
+    \item Briefly explain why this division of responsibility is more efficient than ``save every register every time''.
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions (Source-Tagged) (20 marks)}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{Functions with stack support (Source: 2023\_Final\_Exam\_SuppDA.pdf, Part A, adapted) (6 marks)}\\
+  A teaching ISA is extended with \texttt{sp}, \texttt{lr}, \texttt{push}, \texttt{pop}, \texttt{bl}, and \texttt{bx lr}. Explain why each of the following is useful for implementing functions:
+  \begin{enumerate}[label=(\alph*)]
+    \item An explicit link register
+    \item Stack push/pop support
+    \item A branch-and-link style call instruction
+  \end{enumerate}
+
+  \item \textbf{Calling convention design (Source: 2023\_Final\_Exam\_SuppDA.pdf, Part A, adapted) (7 marks)}\\
+  Suppose a simple ISA has a function \texttt{mul} that may clobber registers. Propose a small calling convention for four general-purpose registers and state clearly which are caller-saved and which are callee-saved. Briefly justify your design.
+
+  \item \textbf{Returning without a link register (Source: 2023\_Final\_Exam.pdf, Q1A, adapted) (7 marks)}\\
+  Explain how functions can still be implemented in an ISA that has a stack pointer but no dedicated link register. What must be saved on the stack at call time, and how is the return performed?
+\end{enumerate}
+
+\end{document}

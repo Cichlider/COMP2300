@@ -1,0 +1,104 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 8 Practice Exam Solutions}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Part A: Multiple Choice}
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item C
+  \item B
+  \item B
+  \item B
+  \item C
+  \item C
+  \item B
+  \item C
+  \item B
+  \item B
+\end{enumerate}
+
+\section*{Part B: Computational / Reasoning Problems}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{Classifying dependences}
+  \begin{itemize}[leftmargin=1.5em]
+    \item \texttt{i1 -> i2}: \textbf{RAW}, because \texttt{i2} reads \texttt{R2} produced by \texttt{i1}.
+    \item \texttt{i3 -> i4}: \textbf{RAW}, because \texttt{i4} uses the updated \texttt{R6} as a base register.
+    \item \texttt{i5 -> i6}: \textbf{WAW}, because both write \texttt{R2}.
+  \end{itemize}
+
+  \item \textbf{Renaming to remove false dependences}
+  \\[0.5ex]
+  One valid answer is:
+\begin{verbatim}
+i1: ADD T0, R2, R3
+i2: SUB T1, R4, R5
+i3: ADD R6, T0, R7
+i4: MUL R2, R8, R9
+\end{verbatim}
+  Explanation:
+  \begin{itemize}[leftmargin=1.5em]
+    \item \texttt{i1} originally wrote \texttt{R1}; renaming it to \texttt{T0} still lets \texttt{i3} read the correct value.
+    \item \texttt{i2} writes a value that would otherwise create naming conflicts with later uses of \texttt{R2}; renaming it to \texttt{T1} removes a false name dependence.
+    \item The true dependence from the producer used by \texttt{i3} is preserved.
+  \end{itemize}
+  Any correct renaming that removes false dependences while preserving true dataflow earns full credit.
+
+  \item \textbf{ROB allocation and retirement order}
+  \begin{enumerate}[label=(\alph*)]
+    \item \texttt{ROB0} belongs to the oldest instruction.
+    \item No. Finishing execution and retiring are different. Retirement must happen in program order.
+    \item \texttt{ROB0} and then \texttt{ROB1} must retire before \texttt{ROB2} may retire.
+  \end{enumerate}
+
+  \item \textbf{Speculation and precise exceptions}
+  \begin{enumerate}[label=(\alph*)]
+    \item If younger instructions write directly into the architectural register file before the older load faults, the visible state may already contain effects of instructions that should not have committed yet. That makes the exception imprecise.
+    \item In a ROB design, younger speculative results stay in the ROB until they retire in order. If the older load faults, the younger results can be discarded instead of having polluted the committed architectural state.
+  \end{enumerate}
+
+  \item \textbf{Load/store reordering}
+  \begin{enumerate}[label=(\alph*)]
+    \item Safe, because the addresses are known to be different, so memory ordering between them does not affect program meaning.
+    \item Not safe, because the load could observe the wrong value if it passes the store to the same address.
+    \item Not safely reorderable yet, because the machine cannot prove non-aliasing without the older store address.
+  \end{enumerate}
+
+  \item \textbf{OOO overlap on a cache miss}
+  \begin{enumerate}[label=(\alph*)]
+    \item The dependent ADD must wait, because it has a true dependence on the load result.
+    \item The two independent arithmetic instructions and the ready younger branch may still issue in an OOO design, subject to resource availability and speculation policy.
+    \item In a strict in-order design, the front of the machine is typically blocked by the older stalled instruction, so younger independent work cannot bypass it.
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{Register renaming}
+  \\[0.5ex]
+  Register renaming assigns distinct physical / speculative names to different writes that would otherwise share the same architectural register name. This removes false dependences such as WAR and WAW, because unrelated instructions no longer appear to fight over the same register name. True dependences remain because consumers are linked to the specific producing version they actually need. This helps OOO execution by increasing the number of instructions that can proceed independently.
+
+  \item \textbf{OOO pipeline issues addressed by ARF+ROB}
+  \\[0.5ex]
+  Four acceptable issues are:
+  \begin{itemize}[leftmargin=1.5em]
+    \item WAR false dependences
+    \item WAW false dependences
+    \item inability to recover cleanly from branch misprediction / misspeculation
+    \item imprecise exceptions / interrupts
+  \end{itemize}
+  Other equivalent phrasings about recovery and speculative-state management are also valid.
+
+  \item \textbf{Issue queue and dynamic scheduling}
+  \\[0.5ex]
+  The issue queue stores instructions that have been decoded but are waiting for operands or execution resources. The scheduler can select ready instructions out of order, so a long-latency miss does not necessarily block all younger independent instructions. This improves ILP and helps tolerate misses much better than a simple in-order pipeline.
+\end{enumerate}
+
+\end{document}

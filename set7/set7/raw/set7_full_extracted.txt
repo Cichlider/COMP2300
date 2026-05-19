@@ -1,0 +1,5158 @@
+===== PAGE 1 =====
+Convener: Shoaib Akram
+shoaib.akram@anu.edu.au
+
+===== PAGE 2 =====
+General Idea of
+Pipelining
+1
+
+===== PAGE 3 =====
+Speed of a Circuit
+§ A digital circuit processes a group of inputs (task) and produces
+a group of outputs
+tpd
+inputs Digital
+Circuit
+outputs
+§ Latency: Time required to produce one group of outputs
+§ Throughput: Number of input groups processed per unit of time
+§ Parallelism is a key technique for increasing throughput and processing
+several inputs at the same time
+2
+
+===== PAGE 4 =====
+Spatial Parallelism
+§ Spatial Parallelism: Use multiple copies of hardware
+(circuit) to get multiple tasks done at the same time
+Arbitrary
+Circuit
+Arbitrary
+Circuit
+Arbitrary
+Circuit
+Arbitrary
+Circuit
+§ Suppose a task has a latency of L second
+§ No spatial parallelism: Throughput is 1/L (one task per L second)
+§ N copies of hardware: Throughput is N/L (N tasks per L second)
+§ Gain in throughput (speedup) = N
+3
+
+===== PAGE 5 =====
+Spatial Parallelism does not reduce the
+latency of the circuit. We can finish more
+tasks per unit of time. But each task still
+takes L seconds
+4
+
+===== PAGE 6 =====
+Pipelining
+§ Temporal Parallelism (pipelining):
+§ Break down a circuit into stages
+§ Each task passes through all stages
+§ Multiple tasks are spread through stages
+§ If a task of latency L is broken into M stages, and all stages are of equal length,
+then the throughput is M/L
+Arbitrary
+Circuit
+Arbitrary
+Circuit
+Tc
+Tc
+§ The challenge of pipelining is to find stages of equal length
+5
+
+===== PAGE 7 =====
+Cookie Parallelism
+§ What is the latency and throughput for a tray of cookies?
+§ Step 1: Roll cookies (5 minutes)
+§ Step 2: Bake in the oven (15 minutes)
+§ Once cookies are baked, start another tray
+§ Latency (hours/tray):
+§ Throughput (trays/hour):
+6
+
+===== PAGE 8 =====
+Cookie Parallelism: Scenarios
+§ Ben and Jon are making cookies. Let’s study the latency and
+throughput of rolling and baking many cookie trays with
+§ No parallelism
+§ Spatial parallelism
+§ Pipelining
+§ Spatial parallelism + pipelining
+7
+
+===== PAGE 9 =====
+No Parallelism (Ben Only)
+0
+5 10 15 20 25
+30 35 40 45 50 55 60
+Time (mins)
+Ben 1
+Ben 1
+Ben 2 Ben 2
+Ben 3 Ben 3
+Latency (hours/tray):
+Throughput (trays/hour):
+8
+
+===== PAGE 10 =====
+Spatial Parallelism (Ben & Jon)
+0
+5 10 15 20 25
+30 35 40 45 50 55
+60
+Time (mins)
+Ben 1
+Ben 1
+Jon 1 Jon 1
+Ben 2 Ben 2
+Jon 2 Jon 2
+Ben 3 Ben 3
+Latency (hours/tray):
+Throughput (trays/hour):
+Jon 3 Jon 3
+Note: Jon owns a tray and oven (hardware duplication)
+9
+
+===== PAGE 11 =====
+Pipelining (Ben Only)
+0
+5 10 15 20 25
+30 35 40 45 50 55 60
+Time (mins)
+Ben 1
+Ben 1
+Ben 2 Ben 2
+Ben 3 Ben 3
+Ben 4
+Latency (hours/tray):
+Throughput (trays/hour):
+Note: Ben decides not to waste a separate tray and oven
+10
+
+===== PAGE 12 =====
+Spatial + Temporal Parallelism
+0
+5 10 15 20 25
+30 35 40 45 50 55
+60
+Time (mins)
+Ben 1
+Ben 1
+Jon 1 Jon 1
+Ben 2 Ben 2
+Jon 2 Jon 2
+Ben 3 Ben 3
+Jon 3 Jon 3
+Ben 4
+Latency (hours/tray):
+Throughput (trays/hour):
+Jon 4
+11
+
+===== PAGE 13 =====
+Answers Explained
+§ No parallelism
+§ Latency is clearly 20 minutes (1/3 hours/tray)
+§ Throughput is 3 trays per hour
+§ Spatial parallelism
+§ Latency remains unchanged as it still takes 20 mins to finish a tray
+§ Throughput is doubled via duplication: 6 trays per hour
+§ Pipelining
+§ Latency for a single tray remains unchanged
+§ Throughput: Ben puts a new tray in the oven every 15 minutes, so the
+throughput is 4 trays per hour
+§ Note that in the first hour, Ben loses 5 minutes to fill the pipeline
+§ Spatial parallelism + pipelining
+§ Latency remains unchanged
+§ Throughput: Ben & Jon combo puts two trays in the oven every 15
+minutes, so the throughput is 8 trays per hour
+12
+
+===== PAGE 14 =====
+Sequential Laundry
+6 PM
+Wash Dry Fold Hang
+8 PM
+Time
+Alice
+§ A new load begins every 2 hours
+Bob
+Tim
+13
+
+===== PAGE 15 =====
+6 PM
+6:30
+8 PM
+Pipelined Laundry
+Time
+Alice
+Bob
+Tim
+§ A new load begins every 30 mins à speedup of 4 14
+
+===== PAGE 16 =====
+Pipelining Circuits
+§ Divide a large combinational circuit into shorter stages
+§ Insert registers between the stages
+§ The outputs of one stage are copied into a register and communicated
+to the next stage
+§ Run the pipelined circuit at a higher clock frequency
+§ Each clock cycle, data flows through the pipeline from left to the right
+§ Multiple tasks can be spread across the pipeline
+15
+
+===== PAGE 17 =====
+Pipelined Microarchitecture
+16
+
+===== PAGE 18 =====
+Stages in “Instruction Processing”
+WRITEBACK
+FETCH DECODE/RF-READ EXECUTE
+Single-Cycle
+CLK
+19:16
+CLK
+PC'
+PC
+Instr
+RA1
+SrcA
+1
+0
+0
+1
+15
+3:0
+ALUResult MEM
+ACCESS
+CLK
+ReadDat a
+A RD
+Instructi on
+Memory
+0
+1
+RA2
+15:12
++
+PCPlus8 A1
+A2
+A3
+WD3
+R15
+WE3
+RD1
+RD2
+Register
+File
+ALU
+0
+1
+SrcB
+WriteData
+WE
+A RD
+Data
+Memory
+WD
+PCPlus4
++
+4
+4
+23:0
+CLK
+PC'
+PCF
+InstrF
+1
+0
+A RD
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+CLK
+19:16
+0
+RA1D
+SrcAE
+15
+3:0
+1
+0
+RA2D
+ALU
+ALUResultE 1
+15:12
+WA3D
+WriteDataE
+InstrD
+A1
+WE3
+RD1
+1
+0
+Result
+17
+ReadDat aW
+Instructi on
+Memory
+4
++
+PCPlus8 A2
+A3
+WD3
+R15
+RD2
+Register
+File
+0
+SrcBE
+1
+WE
+A RD
+Data
+Memory
+WD
+ALUOutM PCPlus4F
+ALUOutW
+1
+0
+
+===== PAGE 19 =====
+Pipelined Microarchitecture: Key Idea
+§ Multiple instructions (up to 5) can be in the pipeline in any
+cycle
+§ Each instruction can be in a different stage
+§ Idea is for “maximizing utilization” of hardware resources
+§ Stages must be isolated from one another using pipelined
+register (non-arch. registers). Referred to as “PPR”
+§ The work of a stage should be preserved in a PPR each cycle
+18
+
+===== PAGE 20 =====
+Key Idea (Continued)
+§ The work of a stage should be preserved in a PPR each cycle
+§ PPR acts as a source of data the next stage needs in a
+subsequent cycle
+§ If any subsequent stage down the pipeline needs data from an
+earlier stage it must be passed through the PPRs
+§ .... Things don’t always go smoothly as we shall see!
+19
+
+===== PAGE 21 =====
+Stages
+§ Fetch (F)
+§ Decode/RF-Read (D or DE/DEC or RF)
+§ Execute (E or EX)
+§ Memory (M or MEM)
+§ Writeback (W or WB)
+20
+
+===== PAGE 22 =====
+Pipeline Register Names
+§ PC is often referred to as the Fetch PPR
+CLK
+19:16
+Instr
+0
+1
+RA1
+15
+3:0
+0
+1
+RA2
+15:12
+WE3
+A1
+RD1
+A2
+RD2
+A3
+Register
+File
+WD3
+R15
+§ B/w Fetch and Decode: Decode PPR
+CLK
+1
+PC'
+PC
+A RD
+0
+Instructi on
+Memory
+4
++
+PCPlus4
++
+§ B/w Decode and Execute: Execute PPR
+4
+23:0
+PCPlus8 WE3
+A1
+RD1
+A2
+RD2
+A3
+Register
+File
+WD3
+R15
+Single-Cycle
+SrcA
+ALUResult CLK
+ReadDat a
+ALU
+0
+1
+SrcB
+WriteData
+WE
+A RD
+Data
+Memory
+WD
+§ Similarly, Memory PPR
+CLK
+PC'
+PCF
+InstrF
+InstrD
+1
+0
+A RD
+Instructi on
+Memory
++
+PCPlus4F
+4
+§ Writeback PPR
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+CLK
+19:16
+0
+RA1D
+SrcAE
+1
+0
+RA2D
+1
+WA3D
++
+PCPlus8 Extend
+15
+3:0
+ALU
+ALUResultE 15:12
+0
+1
+SrcBE
+WriteDataE
+WE
+A RD
+Data
+Memory
+WD
+4
+23:0
+ExtImmE
+Fetch Decode Execute ALUOutM Memory 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+21
+
+===== PAGE 23 =====
+Let’s complete the picture
+§ Start with the single-cycle microarchitecture
+§ And insert pipeline registers
+22
+
+===== PAGE 24 =====
+Single-Cycle
+CLK
+CLK
+CLK
+Instr
+19:16
+RA1
+SrcA
+1
+0
+PC'
+PC
+0
+1
+A RD
+Instructi on
+Memory
+15
+3:0
+0
+1
+RA2
+15:12
++
+PCPlus8 A1
+A2
+A3
+WD3
+R15
+WE3
+RD1
+RD2
+Register
+File
+ALU
+ALUResult 0
+1
+SrcB
+WriteData
+WE
+A RD
+Data
+Memory
+WD
+ReadDat a
++
+PCPlus4
+4
+4
+23:0
+1
+0
+Extend
+Ext Imm
+Result
+Pipelined
+CLK CLK CLK CLK
+§ Once we insert pipeline registers, we would need to
+CLK
+CLK
+CLK
+1
+PC'
+PCF
+InstrF
+InstrD
+19:16
+0
+RA1D
+WE3
+SrcAE
+WE
+A1
+RD1
+A RD
+15
+1
+ALUResultE 0
+pass the results of one stage to the next stage 3:0
+Instructi on
+0
+RA2D
+A2
+RD2
+0
+ALU
+A RD
+SrcBE
+Data
+ReadDat aW
+via the
+Memory
+1
+15:12
+WA3D
+1
+Memory
+pipeline registers
+A3
+Register
+File
+WriteDataE
+WD
+4
++
+PCPlus8 WD3
+R15
+1
+ALUOutW
+PCPlus4F
+0
++
+4
+23:0
+Extend
+Result W
+§ What is the outcome of the FETCH stage?
+Fetch Decode Execute Writeback
+ALUOutM ExtImmE
+Memory 23
+
+===== PAGE 25 =====
+Pipeline Microarchitecture
+Single-Cycle
+CLK
+CLK
+PC'
+Instr
+CLK
+19:16
+RA1
+SrcA
+1
+0
+PC
+0
+1
+A RD
+Instructi on
+Memory
+15
+3:0
+0
+1
+RA2
+15:12
++
+PCPlus8 A1
+A2
+A3
+WD3
+R15
+WE3
+RD1
+RD2
+Register
+File
+ALU
+ALUResult 0
+1
+SrcB
+WriteData
+WE
+A RD
+Data
+Memory
+WD
+ReadDat a
++
+PCPlus4
+4
+4
+23:0
+PC'
+CLK
+PCF
+InstrF
+1
+0
+A RD
+Instructi on
+Memory
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+CLK
+19:16
+0
+RA1D
+SrcAE
+1
+0
+RA2D
+1
+WA3D
+InstrD
+15
+3:0
+15:12
++
+PCPlus8 WE3
+A1
+RD1
+A2
+RD2
+A3
+Register
+File
+WD3
+R15
+ALU
+ALUResultE 0
+1
+SrcBE
+WriteDataE
+WE
+A RD
+Data
+Memory
+WD
++
+PCPlus4F
+4
+4
+23:0
+Extend
+ExtImmE
+Fetch Decode Execute ALUOutM Memory 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+24
+
+===== PAGE 26 =====
+1
+0
+PC'
+PC
+A RD
+Instructi on
+Memory
+Instr
+19:16
+15
+3:0
+15:12
+0
+1
+0
+1
+RA1
+RA2
+0
+1
+SrcA
+SrcB
+ALU
+ALUResult WriteData
+WE
+A RD
+Data
+Memory
+WD
+WE3
+A1
+RD1
+A2
+RD2
+A3
+Register
+WD3
+File
+4
++
+PCPlus8 R15
+PCPlus4
++
+Pipeline Microarchitecture
+4
+23:0
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+CLK
+19:16
+RA1D
+WE3
+SrcAE
+RD1
+0
+RA2D
+RD2
+1
+WA3D
+Register
+File
+ReadDat a
+1
+0
+PC'
+CLK
+PCF
+InstrF
+InstrD
+0
+1
+A RD
+Instructi on
+Memory
+15
+3:0
+15:12
++
+PCPlus8 A1
+A2
+A3
+WD3
+R15
+ALU
+ALUResultE 0
+1
+SrcBE
+WriteDataE
+WE
+A RD
+Data
+Memory
+WD
++
+PCPlus4F
+4
+4
+23:0
+Extend
+ExtImmE
+Execute ALUOutM Memory 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+Fetch Decode q Stages and their boundaries are indicated in blue
+q Signals are given a suffix (F, D, E, M, or W) to indicate the stage in
+which they reside
+25
+
+===== PAGE 27 =====
+Pipeline Operation
+§ Consider the example instruction sequence
+I1: ADD R0, R5, #10
+I2: ADD R1, R5, #10
+I3: ADD R2, R5, #10
+I4: STR R0, [R7, #4]
+I5: STR R1, [R7, #8]
+I6: STR R2, [R7, #12]
+26
+
+===== PAGE 28 =====
+CLK
+A1
+WE3
+RD1
+SrcA
+WE
+4
+Single-Cycle
+CLK
+CLK
+1
+PC'
+PC
+Instr
+19:16
+0
+RA1
+A RD
+0
+15
+3:0
+1
+Instructi on
+0
+RA2
+ALU
+ALUResult A2
+RD2
+0
+SrcB
+Memory
+1
+15:12
+1
+A3
+Register
+Pipeline Operation: Cycle 1
+WriteData
+WD3
+File
+4
++
+PCPlus8 R15
+PCPlus4
++
+23:0
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+CLK
+19:16
+0
+RA1D
+WE3
+SrcAE
+A1
+RD1
+1
+0
+RA2D
+A2
+RD2
+ALU
+ALUResultE 1
+WA3D
+A3
+Register
+File
+WriteDataE
+WD3
+R15
+ReadDat a
+A RD
+Data
+Memory
+WD
+CLK
+PC'
+PCF
+InstrF
+InstrD
+1
+0
+A RD
+Instructi on
+Memory
+15
+3:0
+15:12
+0
+1
+SrcBE
+WE
+A RD
+Data
+Memory
+WD
+4
+23:0
++
+PCPlus8 +
+PCPlus4F
+4
+Extend
+ExtImmE
+Decode Fetch I1
+q Is the pipeline fully utilized? Execute ALUOutM Memory 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+NO
+27
+
+===== PAGE 29 =====
+CLK
+A1
+WE3
+RD1
+SrcA
+WE
+4
+Single-Cycle
+CLK
+CLK
+1
+PC'
+PC
+Instr
+19:16
+0
+RA1
+A RD
+0
+15
+3:0
+1
+Instructi on
+0
+RA2
+ALU
+ALUResult A2
+RD2
+0
+SrcB
+Memory
+1
+15:12
+1
+A3
+Register
+Pipeline Operation: Cycle 2
+WriteData
+WD3
+File
+4
++
+PCPlus8 R15
+PCPlus4
++
+23:0
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+CLK
+19:16
+RA1D
+WE3
+SrcAE
+A1
+RD1
+A2
+RD2
+ALU
+ALUResultE A3
+Register
+File
+WriteDataE
+WD3
+R15
+ReadDat a
+A RD
+Data
+Memory
+WD
+CLK
+PC'
+PCF
+InstrF
+InstrD
+1
+0
+0
+1
+A RD
+Instructi on
+Memory
+15
+3:0
+15:12
+0
+1
+RA2D
+WA3D
+0
+1
+SrcBE
+WE
+A RD
+Data
+Memory
+WD
+4
+23:0
++
+PCPlus8 PCPlus4F
++
+4
+Extend
+ExtImmE
+Fetch Decode I2 I1
+Execute ALUOutM Memory 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+q Is the pipeline fully utilized? NO
+28
+
+===== PAGE 30 =====
+CLK
+A1
+WE3
+RD1
+WE
+4
+Single-Cycle
+CLK
+CLK
+1
+PC'
+PC
+Instr
+19:16
+0
+RA1
+SrcA
+A RD
+0
+15
+3:0
+1
+Instructi on
+0
+RA2
+ALU
+ALUResult A2
+RD2
+0
+SrcB
+Memory
+1
+15:12
+1
+A3
+Register
+Pipeline Operation: Cycle 3
+WriteData
+WD3
+File
+4
++
+PCPlus8 R15
+PCPlus4
++
+23:0
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+19:16
+RA1D
+WE3
+SrcAE
+RD1
+RD2
+Register
+File
+ReadDat a
+A RD
+Data
+Memory
+WD
+CLK
+CLK
+PC'
+PCF
+InstrF
+InstrD
+1
+0
+0
+1
+A RD
+Instructi on
+Memory
+15
+3:0
+15:12
+0
+1
+RA2D
+WA3D
++
+PCPlus8 A1
+A2
+A3
+WD3
+R15
+ALU
+ALUResultE 0
+1
+SrcBE
+WriteDataE
+WE
+A RD
+Data
+Memory
+WD
++
+PCPlus4F
+4
+4
+23:0
+ExtImmE
+Fetch Extend
+Decode I3 I2 I1
+Execute ALUOutM Memory 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+q Is the pipeline fully utilized? NO
+29
+
+===== PAGE 31 =====
+CLK
+A1
+WE3
+RD1
+SrcA
+WE
+4
+Single-Cycle
+CLK
+CLK
+1
+PC'
+PC
+Instr
+19:16
+0
+RA1
+A RD
+0
+15
+3:0
+1
+Instructi on
+0
+RA2
+ALU
+ALUResult A2
+RD2
+0
+SrcB
+Memory
+1
+15:12
+1
+A3
+Register
+Pipeline Operation: Cycle 4
+WriteData
+WD3
+File
+4
++
+PCPlus8 R15
+PCPlus4
++
+23:0
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+19:16
+RA1D
+WE3
+SrcAE
+RD1
+RD2
+Register
+File
+ReadDat a
+A RD
+Data
+Memory
+WD
+CLK
+CLK
+PC'
+PCF
+InstrF
+InstrD
+1
+0
+0
+1
+A RD
+Instructi on
+Memory
+15
+3:0
+15:12
+0
+1
+RA2D
+WA3D
++
+PCPlus8 A1
+A2
+A3
+WD3
+R15
+ALU
+ALUResultE 0
+1
+SrcBE
+WriteDataE
+WE
+A RD
+Data
+Memory
+WD
++
+PCPlus4F
+4
+4
+23:0
+Extend
+Fetch Decode ALUOutM Memory 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+ExtImmE
+Execute I4 I3 I2 I1
+q Is the pipeline fully utilized? NO
+30
+
+===== PAGE 32 =====
+CLK
+A1
+WE3
+RD1
+SrcA
+WE
+4
+Single-Cycle
+CLK
+CLK
+1
+PC'
+PC
+Instr
+19:16
+0
+RA1
+A RD
+0
+15
+3:0
+1
+Instructi on
+0
+RA2
+ALU
+ALUResult A2
+RD2
+0
+SrcB
+Memory
+1
+15:12
+1
+A3
+Register
+Pipeline Operation: Cycle 5
+WriteData
+WD3
+File
+4
++
+PCPlus8 R15
+PCPlus4
++
+23:0
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+19:16
+RA1D
+WE3
+SrcAE
+RD1
+RD2
+Register
+File
+ReadDat a
+A RD
+Data
+Memory
+WD
+CLK
+CLK
+PC'
+PCF
+InstrF
+InstrD
+1
+0
+0
+1
+A RD
+Instructi on
+Memory
+15
+3:0
+15:12
+0
+1
+RA2D
+WA3D
++
+PCPlus8 A1
+A2
+A3
+WD3
+R15
+ALU
+ALUResultE 0
+1
+SrcBE
+WriteDataE
+WE
+A RD
+Data
+Memory
+WD
++
+PCPlus4F
+4
+4
+23:0
+Extend
+ExtImmE
+Fetch ALUOutM Memory 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+Decode Execute I5 I4 I3 I2 I1
+q Is the pipeline fully utilized? YES
+31
+
+===== PAGE 33 =====
+CLK
+A1
+WE3
+RD1
+SrcA
+WE
+4
+Single-Cycle
+CLK
+CLK
+1
+PC'
+PC
+Instr
+19:16
+0
+RA1
+A RD
+0
+15
+3:0
+1
+Instructi on
+0
+RA2
+ALU
+ALUResult A2
+RD2
+0
+SrcB
+Memory
+1
+15:12
+1
+A3
+Register
+Pipeline Operation: Cycle 6
+WriteData
+WD3
+File
+4
++
+PCPlus8 R15
+PCPlus4
++
+23:0
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+19:16
+RA1D
+WE3
+SrcAE
+RD1
+RD2
+Register
+File
+ReadDat a
+A RD
+Data
+Memory
+WD
+CLK
+CLK
+PC'
+PCF
+InstrF
+InstrD
+1
+0
+0
+1
+A RD
+Instructi on
+Memory
+15
+3:0
+15:12
+0
+1
+RA2D
+WA3D
++
+PCPlus8 A1
+A2
+A3
+WD3
+R15
+ALU
+ALUResultE 0
+1
+SrcBE
+WriteDataE
+WE
+A RD
+Data
+Memory
+WD
++
+PCPlus4F
+4
+4
+23:0
+Extend
+ExtImmE
+Fetch ALUOutM Memory 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+Decode Execute I6 I5 I4 I3 I2
+q Is the pipeline fully utilized? YES
+32
+
+===== PAGE 34 =====
+CLK
+A1
+WE3
+RD1
+SrcA
+WE
+4
+Single-Cycle
+CLK
+CLK
+1
+PC'
+PC
+Instr
+19:16
+0
+RA1
+A RD
+0
+15
+3:0
+1
+Instructi on
+0
+RA2
+ALU
+ALUResult A2
+RD2
+0
+SrcB
+Memory
+1
+15:12
+1
+A3
+Register
+Pipeline Operation: Cycle 7
+WriteData
+WD3
+File
+4
++
+PCPlus8 R15
+PCPlus4
++
+23:0
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+19:16
+0
+RA1D
+WE3
+SrcAE
+RD1
+1
+0
+RA2D
+RD2
+1
+WA3D
+Register
+File
+ReadDat a
+A RD
+Data
+Memory
+WD
+CLK
+CLK
+PC'
+PCF
+InstrF
+InstrD
+1
+0
+A RD
+Instructi on
+Memory
+15
+3:0
+15:12
++
+PCPlus8 A1
+A2
+A3
+WD3
+R15
+ALU
+ALUResultE 0
+1
+SrcBE
+WriteDataE
+WE
+A RD
+Data
+Memory
+WD
++
+PCPlus4F
+4
+4
+23:0
+ExtImmE
+Fetch Decode 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+Extend
+Execute ALUOutM Memory I6 I5 I4 I3
+q Is the pipeline fully utilized? NO
+33
+
+===== PAGE 35 =====
+CLK
+A1
+WE3
+RD1
+SrcA
+WE
+4
+Single-Cycle
+CLK
+CLK
+1
+PC'
+PC
+Instr
+19:16
+0
+RA1
+A RD
+0
+15
+3:0
+1
+Instructi on
+0
+RA2
+ALU
+ALUResult A2
+RD2
+0
+SrcB
+Memory
+1
+15:12
+1
+A3
+Register
+Pipeline Operation: Cycle 8
+WriteData
+WD3
+File
+4
++
+PCPlus8 R15
+PCPlus4
++
+23:0
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+CLK
+19:16
+0
+RA1D
+WE3
+SrcAE
+A1
+RD1
+1
+0
+RA2D
+A2
+RD2
+1
+WA3D
+A3
+Register
+File
+WD3
+R15
+ReadDat a
+A RD
+Data
+Memory
+WD
+CLK
+PC'
+PCF
+InstrF
+InstrD
+1
+0
+A RD
+Instructi on
+Memory
+15
+3:0
+ALU
+ALUResultE 15:12
+0
+1
+SrcBE
++
+PCPlus4F
+4
+4
+23:0
++
+PCPlus8 Extend
+ExtImmE
+Fetch Decode Execute ALUOutM Memory 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+I6 I5 I4
+WriteDataE
+WE
+A RD
+Data
+Memory
+WD
+q Is the pipeline fully utilized? NO
+34
+
+===== PAGE 36 =====
+CLK
+A1
+WE3
+RD1
+SrcA
+WE
+4
+Single-Cycle
+CLK
+CLK
+1
+PC'
+PC
+Instr
+19:16
+0
+RA1
+A RD
+0
+15
+3:0
+1
+Instructi on
+0
+RA2
+ALU
+ALUResult A2
+RD2
+0
+SrcB
+Memory
+1
+15:12
+1
+A3
+Register
+Pipeline Operation: Cycle 9
+WriteData
+WD3
+File
+4
++
+PCPlus8 R15
+PCPlus4
++
+23:0
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+CLK
+19:16
+0
+RA1D
+WE3
+SrcAE
+A1
+RD1
+1
+0
+RA2D
+A2
+RD2
+ALU
+ALUResultE 1
+WA3D
+A3
+Register
+File
+WriteDataE
+WD3
+R15
+ReadDat a
+A RD
+Data
+Memory
+WD
+CLK
+PC'
+PCF
+InstrF
+InstrD
+1
+0
+A RD
+Instructi on
+Memory
+15
+3:0
+15:12
+0
+1
+SrcBE
+WE
+A RD
+Data
+Memory
+WD
+4
+23:0
++
+PCPlus8 +
+PCPlus4F
+4
+Extend
+ExtImmE
+Fetch Decode Execute ALUOutM Memory 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+I6 I5
+q Is the pipeline fully utilized? NO
+35
+
+===== PAGE 37 =====
+CLK
+A1
+WE3
+RD1
+SrcA
+WE
+ReadDat a
+A RD
+Data
+Memory
+WD
+Single-Cycle
+CLK
+CLK
+1
+PC'
+PC
+Instr
+19:16
+0
+RA1
+A RD
+0
+15
+3:0
+1
+Instructi on
+0
+RA2
+ALU
+ALUResult A2
+RD2
+0
+SrcB
+Memory
+1
+15:12
+1
+A3
+Register
+Pipeline Operation: Cycle 10
+WriteData
+WD3
+File
+4
++
+PCPlus8 R15
+PCPlus4
++
+4
+23:0
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+CLK
+19:16
+0
+RA1D
+WE3
+SrcAE
+A1
+RD1
+1
+0
+RA2D
+A2
+RD2
+ALU
+ALUResultE 1
+WA3D
+A3
+Register
+File
+WriteDataE
+WD3
+R15
+CLK
+PC'
+PCF
+InstrF
+InstrD
+1
+0
+A RD
+Instructi on
+Memory
+15
+3:0
+15:12
+0
+1
+SrcBE
+WE
+A RD
+Data
+Memory
+WD
+4
+23:0
++
+PCPlus8 +
+PCPlus4F
+4
+Extend
+ExtImmE
+Fetch Decode Execute ALUOutM Memory 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+I6
+q Is the pipeline fully utilized? NO
+36
+
+===== PAGE 38 =====
+CLK
+A1
+WE3
+RD1
+SrcA
+WE
+ALU
+ALUResult ReadDat a
+0
+1
+SrcB
+WriteData
+A RD
+Data
+Memory
+WD
+Single-Cycle
+CLK
+CLK
+1
+PC'
+PC
+Instr
+19:16
+0
+RA1
+A RD
+0
+15
+3:0
+1
+Instructi on
+0
+RA2
+A2
+RD2
+Memory
+1
+15:12
+A3
+Register
+Pipeline Operation
+WD3
+File
+4
++
+PCPlus8 R15
+PCPlus4
++
+4
+23:0
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+CLK
+InstrD
+19:16
+0
+RA1D
+WE3
+SrcAE
+A1
+RD1
+1
+0
+RA2D
+A2
+RD2
+ALU
+ALUResultE 1
+WA3D
+A3
+Register
+File
+WriteDataE
+WD3
+R15
+CLK
+PC'
+PCF
+InstrF
+1
+0
+A RD
+Instructi on
+Memory
+15
+3:0
+15:12
+0
+1
+SrcBE
+WE
+A RD
+Data
+Memory
+WD
+4
+23:0
++
+PCPlus8 +
+PCPlus4F
+4
+Extend
+ExtImmE
+Fetch Decode Execute ALUOutM Memory 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+q No more instructions to execute
+37
+
+===== PAGE 39 =====
+Performance Analysis
+§ The 6 instructions took 10 cycles to finish execution
+§ Cycles per Instruction (CPI) is : 10/6 = 1.66
+§ Conversely, instruction per cycle (IPC) is: 0.6
+§ Ideally, we want the IPC to be close to 1
+§ One instruction finished every cycle
+§ Why is the throughput(IPC) less than 1?
+§ It takes some time to fill and some time to drain the pipeline
+§ During this time pipeline is operating below its potential
+38
+
+===== PAGE 40 =====
+Pipeline Idealism vs. Reality
+§ Pipeline fill time: The time it takes to fill the pipeline and make it
+operate at maximum efficiency
+§ Pipeline drain time: The time that is wasted when there is no
+more work to do in the pipeline
+§ The two factors limit the pipeline from delivering ideal speed-up
+§ In the case when the amount of work is small relative to the
+number of stages in the pipeline
+39
+
+===== PAGE 41 =====
+6 PM
+Recall: Pipelined Laundry
+6:30
+8 PM
+Time
+Alice
+Bob
+Tim
+§ Ideal speedup = 4, Actual speedup = 2
+
+===== PAGE 42 =====
+Performance Analysis
+§ The 6 instructions took 10 cycles to finish execution
+§ Cycles per Instruction (CPI) is : 10/6 = 1.66
+§ Conversely, instruction per cycle (IPC) is: 0.6
+§ What if we have 1 billion instructions instead of 6?
+§ CPI = (4 + 1000000000)/1000000000 = ~1
+§ Computer programs execute billions of instructions, so the
+overhead of filling/draining is amortized
+41
+
+===== PAGE 43 =====
+0
+Instructi on
+Memory
+3:0
+15:12
+0
+1
+RA2
+4
++
+PCPlus8 A2
+A3
+WD3
+R15
+RD2
+Register
+File
+0
+1
+SrcB
+AL
+WriteData
+A RD
+Data
+Memory
+WD
++
+PCPlus4
+1
+0
+4
+23:0
+Pipelined Data
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+CLK
+CLK
+1
+PC'
+PCF
+InstrF
+InstrD
+19:16
+RA1D
+SrcAE
+0
+Result
+0
+1
+A RD
+Instructi on
+Memory
+15
+3:0
+15:12
+0
+1
+RA2D
+WA3D
++
+PCPlus8 A1
+A2
+A3
+WD3
+R15
+WE3
+RD1
+RD2
+Register
+File
+ALU
+ALUResultE 0
+1
+SrcBE
+WriteDataE
+WE
+A RD
+Data
+Memory
+WD
+ReadDat aW
++
+PCPlus4F
+4
+4
+23:0
+Extend
+ExtImmE
+ALUOutM Memory 1
+ALUOutW
+0
+Result W
+Writeback
+Fetch Decode Execute § From Fetch to Decode: Instruction and PC+4
+§ From Decode to Execute: Two register values and extended immediate
+§ From Execute to Memory: ALUResultE and WriteDataE
+§ WriteDataE is one of the registers read from the RF, and M stage may need it for writing to
+memory in the case of an STR instruction
+§ From Memory to Writeback: Output of ALU (ALUOutM) and data read from memory (ALUOutW)
+§ Think: What is the width of each pipeline register?
+42
+
+===== PAGE 44 =====
+g y
+1
+0
+CLK
+PC'
+PC
+A RD
+Instructi on
+Instr
+19:16
+15
+3:0
+0
+1
+CLK
+RA1
+0
+RA2
+CLK
+SrcA
+WE
+A RD
+Data
+Memory
+WD
+WE3
+A1
+RD1
+ALU
+ALUResult A2
+RD2
+0
+SrcB
+Memory
+1
+15:12
+1
+A3
+Register
+WD3
+File
+4
+Bug in Pipelined Hardware!
++
+PCPlus8 R15
+PCPlus4
++
+4
+WriteData
+23:0
+Extend
+Ext Imm
+Pipelined
+CLK CLK CLK CLK
+CLK
+CLK
+19:16
+RA1D
+WE3
+SrcAE
+RD1
+0
+RA2D
+RD2
+1
+WA3D
+Register
+File
+ReadDat a
+CLK
+PC'
+1
+0
+PCF
+InstrF
+InstrD
+0
+1
+A RD
+Instructi on
+Memory
+15
+3:0
+15:12
++
+PCPlus8 A1
+A2
+A3
+WD3
+R15
+ALU
+ALUResultE 0
+1
+SrcBE
+WriteDataE
+WE
+A RD
+Data
+Memory
+WD
++
+PCPlus4F
+4
+4
+23:0
+Extend
+ExtImmE
+Fetch Decode Execute § There is a “hardware bug” in the pipelined
+microarchitecture
+§ Can you spot it?
+ALUOutM Memory 1
+0
+Result
+ReadDat aW
+1
+ALUOutW
+0
+Result W
+Writeback
+43
+
+===== PAGE 45 =====
+g y
+1
+0
+CLK
+PC'
+PC
+19:16
+Instr
+A RD
+Instructi on
+15
+3:0
+0
+1
+0
+CLK
+RA1
+RA2
+CLK
+SrcA
+ALU
+ALUResult 1
+WE
+A RD
+Data
+Memory
+WD
+ReadDat a
+WE3
+A1
+RD1
+A2
+RD2
+0
+SrcB
+Memory
+15:12
+1
+A3
+Register
+WD3
+File
+4
+Bug in Pipelined Hardware!
++
+PCPlus8 R15
+PCPlus4
++
+4
+WriteData
+1
+0
+23:0
+Extend
+Ext Imm
+Result
+§ The error is in the register file write logic that operates in the writeback stage
+Pipelined
+CLK CLK CLK CLK
+CLK
+CLK
+CLK
+19:16
+RA1D
+WE3
+SrcAE
+1
+PC'
+PCF
+RD1
+ReadDat aW
+0
+0
+RA2D
+RD2
+1
+WA3D
+Register
+File
+InstrF
+InstrD
+0
+1
+A RD
+Instructi on
+Memory
+15
+3:0
+15:12
++
+PCPlus8 A1
+A2
+A3
+WD3
+R15
+ALU
+ALUResultE 0
+1
+SrcBE
+WriteDataE
+WE
+A RD
+Data
+Memory
+WD
+PCPlus4F
++
+4
+4
+23:0
+Extend
+1
+ALUOutW
+0
+Result W
+Writeback
+ALUOutM ExtImmE
+Fetch Decode Execute Memory § The data value comes from ResultW , a Writeback stage signal
+§ But the write address comes from InstrD15:12 (WA3D), a Decode stage signal
+§ Without correction, during cycle 5, the result of the instruction in the
+writeback stage would be incorrectly written to a different destination register
+44
+
+===== PAGE 46 =====
+Bug in Pipelined Hardware!
+§ Without correction, during cycle 5, the result of the LDR instruction would be
+incorrectly written to R5 instead of R2
+1 2 3 4 5 6 7 8 9 10
+Time (cycles)
+R0
+LDR R2, [R0, #40] ADD R3, R9, R10
+SUB R4, R1, R5
+AND R5, R12, R13
+STR R6, [R1, #20]
+ORR R7, R11, #42
+IM LDR
+RF 40
++ DM
+R9
+R2
+RF
+ADD
+IM
+RF R10
++ DM
+R1
+R3
+RF
+SUB
+DM
+R4
+IM
+RF R5
+-
+RF
+R12
+AND
+IM
+RF R13
+& DM
+R1
+R5
+RF
+STR
+IM
+RF 20
++ DM
+R11
+R6
+RF
+ORR
+IM
+RF 42
+| DM
+R7
+RF
+45
+
+===== PAGE 47 =====
+Corrected Pipelined Datapath
+§ Here is the corrected pipelined datapath
+CLK CLK CLK CLK
+CLK
+CLK
+InstrD
+19:16
+0
+RA1D
+SrcAE
+1
+CLK
+PC'
+PCF
+InstrF
+1
+0
+A RD
+Instruction
+Memory
+15
+3:0
+0
+1
+PCPlus8
++
+RA2D
+4
+15:12
+A1
+A2
+A3
+WD3
+R15
+WE3
+RD1
+RD2
+Register
+File
+ALU
+ALUResultE 0
+1
+SrcBE
+WE
+A RD
+Data
+Memory
+WD
+ReadDataW
++
+PCPlus4F
+WA3D
+WriteDataE
+WA3E ALUOutM WA3M ALUOutW
+WA3W
+4
+23:0
+Extend
+ExtImmE
+1
+0
+ResultW
+§ The WA3 signal is now pipelined along through the Execution, Memory, and
+Writeback stages so it remains sync with the rest of the instruction
+§ WA3W and ResultW are fed back together to the register file in the
+Writeback stage
+46
+
+===== PAGE 48 =====
+Optimized Pipelined Datapath
+§ Remove adder by using PCPlus4F after PC has been updated to PC+4
+CLK CLK CLK CLK
+CLK
+CLK
+CLK
+19:16
+0
+RA1D
+SrcAE
+1
+PC'
+PCF
+1
+0
+0
+RA2D
+ALU
+ALUResultE 1
+WriteDataE
+PCPlus8
++
+WA3E InstrF
+InstrD
+A RD
+Instruction
+Memory
+15
+3:0
+PCPlus4F
++
+4
+15:12
+A1
+A2
+A3
+WD3
+R15
+WE3
+RD1
+RD2
+Register
+File
+0
+SrcBE
+1
+WE
+A RD
+Data
+Memory
+WD
+WA3D
+ALUOutM WA3M 4
+23:0
+CLK
+PC'
+PCF
+InstrF
+1
+0
+A RD
+Instruction
+Memory
+Extend
+ExtImmE
+CLK CLK CLK CLK
+CLK
+CLK
+19:16
+RA1D
+SrcAE
+RA2D
+InstrD
+0
+1
+15
+3:0
+0
+1
+WE3
+A1
+RD1
+A2
+RD2
+A3
+WD3
+Register
+File
+R15
+ALU
+ALUResultE 0
+1
+SrcBE
+WE
+A RD
+Data
+Memory
+WD
++
+PCPlus4F
+4
+15:12
+WA3D
+WriteDataE
+WA3E ALUOutM WA3M 23:0
+Extend
+ExtImmE
+PCPlus8D
+ReadDataW
+1
+ALUOutW
+0
+WA3W
+ResultW
+ReadDataW
+1
+ALUOutW
+0
+WA3W
+ResultW
+47
+
+===== PAGE 49 =====
+Control Unit for Pipelined uArch
+§ Same control signals as the single-cycle processor
+§ Therefore, uses the same control unit
+§ The control unit examines the Op and Funct fields of the
+instruction in the Decode stage to produce the control signals
+§ These control signals must be pipelined along with the data
+§ Remember: The control unit also examines the Rd field (back flow)
+§ Special treatment for RegWrite and WA3 (backward flow)
+48
+
+===== PAGE 50 =====
+Pipelined Processor Control
+q No need to send the circled signals to the next stage because they are no longer needed
+CLK
+Flags'
+CLK CLK
+PCSrcM PCSrcW
+27:26
+25:20
+Control
+Unit
+Op
+Funct
+15:12 Rd
+31:28
+PCSrcD RegWriteD
+PCSrcE RegWriteE
+RegWriteM
+RegWriteW
+MemtoRegD
+MemtoRegE
+MemtoRegM
+MemtoRegW
+MemWriteD
+MemWriteE
+MemWriteM
+ALUControlD
+ALUControlE
+BranchD
+BranchE
+ALUSrcD
+FlagWriteD
+ALUSrcE
+FlagWriteE
+ImmSrcD
+CondE
+CLK
+CLK
+PC'
+PCF
+InstrF
+InstrD
+19:16
+1
+0
+15
+3:0
+0 1
+0
+1
+RegSrcD
+0
+1
+CLK
+FlagsE
+RA1D
+SrcAE
+CondExE
+Cond
+Unit
+ALUFlags
+ALUResultE CLK
+A RD
+Instruction
+Memory
+RA2D
+A1
+A2
+A3
+WD3
+R15
+WE3
+RD1
+RD2
+Register
+File
+ALU
+0
+1
+SrcBE
+WE
+A RD
+Data
+Memory
+WD
+ReadDataW
+PCPlus4F
++
+15:12
+Ext ImmE
+WriteDataE
+WA3E ALUOutM WA3M ALUOutW
+WA3W
+4
+23:0
+Extend
+PCPlus8D
+1
+0
+ResultW
+49
+
+===== PAGE 51 =====
+Timing Diagrams
+§ To visualize the execution of many instructions in a pipeline we
+can use timing diagrams where:
+§ Time is on the horizontal axis
+§ Instructions are on the vertical axis
+50
+
+===== PAGE 52 =====
+Timing Diagrams
+Assumption of logic element delays from Table 7.5 of textbook
+Single-Cycle
+0 100 200 300 400 500 600 700 800 900 1100 1200 1300 1400 1500
+1000
+Instr
+1
+2
+Time (ps)
+Fetch
+Instruction
+Dec
+Read
+Reg
+Execute
+ALU
+Memory
+Read / Write
+Wr
+Reg
+Fetch
+Instruction
+Dec
+Read
+Reg
+Execute
+ALU
+Memory
+Read / Write
+Wr
+Reg
+Pipelined
+Instr
+1
+2
+3
+Fetch
+Instruction
+Dec
+Read
+Reg
+Fetch
+Instruction
+Execute
+ALU
+Memory
+Read / Write
+Wr
+Reg
+Dec
+Read
+Reg
+Fetch
+Instruction
+Execute
+ALU
+Memory
+Read / Write
+Wr
+Reg
+Dec
+Read
+Reg
+Execute
+ALU
+Memory
+Read / Write
+Wr
+Reg
+(b)
+51
+
+===== PAGE 53 =====
+Performance Analysis
+§ In the previous slide, what is the throughout in terms of
+instructions per second (IPS) for single-cycle microarchitecture?
+§ 1 instruction every 680 picoseconds
+§ 1.47 Billion Instructions per Second
+§ What about the pipelined microarchitecture?
+§ The length of the pipeline stage is set by the slowest stage to
+be 200 ps
+§ 1 instruction per 200 ps
+§ 5 billion instructions per second
+52
+
+===== PAGE 54 =====
+Instruction Latency with Pipelining
+§ Pipelining does not help to reduce the latency of a single
+instruction
+§ Latency of a single instruction increases
+§ Sequencing overhead of pipeline registers
+§ Clock cycle time decided by slowest pipeline stage (internal
+fragmentation due to imbalanced stages)
+§ Pipelining helps increase the throughput of an entire workload
+§ Workload = Number of instructions
+§ Workload must be “sufficiently” large
+53
+
+===== PAGE 55 =====
+Abstract Diagrams of Pipelined uArch
+1 2 3 4 5 6 7 8 9 10
+Time (cycles)
+R0
+R2
+LDR R2, [R0, #40] ADD R3, R9, R10
+SUB R4, R1, R5
+AND R5, R12, R13
+STR R6, [R1, #20]
+ORR R7, R11, #42
+IM LDR
+RF 40
+ADD
+IM
+RF SUB
++ DM
+R9
+R10
+IM
+RF
++ DM
+R1
+R3
+RF
+DM
+R4
+RF R5
+-
+RF
+R12
+AND
+IM
+RF R13
+& DM
+R1
+R5
+RF
+STR
+IM
+RF 20
++ DM
+R11
+R6
+RF
+ORR
+IM
+RF 42
+| DM
+R7
+RF
+54
+
+===== PAGE 56 =====
+RF Read/Write in Pipelined uArch
+1 2 3 4 5 6 7 8 9 10
+Time (cycles)
+R0
+LDR R2, [R0, #40] ADD R3, R9, R10
+IM LDR
+RF 40
+ADD
+IM
+RF SUB
+SUB R4, R1, R5
++ DM
+R9
+R10
+IM
+R2
+RF
++ DM
+R1
+R3
+RF
+DM
+R4
+RF R5
+-
+RF
+R12
+AND
+IM
+RF R13
+& DM
+R1
+R5
+STR
+IM
+RF 20
++ DM
+R11
+AND R5, R12, R13
+STR R6, [R1, #20]
+ORR R7, R11, #42
+Write in first half of clock cycle, read in the second half. In one cycle, an
+instruction's writeback can be visible to a younger instruction’s reg read
+RF
+R6
+RF
+ORR
+IM
+RF 42
+| DM
+R7
+RF
+55
+
+===== PAGE 57 =====
+Simplified View of Pipelining
+C1 C2 C3 C4 C5 C6 C7 C8
+I1
+I2
+I3
+I4
+à Insts
+F D E M W
+F D E M W
+F D E M W
+F D E M W
+F D E M W
+F D E M W
+56
+
+===== PAGE 58 =====
+Next: Pipeline Hazards
+§ When multiple instructions are handled concurrently there is a
+danger of hazard
+§ Hazards are a part of real life
+§ We need to cope with hazards using extra hardware
+57
+
+===== PAGE 59 =====
+Pipeline Hazards (Three Types)
+§ Structural hazard
+§ When two instructions want to use the same resource
+§ Memory for instructions (F) and data (M)
+§ Register file is accessed in two different stages (what are
+those?)
+§ Data hazard
+§ When a dependent instruction wants the result of an earlier
+instruction
+§ Control hazard
+§ When a PC-changing instruction is in the pipeline (why is this a
+hazard?)
+58
+
+===== PAGE 60 =====
+Hazard Mitigation
+§ Hardware for concurrent instruction execution must deal with
+hazards
+§ From the processor’s perspective:
+§ Different solutions with different tradeoffs
+§ Architectural state requires “serious” repair
+§ Architectural state is untouched, and hazard avoided
+§ Dedicated logic may be needed for hazard avoidance
+§ Defensive mindset: stall the CPU until hazard is gone
+§ Power, energy, latency are all considerations
+59
+
+===== PAGE 61 =====
+Pipeline Hazards (Another View)
+§ Instructions and data generally flow from left to right
+§ Right-to-left flow affect future instructions and leads to hazards
+§ Writeback stage places the result into the register file
+(potential for data hazard)
+§ Selection of next PC, choice of PC + 4 or branch target
+address
+§ Also backward flow and a hazard: control hazard
+60
+
+===== PAGE 62 =====
+Pipeline Hazards (Another View)
+§ Identify backward flows (control and data)
+CLK
+Flags'
+CLK CLK
+PCSrcM PCSrcW
+27:26
+25:20
+Control
+Unit
+Op
+Funct
+15:12 Rd
+31:28
+PCSrcD RegWriteD
+PCSrcE RegWriteE
+RegWriteM
+RegWriteW
+MemtoRegD
+MemtoRegE
+MemtoRegM
+MemtoRegW
+MemWriteD
+MemWriteE
+MemWriteM
+ALUControlD
+ALUControlE
+BranchD
+BranchE
+ALUSrcD
+FlagWriteD
+ALUSrcE
+FlagWriteE
+ImmSrcD
+CondE
+CLK
+CLK
+PC'
+PCF
+InstrF
+InstrD
+19:16
+1
+0
+15
+3:0
+0 1
+0
+1
+RegSrcD
+0
+1
+CLK
+FlagsE
+RA1D
+SrcAE
+CondExE
+Cond
+Unit
+ALUFlags
+ALUResultE CLK
+A RD
+Instruction
+Memory
+RA2D
+A1
+A2
+A3
+WD3
+R15
+WE3
+RD1
+RD2
+Register
+File
+ALU
+0
+1
+SrcBE
+WE
+A RD
+Data
+Memory
+WD
++
+PCPlus4F
+15:12
+Ext ImmE
+WriteDataE
+WA3E ALUOutM WA3M 4
+23:0
+Extend
+PCPlus8D
+ReadDataW
+ALUOutW
+WA3W
+1
+0
+ResultW
+61
+
+===== PAGE 63 =====
+Data Dependences
+§ In Von Neumann model, instructions depend on each other for data
+§ One type of dependence is called true dependence
+§ Data (True) Dependence: One instruction produces a result that the
+subsequent instruction consumes
+ADD R0, R0, #4
+LDR R1, [R0, #0]
+SUB R2, R1, #1
+ADD R0, R1, #4
+LDR R2, [R3, #0]
+ADD R4, R5, #1
+Dependence b/w ADD & LDR
+NO dependences b/w instructions
+Dependence b/w LDR and SUB
+§ Instruction chains with dependences need special care in pipelined uarch
+62
+
+===== PAGE 64 =====
+Read-After-Write Hazards
+§ True dependences lead to read-after-write hazards
+§ These hazards are not possible in a single-cycle
+microarchitecture
+§ Two Very Important points to remember:
+§ True dependencies are a property of the program
+(programmer’s intention is expressed by way of them)
+§ Hazards are a property of microarchitecture
+§ A dependency may or may not lead to a hazard
+63
+
+===== PAGE 65 =====
+Pipeline Hazards (Example)
+§ Look at the instructions on the left. There are three data hazards
+1 2 3 4 5 6 7 8
+R4
+ADD R1, R4, R5 IM ADD
+RF R5
++ DM
+R1
+R1
+RF
+AND
+Time (cycles)
+Write in one half, and read on
+other half eliminates the hazard
+R8
+AND R8, R1, R3
+IM
+RF R3
+& DM
+R6
+RF
+ORR
+ORR R9, R6, R1
+IM
+RF R1
+| DM
+R1
+R9
+RF
+SUB
+DM
+R10
+IM
+RF R7
+-
+RF
+SUB R10, R1, R7
+§ Use a clever register read/write policy to eliminate one hazard
+§ What can we do about the remaining two hazards?
+64
+
+===== PAGE 66 =====
+Solution # 1: Software Interlocking
+§ Insert NOPS in code at compile time
+§ NOP is an instruction that does nothing
+§ Idea: Insert enough NOPS for results to be ready
+§ OR better, move independent useful instructions forward at
+compile time
+65
+
+===== PAGE 67 =====
+Example: Software Interlocking
+1 2 3 4 5 6 7 8
+Time (cycles)
+R4
+R1
+ADD R1, R4, R5 NOP
+NOP
+AND R8, R1, R3
+ORR R9, R6, R1
+SUB R10, R1, R7
+IM ADD
+RF R5
++ DM
+RF
+NOP
+DM
+IM
+RF RF
+NOP
+DM
+IM
+RF RF
+R1
+AND
+IM
+RF R3
+& DM
+R6
+R8
+RF
+ORR
+IM
+RF R1
+| DM
+R1
+R9
+SUB
+IM
+RF R7
+-
+9 10
+RF
+DM
+R10
+RF
+66
+
+===== PAGE 68 =====
+Solution # 1: Software Interlocking
+§ Drawbacks of software interlocking
+§ Programming is complicated
+§ Speed is degraded
+67
+
+===== PAGE 69 =====
+Solution # 2: Forwarding or Bypassing
+§ Hardware solution: Data hazards can be solved by forwarding or
+bypassing (except some special scenarios)
+§ Extra hardware to send result from the Memory or Writeback
+stage to a “dependent” instruction in Execute stage
+§ Key: We can bypass the register file and get results early
+from pipeline register
+§ Requires adding muxes in front of the ALU to select the operand
+from one of the many sources
+§ (1) RF, (2) Memory PPR, (3) Writeback PPR
+68
+
+===== PAGE 70 =====
+Data Forwarding
+Why Forwarding Works?
+1 2 3 4 5 6 7 8
+Time (cycles)
+R4
+ADD R1, R4, R5 IM ADD
+RF R5
++ DM
+R1
+R1
+RF
+AND
+AND R8, R1, R3
+IM
+RF R3
+& DM
+R6
+R8
+RF
+ORR
+ORR R9, R6, R1
+IM
+RF R1
+| DM
+R1
+R9
+RF
+SUB
+SUB R10, R1, R7
+DM
+R10
+IM
+RF R7
+-
+RF
+§ Sum from the ADD instruction is computed by ALU in cycle 3
+and is needed by the AND instruction in cycle 4
+§ No need to wait for the results to appear in register file
+69
+
+===== PAGE 71 =====
+Forwarding Exercise
+C1 C2 C3 C4 C5 C6 C7 C8 D
+F D E M W
+I1
+I2
+I3
+I4
+à Insts
+F D E M W
+F D E M W
+PPR Code
+E
+M
+W
+F D E M W
+§ Is forwarding from I1(M) to I2(E) valid?
+§ Is forwarding from I1(W) to I3(E) valid?
+§ Is forwarding from I1(W) to I2(E) valid?
+70
+
+===== PAGE 72 =====
+Data Forwarding
+Forwarding Example
+1 2 3 4 5 6 7 8
+Time (cycles)
+R4
+Next 2
+younger
+“dependent”
+instructions
+expose a
+hazard
+ADD R1, R4, R5 AND R8, R1, R3
+ORR R9, R6, R1
+SUB R10, R1, R7
+IM ADD
+RF R5
++ DM
+R1
+R1
+RF
+AND
+IM
+RF R3
+& DM
+R6
+R8
+RF
+ORR
+IM
+RF R1
+| DM
+R1
+R9
+RF
+SUB
+DM
+R10
+IM
+RF R7
+-
+RF
+§ When is forwarding necessary?
+§ Check if source register read in EX stage matches
+destination register written in MEM or WB stage
+§ If so, forward result
+71
+
+===== PAGE 73 =====
+Data Forwarding
+Necessary Conditions for Forwarding
+§ When an instruction in Execute stage has a source
+register that matches the destination register of
+an instruction in Memory or Writeback stage
+§ Let’s write equations for generating control signals
+that indicate whether to forward or not
+72
+
+===== PAGE 74 =====
+Data Forwarding Necessary Conditions for Forwarding
+§ Execute stage register matches Memory stage register?
+Match_1E_M = (RA1E == WA3M)
+Match_2E_M = (RA2E == WA3M)
+§ Execute stage register matches Writeback stage register?
+Match_1E_W = (RA1E == WA3W)
+Match_2E_W = (RA2E == WA3W)
+§ If it matches, forward result:
+if (Match_1E_M • RegWriteM) ForwardAE = 10;
+else if (Match_1E_W • RegWriteW) ForwardAE = 01;
+else ForwardAE = 00;
+ForwardBE same but with Match2E
+73
+
+===== PAGE 75 =====
+Data Forwarding Pipelined Processor with Forwarding
+CLK
+Flags'
+CLK CLK
+PCSrcM Control
+Unit
+27:26
+Op
+25:20
+Funct
+15:12 Rd
+31:28
+PCSrcD RegWriteD
+PCSrcE RegWriteE
+PCSrcW
+RegWriteM
+RegWriteW
+MemtoRegD
+MemtoRegE
+MemtoRegM
+MemtoRegW
+MemWriteD
+MemWriteE
+MemWriteM
+ALUControlD
+ALUControlE
+BranchD
+BranchE
+ALUSrcD
+FlagWriteD
+ALUSrcE
+FlagWriteE
+ImmSrcD
+CondE
+CLK
+FlagsE
+CLK
+PC'
+PCF
+InstrF
+InstrD
+19:16
+SrcAE
+1
+0
+15
+3:0
+00
+01
+10
+CondExE
+Cond
+Unit
+ALUFlags
+ALUResultE A RD
+Instructi on
+Memory
+0 1
+0
+1
+RegSrcD
+RA1D
+0
+RA2D
+1
+CLK
+A1
+A2
+A3
+WE3
+RD1
+RD2
+WD3
+Register
+File
+R15
+CLK
+ALU
+00
+01
+10
+0
+1
+SrcBE
+WE
+A RD
+Data
+Memory
+WD
++
+PCPlus4F
+15:12
+Ext ImmE
+WriteDataE
+WA3E ALUOutM WA3M 4
+23:0
+Extend
+PCPlus8D
+ForwardAE
+ForwardBE
+Match
+RegWriteM
+RegWriteW
+Hazard Unit
+ReadDataW
+1
+ALUOutW
+0
+WA3W
+ResultW
+three sources for the
+ALU to choose from
+74
+
+===== PAGE 76 =====
+Load-Use Hazard
+Data Forwarding
+§ Recall: Execution of Load has a two-cycle latency (E + M)
+§ LDR does not finish reading data until the end of the MEM
+stage
+§ The result cannot be forwarded to the EX-stage of the next
+instruction
+§ We call Load followed by its use a Load-Use hazard
+§ Load-Use hazard cannot be solved with forwarding
+§ Solution: stalling the pipeline until the data is available
+75
+
+===== PAGE 77 =====
+Stalling
+Load-Use Hazard
+§ The LDR instruction received data from memory at the end
+of cycle 4
+1 2 3 4 5 6 7 8
+Time (cycles)
+R4
+LDR R1, [R4, #40] IM LDR
+RF 40
++ DM
+Trouble!
+R1
+R1
+RF
+AND
+AND R8, R1, R3
+IM
+RF R3
+& DM
+R6
+R8
+RF
+ORR
+ORR R9, R6, R1
+IM
+RF R1
+| DM
+R1
+R9
+RF
+SUB
+DM
+R10
+IM
+RF R7
+-
+RF
+SUB R10, R1, R7
+§ The AND instruction needs that data at the beginning of
+cycle 4
+§ We cannot go backward in time and fix things up!
+
+===== PAGE 78 =====
+Stalling Stalls to Resolve Load-Use Hazards
+§ The dependent instruction can be detected as the “user” of
+LDR after it has been decoded at the end of Decode stage
+§ Idea: Stall the dependent instruction in the Decode stage
+for one cycle (until LDR completes the memory read)
+§ Furthermore, the instruction immediately behind the “user”
+of LDR must remain in the Fetch stage because the Decode
+stage is full
+77
+
+===== PAGE 79 =====
+Stalling
+Stalls to Resolve Load-Use Hazards
+§ Stall the dependent instruction (AND) in Decode stage
+1 2 3 4 5 6 7 8
+9
+Time (cycles)
+R4
+LDR R1, [R4, #40] IM LDR
+RF 40
++ DM
+R1
+R1
+RF
+R1
+AND
+AND R8, R1, R3
+IM
+RF R3
+RF R3
+& DM
+R6
+R8
+RF
+ORR
+ORR R9, R6, R1
+IM
+IM ORR
+RF R1
+Stall
+| DM
+R1
+R9
+RF
+SUB
+SUB R10, R1, R7
+DM
+R10
+IM
+RF R7
+-
+RF
+§ AND remains in Decode, and ORR remains in Fetch
+§ Cycle 5: result forwarded from WB of LDR to EX of AND
+78
+
+===== PAGE 80 =====
+What does a stall look like?
+§ Stalling stage X does three things
+§ Stalls stage X (obviously)
+§ Stalls stage X – 1
+§ Sends a bubble in stage X + 1
+79
+
+===== PAGE 81 =====
+Let’s Visualize Stall in Decode stage
+§ i1 – i5 are five instructions. Load-use hazard between i2 – i3
+Cycle # Fetch Decode Execute Memory Writeback
+1:
+2:
+3:
+4:
+5:
+6:
+7:
+80
+
+===== PAGE 82 =====
+Let’s Visualize Stall in Decode stage
+§ i1 – i5 are five instructions. Load-use hazard between i2 – i3
+Cycle # Fetch Decode Execute Memory Writeback
+1: i1
+2:
+3:
+4:
+5:
+6:
+7:
+81
+
+===== PAGE 83 =====
+Let’s Visualize Stall in Decode stage
+§ i1 – i5 are five instructions. Load-use hazard between i2 – i3
+Cycle # Fetch Decode Execute Memory Writeback
+1: i1
+2: i2 i1
+3:
+4:
+5:
+6:
+7:
+82
+
+===== PAGE 84 =====
+Let’s Visualize Stall in Decode stage
+§ i1 – i5 are five instructions. Load-use hazard between i1 – i2
+Cycle # Fetch Decode Execute Memory Writeback
+1: i1
+2: i2 i1
+3: i3 i2 i1
+4:
+5:
+6:
+7:
+83
+
+===== PAGE 85 =====
+Let’s Visualize Stall in Decode stage
+§ i1 – i5 are five instructions. Load-use hazard between i2 – i3
+Cycle # Fetch Decode Execute Memory Writeback
+1: i1
+2: i2 i1
+3: i3 i2 i1
+(stall)
+4: i3 i2 00000000 i1
+5:
+6:
+7:
+84
+
+===== PAGE 86 =====
+Let’s Visualize Stall in Decode stage
+§ i1 – i5 are five instructions. Load-use hazard between i2 – i3
+Cycle # Fetch Decode Execute Memory Writeback
+1: i1
+2: i2 i1
+3: i3 i2 i1
+(stall)
+4: i3 i2 00000000 i1
+5: i4 i3 i2 00000000 i1
+6:
+7:
+85
+
+===== PAGE 87 =====
+Let’s Visualize Stall in Decode stage
+§ i1 – i5 are five instructions. Load-use hazard between i2 – i3
+Cycle # Fetch Decode Execute Memory Writeback
+1: i1
+2: i2 i1
+3: i3 i2 i1
+(stall)
+4: i3 i2 00000000 i1
+5: i4 i3 i2 00000000 i1
+6: i5 i4 i3 i2 00000000
+7:
+86
+
+===== PAGE 88 =====
+Let’s Visualize Stall in Decode stage
+§ i1 – i5 are five instructions. Load-use hazard between i2 – i3
+Cycle # Fetch Decode Execute Memory Writeback
+1: i1
+2: i2 i1
+3: i3 i2 i1
+(stall)
+4: i3 i2 00000000 i1
+5: i4 i3 i2 00000000 i1
+6: i5 i4 i3 i2 00000000
+7: i5 i4 i3 i2
+87
+
+===== PAGE 89 =====
+Let’s Visualize Stall in Decode stage
+§ i1 – i5 are five instructions. Load-use hazard between i2 – i3
+Cycle # Fetch Decode Execute Memory Writeback
+1: i1
+2: i2 i1
+3: i3 i2 i1
+(stall)
+4: i3 i2 00000000 i1
+5: i4 i3 i2 00000000 i1
+6: i5 i4 i3 i2 00000000
+7: i5 i4 i3 i2
+88
+
+===== PAGE 90 =====
+Stalling Pipeline Bubbles
+§ EX is unused in cycle 4
+§ MEM is unused in cycle 5
+§ WB is unused in cycle 6
+§ This used stage propagating through the pipeline is called a
+bubble
+§ It behaves like a NOP instruction
+89
+
+===== PAGE 91 =====
+Stalling Implementing Stalls
+§ Stalling a stage requires disabling the pipeline register, so that the
+contents do not change
+§ All previous stages must also be stalled
+§ Bubble is introduced by clearing the pipeline register directly after
+the stalling stage
+§ Prevents bogus information from propagating forward
+§ Forgetting to introduce a bubble may wrongly update the
+architectural state
+§ Stalls degrade performance so must be used only when needed 90
+
+===== PAGE 92 =====
+Stalling Logic to Compute Stalls and Flushes
+§ Is either source register in the Decode stage the same as the one
+being written in the Execute stage?
+Match_12D_E = (RA1D == WA3E) + (RA2D == WA3E)
+§ Is LDR in the Execute stage AND Match_12D_E is TRUE?
+ldrstall = Match_12D_E AND MemtoRegE
+StallF = StallD = FlushE = ldrstall
+91
+
+===== PAGE 93 =====
+Pipelined CPU with Stalls to Solve Load-Use Hazard
+Figure 7.54 in textbook
+92
+
+===== PAGE 94 =====
+Stalling Control Hazards
+§ Control hazards are due to changes in sequential control flow
+§ Branch (B) instructions
+§ Writes to PC (R15) by regular instructions
+§ The pipelined processor does not know which instruction to fetch
+next
+§ Branch decision has not been made when the instruction is
+fetched
+§ But the PC register is incremented in the Fetch stage
+93
+
+===== PAGE 95 =====
+Stalling Solving Control Hazards
+§ There are two solutions
+§ Stall the pipeline on a branch instruction
+§ Instruction is fetched in the first stage
+§ Branch is resolved in the last (fifth) stage
+§ Stall for 4 cycles – a very high penalty to pay for every branch instruction
+§ Predict the branch outcome (aka. branch prediction)
+§ If the outcome is correct, continue execution (zero penalty)
+§ If the outcome is wrong (branch misprediction), clean up the pipeline, and
+restart from the correct target instruction (aka., recovery)
+§ Branch misprediction penalty depends on when recovery is initiated
+94
+
+===== PAGE 96 =====
+Stalling Simplest Branch Predictor
+§ Predict-always-untaken
+§ Keep fetching the next sequential instructions
+§ Predict-always-taken
+§ CPU stalls for four cycles because target address not available
+§ Both predictors above use a static prediction policy
+§ Dynamic branch prediction
+§ Different predictions for different executions of same branch
+§ Takes recent branch behavior into account
+95
+
+===== PAGE 97 =====
+Stalling Predict-always-untaken: Branch is Taken
+§ predict-always-untaken seems reasonable if target is not known
+1 2 3 4 5 6 7 8
+9
+10
+Time (cycles)
+IM B
+RF DM
+RF
+R1
+AND
+IM
+RF R3
+& DM
+R6
+RF
+ORR
+IM
+RF R1
+| DM
+R1
+RF
+Flush
+these
+instructions
+IM SUB
+RF R7
+R1
+IM SUB
+RF DM
+RF-
+DM
+RF-
+R3
+R8
+20
+B 3C 24
+AND R8, R1, R3
+28
+ORR R9, R6, R1
+2C
+SUB R10, R1, R7
+30
+SUB R11, R1, R8
+34
+...
+...
+64 ADD R12, R3, R4 ADD
+§ BUT, four instructions are flushed when branch is taken
+§ Misprediction penalty of 4 wasted cycles for taken branches
+§ Idea: Predict the branch early
+IM RF R4
+DM
+R12
++
+RF
+96
+
+===== PAGE 98 =====
+Stalling Static Branch Prediction: All Scenarios
+§ Predict-always-untaken (Keep the pipeline busy)
+§ If prediction is correct, nothing to do
+§ If prediction is incorrect, flush 4 instructions and repair the
+architectural state (i.e., update PC with correct target)
+§ Predict-always-taken (Ok to waste slots in the pipeline)
+§ If prediction is correct, branch to the target inst., no harm
+§ If prediction is incorrect, use incremented PC of next
+instruction (4 cycles are wasted)
+97
+
+===== PAGE 99 =====
+Stalling Alternative: Early Branch Resolution
+§ The earliest stage branch target is known is EX
+§ Update the PC in EX to save two cycles
+1 2 3 4 5 6 7 8
+9
+10
+Time (cycles)
+20
+24
+28
+B 3C AND R8, R1, R3
+ORR R9, R6, R1
+IM B
+RF DM
+RF
+R1
+AND
+IM
+RF R3
+& DM
+R6
+RF
+ORR
+IM
+RF R1
+| DM
+Flush
+these
+instructions
+RF
+2C
+30
+34
+...
+SUB R10, R1, R7
+SUB R11, R1, R8
+...
+64 ADD R12, R3, R4 R3
+IM ADD
+RF R4
+DM
+R12
++
+RF
+§ Flush the two instructions in the Fetch and Decode stages
+98
+
+===== PAGE 100 =====
+Stalling Hardware Changes for Early Resolution
+§ Idea: Determine the branch target address (BTA) in the EX-stage
+§ Branch misprediction penalty = 2 cycles
+§ Hardware changes
+§ Add a branch multiplexer before PC register to select BTA from
+ALUResultE
+§ Add BranchTakenE select signal for this multiplexer (only
+asserted if branch condition satisfied)
+99
+
+===== PAGE 101 =====
+Stalling Pipelined Processor Early Resolution
+BranchTakenE
+CLK
+Flags'
+CLK CLK
+PCSrcM Control
+Unit
+27:26
+Op
+25:20
+Funct
+15:12 Rd
+31:28
+PCSrcD RegWriteD
+PCSrcE RegWriteE
+PCSrcW
+RegWriteM
+RegWriteW
+MemtoRegD
+MemtoRegE
+MemtoRegM
+MemtoRegW
+MemWriteD
+MemWriteE
+MemWriteM
+ALUControlD
+ALUControlE
+BranchD
+BranchE
+ALUSrcD
+FlagWriteD
+ALUSrcE
+FlagWriteE
+ImmSrcD
+CondE
+1
+0
+CLK
+PC'
+PCF
+CLK
+InstrF
+FlagsE
+InstrD
+19:16
+SrcAE
+0
+1
+E N
+15
+3:0
+00
+01
+10
+CondExE
+Cond
+Unit
+ALUFlags
+ALUResultE A RD
+Instructi on
+Memory
+0 1
+0
+1
+RegSrcD
+RA1D
+0
+RA2D
+1
+CLK
+A1
+A2
+A3
+WE3
+RD1
+RD2
+WD3
+Register
+File
+R15
+CLK
+ALU
+00
+01
+10
+0
+1
+SrcBE
+WE
+A RD
+Data
+Memory
+WD
++
+PCPlus4F
+15:12
+ExtImmE
+WriteDataE
+WA3E ALUOutM WA3M 4
+CLR
+E N
+23:0
+Extend
+CLR
+PCPlus8D
+ReadDataW
+ALUOutW
+WA3W
+1
+0
+ResultW
+St allF
+St allD
+FlushD
+FlushE
+ForwardAE
+ForwardBE
+Match
+RegWriteM
+RegWriteW
+MemtoRegE
+Hazard Unit
+100
+
+===== PAGE 102 =====
+Stalling Flush Logic with Early Branch Resolution
+§ Flush Decode if branch is taken
+FlushD = BranchTakenE
+§ Flush Execute if branch is taken
+FlushE = BranchTakenE
+101
+
+===== PAGE 103 =====
+Stalling Stall + Flush Logic with Early Branch
+Resolution + Load-Use Hazard
+§ Stall Fetch if load-use hazard is discovered
+StallF = ldrStallD
+§ Flush Decode if branch is taken
+FlushD = BranchTakenE
+§ Flush Execute if branch is taken
+FlushE = ldrStallD + BranchTakenE
+§ Stall Decode if load-use hazard is discovered
+StallD = ldrStallD
+102
+
+===== PAGE 104 =====
+Stalling Optional: Writes to PC
+§ Writes to PC still stall the CPU for 4 cycles (contrast with B
+instruction)
+§ Stall Fetch if PC write is discovered in Decode, Execute, or Memory
+StallF = PCSrcD + PCSrcE + PCSrcM
+§ Flush Decode if PC write is discovered in Decode, Execute, Memory,
+or Writeback
+FlushD = PCSrcD + PCSrcE + PCSrcM + PCSrcW
+103
+
+===== PAGE 105 =====
+Stalling Flush and Stall Logic for Writes to PC
+§ Explaining the logic for StallF control signal
+§ Cycle #1: PC-changing instruction (I) is fetched
+§ Cycle #2: I is decoded and PCSrcD is asserted
+§ Cycle #3: I is executed and PCSrcE is asserted
+§ Cycle #4: I is in M stage and PCSrcM is asserted
+§ Cycle #5: PCSrcW is asserted, and new PC is written to the ResultW bus
+§ PC is a register so will be updated in the next clock cycle (cycle # 6)
+§ In cycle #5, StallF is asserted, so that the next cycle the PC register is set up
+properly to capture the new value of instruction address (ResultW)
+§ In the first four cycles, StallF is deasserted to not cause a change to PC
+104
+
+===== PAGE 106 =====
+Stalling Flush and Stall Logic for Writes to PC
+§ Explaining the logic for FlushD control signal
+§ Cycle #1: PC-changing instruction (I) is fetched
+§ Cycle #2: I is decoded and PCSrcD is asserted
+§ Cycle #3: I is executed and PCSrcE is asserted
+§ Cycle #4: I is in M stage and PCSrcM is asserted
+§ Cycle #5: PCSrcW is asserted, and new PC is written to the ResultW bus
+§ If we keep FlushD asserted during cycle 5, then at the beginning of cycle # 6
+when rising edge arrives, register will still read all zeroes
+§ In cycle # 6, FlushD is released so in cycle # 7, when the correct instruction
+advances to the Decode register, the instruction is captured at the edge of
+the clock (in cycle # 7)
+105
+
+===== PAGE 107 =====
+Stalling Full Control Stalling Logic (page # 440)
+§ PCWrPendingF = 1 if write to PC in Decode, Execute or Memory
+PCWrPendingF = PCSrcD + PCSrcE + PCSrcM
+PC write is in progress in D, E, M
+§ Stall Fetch if PCWrPendingF
+StallF = ldrStallD + PCWrPendingF
+Stall fetch if LDR-Use hazard or PC
+write in D, E, or M
+§ Flush Decode if PCWrPendingF OR PC is written in Writeback OR branch is
+taken
+FlushD = PCWrPendingF + PCSrcW + BranchTakenE
+§ Flush Execute if branch is taken
+FlushE = ldrStallD + BranchTakenE
+Flush D if PC write in progress in D,
+E, M, or W, or branch taken in E
+§ Stall Decode if ldrStallD (as before)
+StallD = ldrStallD
+Stall Decode if LDR-Use hazard
+106
+
+===== PAGE 108 =====
+Stalling ARM Processor with Full Hazard Handling
+BranchTakenE
+CLK
+Flags'
+CLK CLK
+PCSrcM Control
+Unit
+27:26
+Op
+25:20
+Funct
+15:12 Rd
+31:28
+PCSrcD RegWriteD
+PCSrcE RegWriteE
+PCSrcW
+RegWriteM
+RegWriteW
+MemtoRegD
+MemtoRegE
+MemtoRegM
+MemtoRegW
+MemWriteD
+MemWriteE
+MemWriteM
+ALUControlD
+ALUControlE
+BranchD
+BranchE
+ALUSrcD
+FlagWriteD
+ALUSrcE
+FlagWriteE
+ImmSrcD
+CondE
+1
+0
+CLK
+PC'
+PCF
+CLK
+InstrF
+InstrD
+19:16
+0
+1
+E N
+15
+3:0
+0 1
+0
+1
+RegSrcD
+0
+1
+CLK
+FlagsE
+RA1D
+SrcAE
+00
+01
+10
+CondExE
+Cond
+Unit
+ALUFlags
+ALUResultE CLK
+A RD
+Instructi on
+Memory
+RA2D
+WE3
+A1
+RD1
+A2
+RD2
+A3
+WD3
+Register
+File
+R15
+ALU
+00
+01
+10
+0
+1
+SrcBE
+WE
+A RD
+Data
+Memory
+WD
++
+PCPlus4F
+15:12
+ExtImmE
+WriteDataE
+WA3E ALUOutM WA3M 4
+CLR
+E N
+23:0
+St allF
+St allD
+FlushD
+Extend
+Hazard Unit
+CLR
+PCPlus8D
+ReadDataW
+ALUOutW
+WA3W
+1
+0
+ResultW
+FlushE
+ForwardAE
+ForwardBE
+Match
+RegWriteM
+RegWriteW
+MemtoRegE
+107
+
+===== PAGE 109 =====
+Stalling Simplified View of Pipeline
+Decode Execute Memory Writeback
+Control
+PCSrc
+0
+A1
+A2
+A
+MemData
+PC
+IM
+RF
+DM
+ALUResult
+1
+A3
+B
+WD3
+4
+0
+1
+Mem2Reg
+Result
+108
+
+===== PAGE 110 =====
+Stalling Simplified View of Pipeline
+Decode Execute Memory Writeback
+Control
+PCSrc
+0
+1
+PC
+IM
+A1
+A2
+RF
+A3
+WD3
+forwardM A
+ALUResult
+B
+forwardW
+MemData
+DM
+4
+stall
+clear
+stall
+clear
+clear
+clear
+0
+1
+Mem2Reg
+Result
+109
+
+===== PAGE 111 =====
+Stalling Simplified View of Pipeline
+Control
+PCSrc
+0
+1
+PC
+IM
+Decode Execute Memory Writeback
+forwardM A
+ALUResult
+B
+forwardW
+MemData
+A1
+A2
+RF
+A3
+WD3
+DM
+4
+stall
+stall
+clear
+clear
+Hazard Detection Unit
+clear
+clear
+0
+1
+Mem2Reg
+Result
+Match
+Control
+110
+
+===== PAGE 112 =====
+Stalling Simplified View of OOO Pipeline
+Issue Queue (IQ)
+FEtch DEcode ISsue
+EXecute WriteBack
+• Read inst. from
+memory
+• Increment PC
+• Decode inst.
+• Read register if
+value is ready
+• Set scoreboard
+entry to Logic 1
+to indicate
+destination busy
+• Read value/tag
+• Copy inst. into
+the issue queue
+(IQ) if an entry
+is available
+• Pick a ready
+inst. and send
+for execution if
+operands ready
+• Many ALUs and
+memory here
+• Memory can
+handle multiple
+requests
+• Forwarding to
+IQ from here
+• Writeback result to
+RF and IQ
+• Reset scoreboard
+entry
+111
+
+===== PAGE 113 =====
+Stalling Simplified View of OOO Pipeline
+Issue Queue (IQ)
+FEtch DEcode ALlocate
+SChedule EXecute • Read inst. from
+memory
+• Increment PC
+• Decode inst.
+• Read register if
+value is ready
+• Set scoreboard
+entry to Logic 1
+to indicate
+destination busy
+• Read value/tag
+• Copy inst. into
+the issue queue
+(IQ) if an entry
+is available
+• Pick a ready
+inst. and send
+for execution if
+operands ready
+• Many ALUs and
+memory here
+• Memory can
+handle multiple
+requests
+• Forwarding to
+IQ/EX from
+here
+WriteBack
+• Writeback result to
+RF and IQ
+• Reset scoreboard
+entry
+112
+
+===== PAGE 114 =====
+When to Forward?
+§ Read-after-write hazard between two instructions where the first
+or “older” instruction is not a load
+ADD R0, R1, R2
+SUB R4, R0, #1
+MUL R12, R2, R3
+ADD R0, R12, #1
+113
+
+===== PAGE 115 =====
+When to Stall?
+§ Load-use hazard
+§ Stall the Decode and Fetch stages when the “use” is discovered
+§ PC-changing instructions
+§ Possible but not implemented for complexity reasons
+§ Stall Fetch for four cycles
+114
+
+===== PAGE 116 =====
+When to Flush?
+§ Load-use hazard
+§ Flush the Execute pipeline register
+§ PC-changing instructions
+§ Keep flushing the Decode stage until the new instruction (branch
+target) is available in the Decode pipeline register
+§ Branch instructions
+§ When branch is resolved early in the Execute stage, flush the
+pipeline registers in the Decode and Execute stages
+115
+
+===== PAGE 117 =====
+How does the CPU Stall and Flush?
+§ Stall
+§ Use Enable input to hold/retain the value stored in the
+pipeline register
+§ Flush
+§ Use the Clear input to zero the register contents
+116
+
+===== PAGE 118 =====
+Superscalar Processor
+117
+
+===== PAGE 119 =====
+Stalling Superscalar: Idea and Datapath
+§ Multiple copies of datapath hardware to execute instructions simultaneously
+§ Example: 2-way superscalar fetches and executes 2 instructions per cycle
+§ Requires 6-ported register file (4 reads, 2 writes), 2 ALUs, 2-ported data memory
+§ Ideal CPI = 0.5 and IPC = 2
+§ Dependencies and hazards inhibit ideal IPC
+§ Above figure does not show forwarding and hazard detection logic
+118
+
+===== PAGE 120 =====
+Stalling Superscalar: Pipeline Operation
+§ Example program where IPC = 2 is possible
+119
+
+===== PAGE 121 =====
+Stalling Superscalar: Impact of Dependencies
+§ Example of program with data dependences
+§ CPU completes (on average) 6 instructions in 5 cycles (IPC of 1.2)
+§ Can also compute IPC from the fetch side (6 instructions are issued
+in five cycles)
+120
+
+===== PAGE 122 =====
+In-Order Superscalar: Tradeoffs
+Stalling
+§ Superscalar processors encompass spatial + temporal parallelism
+§ Two pipelined lanes in one CPU with duplicated resources
+§ 2-wide, 4-wide, and 6-wide superscalars are common (wide = way)
+§ Too many dependencies (data + control) in real programs
+§ Hard to find many instructions to issue (in order) every cycle
+§ Out-of-order CPUs unlock this bottleneck
+§ Large number of execution units and complex forwarding and hazard
+detection logic costs area, power, and energy
+121
+
+===== PAGE 123 =====
+In-Order Superscalar: Role of Compiler
+Stalling
+§ In-order (superscalar) CPU: Instructions are executed in the exact
+order determined by the assembly programmer or compiler
+§ The compiler can change instruction order to maximize pipeline
+utilization
+§ Goal: Achieve maximum IPC (e.g., IPC of 2 for 2-wide superscalar
+CPUs)
+122
+
+===== PAGE 124 =====
+Branch Prediction
+123
+
+===== PAGE 125 =====
+Static Branch Prediction
+§ Static (fixed) policy #1: Always predict that the branch is not taken
+§ Static policy # 2: Always predict that the branch will be taken
+§ The cost of a branch misprediction (branch misprediction penalty)
+increases for superscalars
+§ Effort to process “wrong path” instructions is wasted
+§ We need more accurate branch predictors (>99% accuracy)
+124
+
+===== PAGE 126 =====
+Dynamic Branch Prediction
+§ Predict the outcome of a branch instruction (in fetch stage)
+based on the recent behavior of the branch
+§ What do we need?
+§ Branch identification (PC uniquely identifies a branch)
+§ Recent branch behavior (taken/untaken last time)
+125
+
+===== PAGE 127 =====
+Branch Identification & Behavior
+§ Branch identification
+§ Use the branch address in instruction memory
+§ Can grab it from PC
+§ Branch behavior
+§ Outcome of the condition test from ALU
+§ Also need to store the branch target the last time the
+branch executed
+126
+
+===== PAGE 128 =====
+One-Bit Predictor
+§ Branch History Table (BHT) or Branch Prediction Buffer
+§ Small amount of memory indexed by low-order branch address bits
+§ Store a single bit that says branch was recently taken or not
+BHT
+0
+1
+0
+branch
+address
+m
+0
+1-bit
+prediction
+1
+1
+1
+1
+§ Due to limited entries in the table, there are conflicts (aka. aliasing)
+127
+
+===== PAGE 129 =====
+One-Bit Predictor: Operation
+§ Placed in the Fetch stage
+§ Predicted untaken: Fetch the next instruction
+§ Predicted taken: Compute the target address and fetch from target
+§ Updates to the BHT
+§ Nothing to do if outcome matches prediction
+§ If outcome does not match prediction
+§ Flip the entry in the BHT
+§ Flush the pipeline and update the PC
+§ Questions
+§ Is correctness affected by misprediction?
+§ Is performance affected by misprediction? 128
+
+===== PAGE 130 =====
+Accuracy/Perf of 1-bit Predictor
+Consider the following loop:
+MOV R0, #1
+FOR
+CMP R0, #10
+BGE DONE
+ADD R0, R0, #1
+B FOR
+DONE
+§ What is the prediction accuracy of a 1-bit branch predictor?
+i =
+1 2 3 4 5 6 7 8 9 10
+Direction
+Current State/Prediction
+New State
+NT NT NT NT NT NT NT NT NT T
+T NT NT NT NT NT NT NT NT NT
+NT NT NT NT NT NT NT NT NT T
+129
+
+===== PAGE 131 =====
+Accuracy/Perf of 1-bit Predictor
+Consider the following loop:
+MOV R0, #1
+FOR
+CMP R0, #10
+BGE DONE
+ADD R0, R0, #1
+B FOR
+DONE
+§ What is the prediction accuracy of a 1-bit branch predictor?
+i =
+Actual Direction
+1 2 3 4 5 6 7 8 9 10
+NT NT NT NT NT NT NT NT NT T
+Current State/Prediction
+New State
+T NT NT NT NT NT NT NT NT NT
+NT NT NT NT NT NT NT NT NT T
+130
+
+===== PAGE 132 =====
+Accuracy/Perf of 1-bit Predictor
+Consider the following loop:
+MOV R0, #1
+FOR
+CMP R0, #10
+BGE DONE
+ADD R0, R0, #1
+B FOR
+DONE
+1 2 3 4 5 6 7 8 9 10
+§ What is the prediction accuracy of a 1-bit branch predictor?
+i =
+Actual Direction
+Current State/Prediction
+New State
+NT NT NT NT NT NT NT NT NT T
+T NT NT NT NT NT NT NT NT NT
+NT NT NT NT NT NT NT NT NT T
+131
+
+===== PAGE 133 =====
+Accuracy/Perf of 1-bit Predictor
+Consider the following loop:
+MOV R0, #1
+FOR
+CMP R0, #10
+BGE DONE
+ADD R0, R0, #1
+B FOR
+DONE
+1 2 3 4 5 6 7 8 9 10
+§ What is the prediction accuracy of a 1-bit branch predictor?
+i =
+Actual Direction
+Current State/Prediction
+New State
+NT NT NT NT NT NT NT NT NT T
+T NT NT NT NT NT NT NT NT NT
+NT NT NT NT NT NT NT NT NT T
+132
+
+===== PAGE 134 =====
+Accuracy/Perf of 1-bit Predictor
+Consider the following loop:
+MOV R0, #1
+FOR
+CMP R0, #10
+BGE DONE
+ADD R0, R0, #1
+B FOR
+DONE
+1 2 3 4 5 6 7 8 9 10
+§ What is the prediction accuracy of a 1-bit branch predictor?
+i =
+Actual Direction
+Current State/Prediction
+New State
+NT NT NT NT NT NT NT NT NT T
+T NT NT NT NT NT NT NT NT NT
+NT NT NT NT NT NT NT NT NT T
+133
+
+===== PAGE 135 =====
+Anomalous Decision
+§ Accuracy of one-bit predictor is 80% for a branch that is NOT
+TAKEN 90% of the time
+§ Anomaly: When branches that are strongly biased toward one
+direction suddenly takes a different path or direction
+§ A 1-bit predictor is “thrown off” by a single anomolous decision
+134
+
+===== PAGE 136 =====
+Smith’s Algorithm
+§ 1979: James E. Smith notices the performance pathology of 1-bit
+predictor at loop termination
+§ Proposes Smith’s branch prediction algorithm
+§ Key insight: Add hysterisis (inertia) to the predictor’s state
+§ The same outcome must occur multiple times to reach the strong states
+§ A saturating counter maps the outcomes of several recent branches on to a
+counter with different states
+135
+
+===== PAGE 137 =====
+k = 2
+§ Four states
+§ Strongly not-taken (SN or 00)
+§ Weakly not-taken (WN or 01)
+§ Weakly taken (WT or 10)
+§ Strongly taken (ST or 11)
+136
+
+===== PAGE 138 =====
+Smith’s Algorithm
+taken
+Untaken
+11
+Predict
+Taken
+taken
+Untaken
+00
+Predict
+Untaken
+taken
+Untaken
+Predict
+Taken
+10
+Untaken
+taken
+Predict
+Untaken
+01
+137
+
+===== PAGE 139 =====
+Smith’s Predictor Hardware (k = 2)
+BHT
+00
+2m k-bit counters
+branch address
+01
+10
+updated counter value
+11
+m
+….
+saturating counter
+increment/decrement
+branch outcome
+MSB
+branch prediction
+138
+
+===== PAGE 140 =====
+Accuracy of Smith’s Predictor
+Below: Accuracy of Smith1 (1-bit counter) and Smith2 (2-bit counter) on a
+sequence of branches with sudden shifts in branch behavior
+Branch
+Direction
+Smith1 Smith2
+State Prediction State Prediction
+1 1 1 11 1
+1 1 1 11 1
+0 1 1
+(misprediction)
+11 1
+(misprediction)
+1 0 0
+10 1
+(misprediction)
+1 1 1 11 1
+1 1 1 11 1
+139
+
+===== PAGE 141 =====
+Accuracy of Smith’s Predictor
+Below: Accuracy of Smith1 (1-bit counter) and Smith2 (2-bit counter) on a
+sequence of branches with sudden shifts in branch behavior
+Branch
+Direction
+Smith1 Smith2
+State Prediction State Prediction
+1 1 1 11 1
+1 1 1 11 1
+0 1 1
+(misprediction)
+11 1
+(misprediction)
+1 0 0
+10 1
+(misprediction)
+1 1 1 11 1
+1 1 1 11 1
+140
+
+===== PAGE 142 =====
+Accuracy of Smith’s Predictor
+Below: Accuracy of Smith1 (1-bit counter) and Smith2 (2-bit counter) on a
+sequence of branches with sudden shifts in branch behavior
+Branch
+Direction
+Smith1 Smith2
+State Prediction State Prediction
+1 1 1 11 1
+1 1 1 11 1
+0 1 1
+(misprediction)
+11 1
+(misprediction)
+1 0 0
+10 1
+(misprediction)
+1 1 1 11 1
+1 1 1 11 1
+141
+
+===== PAGE 143 =====
+Accuracy of Smith’s Predictor
+Below: Accuracy of Smith1 (1-bit counter) and Smith2 (2-bit counter) on a
+sequence of branches with sudden shifts in branch behavior
+Branch
+Direction
+Smith1 Smith2
+State Prediction State Prediction
+1 1 1 11 1
+1 1 1 11 1
+0 1 1
+(misprediction)
+11 1
+(misprediction)
+1 0 0
+10 1
+(misprediction)
+1 1 1 11 1
+1 1 1 11 1
+142
+
+===== PAGE 144 =====
+Branch Target Buffer (BTB)
+§ Buffer = A small memory for storing “some” information
+§ Recall the CPU needs to know in the fetch stage
+§ Branch direction
+§ Branch target address
+§ BTB stores the target addresses for taken branches
+§ Does not make sense to search the BTB for targets of untaken
+branches
+143
+
+===== PAGE 145 =====
+Operation with BTB
+§ Branch is predicted to be taken
+§ Get target address from BTB
+§ Branch is predicted untaken
+§ PC = PC + 4
+§ If the prediction is correct: continue normal execution
+§ If the prediction is incorrect: flush all pipeline stages containing
+instructions from the mispredicted path
+144
+
+===== PAGE 146 =====
+Correlating Branch Predictors
+§ In real programs, the outcome of one branch often depends on the
+behavior of other branches
+aa = 0; bb = 0;
+if (cond1)
+aa = 1;
+if (aa == bb)
+{…}
+§ Traditional (non-correlating) predictors that rely only on the outcome of
+a single branch fail to capture these relationships
+§ Correlating branch predictors improve accuracy by using
+§ Local history (past behavior of the same branch)
+§ Global history (outcomes of recent branches across the program)
+§ Branch address (to distinguish branches with similar histories)
+145
+
+===== PAGE 147 =====
+A Lot More to Say on Branch Prediction!
+§ Important component of a modern processor
+§ Especially superscalar and out-of-order processors
+§ Prediction accuracy above 99%
+§ State of art: Deep neural networks, machine learning approaches
+§ COMP4045: Students implement and compare state of the art
+branch predictors in a C++ simulator
+146
+
+===== PAGE 148 =====
+Real pipelines have caches and real memory
+latencies!
+§ Each memory access costs 100s of cycles (we assumed 1 cycle data memory
+access for simplicity)
+§ Cache hit cost 1– 4 cycles
+§ Cache miss costs close to 100 cycles
+§ Therefore, an in-order pipelined CPU can stall for many cycles on memory
+accesses
+§ Next step
+§ Out-of-order CPU that continues doing useful work in the presence of
+long-latency memory accesses
+147
+

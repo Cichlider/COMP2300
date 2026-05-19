@@ -1,0 +1,1685 @@
+===== PAGE 1 =====
+Convener: Shoaib Akram
+shoaib.akram@anu.edu.au
+
+===== PAGE 2 =====
+What we have done so far
+§ Data processing/ALU instructions
+§ Memory instructions
+§ Branch instructions
+§ Various addressing modes
+§ How do we use these instructions to translate structured programs
+with loops into ARM assembly?
+§ ISA enables easier translation of high-level language constructs
+
+===== PAGE 3 =====
+Recall: Conditional Branch
+§ Conditional branch uses condition mnemonics
+Assembly code:
+MOV R0, #4
+ADD R1, R0, R0
+CMP R0, R1
+BEQ THERE
+ORR R1, R1, R1
+THERE
+ADD R1, R1, #78
+§ CMP subtracts R1 from R0 and sets all flags
+§ Z flag is FALSE because R0 – R1 is not 0
+§ The branch BEQ evaluates to FALSE
+§ Branch is NOT TAKEN (NT)
+§ The next instruction executed is the ORR instruction
+2
+
+===== PAGE 4 =====
+Instruction Format – 3: Branch
+31:28 27:26 25:24 23:0
+cond op 1L imm24
+§ op = 10
+§ imm24 = 24-bit signed immediate
+§ The two bits [25:24] form the funct field
+§ Bit 25 is always 1
+§ L bit: L = 0 for B (Branch)
+§ L bit: L = 1 for BL (Branch and Link)
+§ Format
+B TARGET
+B imm24
+3
+
+===== PAGE 5 =====
+Branch with L = 0
+§ Branch with L bit (Bit 24) as 0 is a regular branch
+31:28 27:26 25:24 23:0
+cond 10 10 imm24
+§ Branch Target Address (BTA): The address of the next instruction to execute if the
+branch is taken
+§ How is BTA calculated?
+1. 2. Shift left imm24 by 2 (to convert words to bytes)
+Sign-extend (copy Instruction[23] into Instruction[24:31] )
+3. Add PC + 8
+4
+
+===== PAGE 6 =====
+BTA Calculation Example
+§ Instruction encodes the distance from PC + 8 as three 32-bit words
+31:28 27:26 25:24 23:0
+cond 10 10 imm24 = 3 (000000000000000000000011)
+address
+suppose PC points here à PC
+PC + 4
+PC + 8
+3 instructions
+= 12 Bytes
+0x80A0
+0x80A4
+0x80A8
+0x80AC
+0x80B0
+0x80B4
+0x80B8
+BLT THERE
+ADD R0, R1, R2
+SUB R0, R0, R9
+ADD R3, R0, R1
+ORR R3, R2, R1
+THERE
+ADD R1, R1, #78
+ADD R3, R3, #0x5
+5
+
+===== PAGE 7 =====
+BTA Calculation DataPath
+31:28 27:26 25:24 23:0
+cond 10 10 imm24 = 3 (000000000000000000000011)
+8
+Shifter
+PC
+SEXT
+ALU
+ALU
+6
+
+===== PAGE 8 =====
+BTA Calculation Summary
+The processor calculates the BTA in three steps
+1. 2. Shift left imm24 by 2 (to convert words to bytes)
+Sign-extend (copy Instr23 into Instr31:24)
+3. Add PC + 8
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1
+= 3
+0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 1 0 0
+= 12
+7
+
+===== PAGE 9 =====
+PC-Relative Addressing Mode
+Add an offset to the PC to calculate the
+memory address of the target
+instruction
+8
+
+===== PAGE 10 =====
+Functions
+9
+
+===== PAGE 11 =====
+Functions
+§ Program fragments that are written once and invoked multiple times
+within the same or a different program
+C Code
+void main()
+{
+int sum(int a, int b)
+{
+return (a + b);
+int y1, y2;
+y1 = sum(42, 7);
+y2 = diffofsums(12, 7, 10, 1);
+}
+}
+int diffofsums(int f, int g, int h, int i) {
+int result;
+result = sum(f, g) – (h + i);
+return result;
+}
+§ One software engineer writes sum(int a, int b) and many
+others can reuse it
+
+===== PAGE 12 =====
+Libraries of Pre-Existing Functions
+§ One might require a fragment that has been supplied by the
+manufacturer or by some independent software supplier
+§ It is almost always the case that collections of such fragments are
+available to programmers to free them from having to write their
+own
+§ These collections are called libraries
+§ Example: Math library provides square root, sine, cosine, arctangent
+§ Programmers do not need to reinvent the wheel
+
+===== PAGE 13 =====
+API
+§ Application Programming Interface (API)
+§ Defines the interfaces by which one software program communicates
+with another at the source code level
+Application A
+Application B
+Math Library
+sqrt()
+sine()
+cosine()
+and so on ...
+Application C
+Application D
+§ API defines the interface only
+§ The user of the API can ignore the implementation
+§ Many implementations of the same API
+§ C standard library hides many low-level details of the system
+
+===== PAGE 14 =====
+Usefulness of Functions
+§ High-level languages offer functions to enable
+§ Abstraction & Modularity
+§ Code reuse
+§ Readability
+§ Testability & validation
+§ Maintainability
+
+===== PAGE 15 =====
+Functions
+§ Functions are also called procedures or subroutines
+§ Functions are ubiquitous which encourages ISA support
+§ Special jump instructions
+§ Special (isolated) space in memory to store function-
+related data
+§ “Mechanism” to reduce interference between nested
+functions
+
+===== PAGE 16 =====
+What we will cover
+§ Architectural support for functions
+§ Branch and Link instruction (BL)
+§ Stack Pointer (SP)
+§ Link Register (LR)
+§ Microarchitecture-level impact of programming styles
+§ Iteration vs. Recursion
+§ Get a deeper understanding of hardware/software
+interaction and tradeoffs
+
+===== PAGE 17 =====
+Functions in C C Code
+§ main()is the caller
+§ It calls another function
+§ Returns nothing (void)
+§ Takes no input arguments
+void main()
+{
+int y;
+y = sum(42, 7);
+...
+int sum(int a, int b)
+return (a + b);
+}
+{
+}
+§ sum()is the callee
+§ Being called by some function
+§ Takes two input arguments of type int: a and b
+§ It returns an integer value
+§ Computes the sum of a and b
+
+===== PAGE 18 =====
+Functions in C C Code
+void main()
+§ The caller provides the input arguments
+§ 42 and 7 in this example
+{
+int y;
+y = sum(42, 7);
+...
+}
+int sum(int a, int b)
+{
+return (a + b);
+}
+§ The distinction between caller and callee depends on
+the context
+§ What if someone calls the main function?
+
+===== PAGE 19 =====
+Leaf versus Non-Leaf Functions
+§ sum()is a leaf function
+§ It does not call another function
+§ main()is a non-leaf function
+§ It calls another function
+§ Non-leaf functions are more complicated especially
+at the assembly level
+
+===== PAGE 20 =====
+Functions as Detectives
+§ Assigned a secret mission (function call)
+§ Acquires necessary resources (acquire memory)
+§ Perform the mission (execute instructions)
+§ Leaves no trace (clean up memory)
+§ Returns safely to point of origin (function return)
+
+===== PAGE 21 =====
+Breaking Down Function Execution
+§ Caller stores arguments in registers or memory
+§ Function call: Caller transfers flow control to the callee
+§ Callee acquires/allocates memory for doing work
+§ Callee executes the function body
+§ Callee stores the result in “some” register
+§ Callee deallocates memory
+§ Function return: Callee returns control back to the caller
+
+===== PAGE 22 =====
+Instruction for Function Call
+§ It is usually the case that ISAs provide a special variant of the branch
+instruction for making the function call
+§ MIPS : jal
+§ ARM : BL
+§ Intel x86 : call
+§ RISC-V : jal
+§ QuAC: No architectural support for functions
+
+===== PAGE 23 =====
+ARM Function Call
+§ BL (Branch and Link)
+§ CPU branches to the label specified by BL
+§ CPU stores the return address in the link register (LR)
+§ Return address is the address of the next instruction
+after the function call
+§ How should we return from the function to the caller?
+
+===== PAGE 24 =====
+Returning to Callee
+§ Returning from function requires updating the PC
+§ Move the link register into PC
+§ MOV PC, LR
+§ How should we pass arguments to the function?
+§ Where should we return the value?
+
+===== PAGE 25 =====
+Passing Arguments
+§ Passing arguments (convention)
+§ R0, R1, R2, R3
+§ Returning value (convention)
+§ R0
+
+===== PAGE 26 =====
+ARM Register Set
+Name Use
+R0 Argument / return value / temporary variable
+R1-R3 Argument / temporary variables
+R4-R11 Saved variables
+R12 Temporary variable
+R13 (SP) Stack Pointer
+R14 (LR) Link Register
+R15 (PC) Program Counter
+
+===== PAGE 27 =====
+Example of a Function Call
+C Code
+int main() {
+simple();
+a = b + c;
+Memory
+Address
+ARM Assembly Code
+0x00000200 MAIN BL SIMPLE
+0x00000204 ADD R4, R5, R6
+...
+}
+0x00401020 SIMPLE MOV PC, LR
+void simple() {
+return;
+}§ BL branches to SIMPLE
+§ MOV PC, LR sets PC = LR
+LR = PC + 4 = 0x00000204
+(the next instruction executed is at 0x00000204)
+§ MAIN and SIMPLE are labels (memory addresses) in assembly
+§ BL transfers flow to SIMPLE and stores the return address in LR
+§ The function returns after MOV, and the next instruction (ADD) is executed
+
+===== PAGE 28 =====
+Another Example: Difference of Sums
+C code:
+int main() {
+int y;
+...
+...
+y = diffofsums(2, 3, 4, 5);
+}
+int diffofsums(int f, int g, int h, int i) {
+int result;
+result = (f + g) – (h + i);
+return result;
+}
+
+===== PAGE 29 =====
+ARM Assembly Code
+; R4 = y
+MAIN
+...
+MOV R0, #2 ; argument 0 = 2
+MOV R1, #3 ; argument 1 = 3
+MOV R2, #4 ; argument 2 = 4
+MOV R3, #5 ; argument 3 = 5
+BL DIFFOFSUMS ; call function
+MOV R4, R0 ; y = returned value
+...
+; R4 = result
+DIFFOFSUMS
+ADD R8, R0, R1 ADD R9, R2, R3 SUB R4, R8, R9 MOV R0, R4 MOV PC, LR ; R8 = f + g
+; R9 = h + i
+; result = (f + g) - (h + i)
+; put return value in R0
+; return to caller
+
+===== PAGE 30 =====
+Questions
+§ How can we pass more than 4 function arguments?
+§ How can we ensure that registers in use by the caller are not
+corrupted?
+§ DIFFOFSUMS overwrites R4, R8, R9
+§ MAIN may have “live” values in these registers
+§ Answer: The Stack
+§ A special area in memory used across function calls to
+preserve registers and store temporary values that
+overflow available registers
+
+===== PAGE 31 =====
+Aside: Register Reuse
+§ Live register
+§ A subsequent instruction will use the register value
+§ The property is called liveness
+§ Dead register
+§ No upcoming instruction will use the register’s value
+§ The register can be safely used to store a new value
+§ It’s really the value stored in the register that is dead and not the
+physical register
+
+===== PAGE 32 =====
+Uses of Stack
+§ Preserving and saving registers
+§ Passing extra arguments
+§ Temporary memory space for Storing function-local
+variables
+
+===== PAGE 33 =====
+The Stack
+§ A stack is like a Last In First Out (LIFO) Queue
+memory address
+44
+40
+36
+32
+28
+24
+20
+16
+12
+8
+4
+0
+§ Stack expands and contracts as items are added and removed
+
+===== PAGE 34 =====
+The Stack
+§ A stack is like a Last In First Out (LIFO) Queue
+memory address
+44
+40
+36
+32
+28
+24
+20
+16
+12
+8
+4
+0
+§ Stack expands and contracts as items are added and removed
+
+===== PAGE 35 =====
+Implementing a Stack
+§ What do we need to implement a stack?
+§ We need “some memory” for stack data (items)
+§ Do we have memory? Yes, we can use data memory
+§ We need “an arrow” to point to the top of the stack
+§ What does an arrow represent in comp. architecture?
+§ It represents a pointer to a memory location
+§ In other words, a register containing the memory address
+§ Do we have a register? Yes, we can use an architectural register
+§ Stack Pointer (SP): An architectural register that is by convention
+dedicated to storing the top of the stack
+
+===== PAGE 36 =====
+Implementing a Stack
+§ Suppose we have the stack pointer initialized to 0. How do we make space for
+(aka reserve) 8 items on the stack. Word size = 4 bytes
+memory address
+44
+40
+36
+32
+28
+24
+20
+16
+12
+8
+4
+0
+§ Add 32 to the stack pointer: SP = SP + 32
+
+===== PAGE 37 =====
+Implementing a Stack
+§ Suppose we have the stack pointer initialized to 0. How do we make space for
+(aka reserve) 8 items on the stack. Word size = 4 bytes
+memory address
+44
+40
+36
+32
+28
+24
+20
+16
+12
+8
+4
+0
+§ Add 32 to the stack pointer: SP = SP + 32
+
+===== PAGE 38 =====
+Growing and Shrinking the Stack
+§ push
+§ Put a new item on top of the stack and adjust the stack
+pointer accordingly (SP = SP + 4)
+§ pop
+§ Remove an item from top of the stack and subtract 4
+from the stack pointer
+
+===== PAGE 39 =====
+Push and Pop Operations
+§ We store the stack at “some” arbitrary address in memory
+§ Details of how the address is chosen are not important
+§ push {R0}
+§ Store R0 onto the stack
+§ pop {R0}
+§ Restore R0 with whatever is at the top of the stack
+
+===== PAGE 40 =====
+Different Ways to Manage Stack
+§ Descending Stack
+§ Grows downward
+§ SP points to the lowest address
+§ Ascending Stack
+§ Grows upward
+§ SP points to highest address
+memory address
+44
+40
+36
+32
+28
+24
+20
+16
+12
+8
+4
+0
+item-1
+item-2
+item-3
+item-4
+memory address
+44
+40
+36
+32
+SP
+28
+24
+20
+16
+12
+8
+4
+0
+SP
+item4
+item3
+item2
+item1
+
+===== PAGE 41 =====
+Further Classification
+§ Full Stack
+§ SP points to the last allocated
+space on the stack (top)
+§ Last item pushed
+memory address
+44
+40
+36
+32
+item-1
+item-2
+item-3
+item-4
+28
+24
+20
+16
+12
+8
+4
+0
+§ Empty Stack
+§ SP points to one word
+beyond the top of stack
+memory address
+44
+item-1
+40
+item-2
+36
+item-3
+SP item-4
+32
+28
+24
+20
+16
+12
+8
+4
+0
+SP
+
+===== PAGE 42 =====
+Empty Descending Stack
+memory address
+44
+40
+36
+32
+28
+24
+20
+16
+12
+8
+4
+0
+item-1
+item-2
+item-3
+item-4
+SP
+
+===== PAGE 43 =====
+Full Ascending Stack
+memory address
+44
+40
+36
+32
+28
+24
+20
+16
+12
+8
+4
+0
+item-4
+item-3
+item-2
+item-1
+SP
+
+===== PAGE 44 =====
+Empty Ascending Stack
+memory address
+44
+40
+36
+32
+28
+24
+20
+16
+12
+8
+4
+0
+item-4
+item-3
+item-2
+item-1
+SP
+
+===== PAGE 45 =====
+Full Descending Stack
+memory address
+44
+40
+36
+32
+28
+24
+20
+16
+12
+8
+4
+0
+item-1
+item-2
+item-3
+item-4
+SP
+§ ARM specifies a full descending stack, which we will assume in
+this course
+
+===== PAGE 46 =====
+ARM Stack
+§ ARM stack grows down
+in memory
+§ Stack Pointer (SP) points
+to the top of the stack
+§ SP register holds the
+address of (points to)
+the top of the stack
+contents of stack pointer
+SP
+0xBEFFFAE8
+Address BEFFFAE8 BEFFFAE4
+BEFFFAE0
+BEFFFADC
+BEFFFAD8
+BEFFFAD4
+Data
+AB000001
+SP
+
+===== PAGE 47 =====
+Growing the Stack
+§ Let us push two items
+on the stack
+§ 0x12345678
+§ 0xFFFFDDCC
+§ Where does the SP
+points to now?
+§ How does the stack look?
+contents of stack pointer
+SP
+0xBEFFFAE8
+Address BEFFFAE8 BEFFFAE4
+BEFFFAE0
+BEFFFADC
+BEFFFAD8
+BEFFFAD4
+Data
+AB000001
+SP
+
+===== PAGE 48 =====
+Growing the Stack
+§ SP points to the most
+recently pushed item on
+the stack
+§ SP decrements by 8 to
+make space for two
+words
+contents of stack pointer
+SP
+0xBEFFFAE0
+Address BEFFFAE8 BEFFFAE4 BEFFFAE0 BEFFFADC
+BEFFFAD8
+BEFFFAD4
+Data
+AB000001
+12345678
+FFFFDDCC
+SP
+
+===== PAGE 49 =====
+Saving and Restoring Registers
+§ DIFFOFSUMS corrupts three registers
+§ Recall: Spy must not reveal their actions
+§ No unintended side-effects (except leaving result in R0)
+§ Callee should not corrupt caller’s execution
+
+===== PAGE 50 =====
+Saving and Restoring Registers
+§ Functions use the stack for saving/restoring registers
+§ Allocate space on the stack (SP = SP – 12)
+§ Store registers in use by the caller on the stack
+§ Execute the function
+§ Restore the registers from the stack
+§ Deallocate space on the stack (SP = SP + 12)
+
+===== PAGE 51 =====
+Improved DIFFOFSUMS
+Address Data
+ARM Assembly Code
+; R0 = result
+DIFFOFSUMS
+SUB SP, SP, #12 STR R9, [SP, #8] STR R8, [SP, #4] STR R4, [SP] ADD R8, R0, R1 ADD R9, R2, R3 SUB R4, R8, R9 MOV R0, R4 LDR R4, [SP] LDR R8, [SP, #4] LDR R9, [SP, #8] ADD SP, SP, #12 MOV PC, LR BEFFFAE8 ; make space on stack
+; for 3 registers
+; save R9 on stack
+; save R8 on stack
+; save R4 on stack
+; R8 = f + g
+; R9 = h + i
+; result = (f + g) - (h + i)
+; put return value in R0
+; restore R4 from stack
+; restore R8 from stack
+; restore R9 from stack
+; deallocate stack space
+; return to caller
+BEFFFAE4
+BEFFFAE0
+BEFFFADC
+BEFFFAD8
+BEFFFAD4
+0X12345678
+SP
+
+===== PAGE 52 =====
+Improved DIFFOFSUMS
+Address Data
+ARM Assembly Code
+; R2 = result
+DIFFOFSUMS
+SUB SP, SP, #12 STR R9, [SP, #8] STR R8, [SP, #4] STR R4, [SP] ADD R8, R0, R1 ADD R9, R2, R3 SUB R4, R8, R9 MOV R0, R4 LDR R4, [SP] LDR R8, [SP, #4] LDR R9, [SP, #8] ADD SP, SP, #12 MOV PC, LR BEFFFAE8 ; make space on stack
+; for 3 registers
+; save R9 on stack
+; save R8 on stack
+; save R4 on stack
+; R8 = f + g
+; R9 = h + i
+; result = (f + g) - (h + i)
+; put return value in R0
+; restore R4 from stack
+; restore R8 from stack
+; restore R9 from stack
+; deallocate stack space
+; return to caller
+BEFFFAE4
+BEFFFAE0
+BEFFFADC
+BEFFFAD8
+BEFFFAD4
+0X12345678
+SP
+
+===== PAGE 53 =====
+Improved DIFFOFSUMS
+Address ARM Assembly Code
+; R2 = result
+DIFFOFSUMS
+SUB SP, SP, #12 STR R9, [SP, #8] STR R8, [SP, #4] STR R4, [SP] ADD R8, R0, R1 ADD R9, R2, R3 SUB R4, R8, R9 MOV R0, R4 LDR R4, [SP] LDR R8, [SP, #4] LDR R9, [SP, #8] ADD SP, SP, #12 MOV PC, LR BEFFFAE8 ; make space on stack
+; for 3 registers
+; save R9 on stack
+; save R8 on stack
+; save R4 on stack
+; R8 = f + g
+; R9 = h + i
+; result = (f + g) - (h + i)
+; put return value in R0
+; restore R4 from stack
+; restore R8 from stack
+; restore R9 from stack
+; deallocate stack space
+; return to caller
+BEFFFAE4 BEFFFAE0 BEFFFADC BEFFFAD8
+BEFFFAD4
+Data
+0X12345678
+R9
+R8
+R4
+SP
+
+===== PAGE 54 =====
+Improved DIFFOFSUMS
+Address ARM Assembly Code
+; R2 = result
+DIFFOFSUMS
+SUB SP, SP, #12 STR R9, [SP, #8] STR R8, [SP, #4] STR R4, [SP] ADD R8, R0, R1 ADD R9, R2, R3 SUB R4, R8, R9 MOV R0, R4 LDR R4, [SP] LDR R8, [SP, #4] LDR R9, [SP, #8] ADD SP, SP, #12 MOV PC, LR BEFFFAE8 ; make space on stack
+; for 3 registers
+; save R9 on stack
+; save R8 on stack
+; save R4 on stack
+; R8 = f + g
+; R9 = h + i
+; result = (f + g) - (h + i)
+; put return value in R0
+; restore R4 from stack
+; restore R8 from stack
+; restore R9 from stack
+; deallocate stack space
+; return to caller
+BEFFFAE4 BEFFFAE0 BEFFFADC BEFFFAD8
+BEFFFAD4
+Data
+0X12345678
+R9
+R8
+R4
+SP
+
+===== PAGE 55 =====
+Calling Convention
+§ Preserving every register that a function uses is wasteful
+§ DIFFOFSUMS preserves R4, R8, R9, but the caller
+may not be using R8 or R9
+§ Calling convention is a contract that callers and callees must
+follow
+
+===== PAGE 56 =====
+Calling Convention
+§ With a convention in place
+§ Functions written by different programmers can
+interoperate
+§ Functions compiled by two different compilers can
+interoperate
+§ A library function written by third party can safely be used
+without worrying about corruption due to misplaced
+arguments and return value
+
+===== PAGE 57 =====
+ARM Calling Convention
+§ Preserved Registers
+§ Registers that are preserved across function calls
+§ Caller can expect these registers to appear as if a function
+call was never made
+§ Callee must save and restore preserved registers
+§ Nonpreserved Registers
+§ Caller must save these registers before making the function
+call
+§ Their preservation is NOT the callee’s responsibility
+
+===== PAGE 58 =====
+ARM Calling Convention
+Preserved Nonpreserved
+Saved registers: R4 – R11 Temporary register: R12
+Stack pointer: SP (R13) Argument registers: R0 – R3
+Return address: LR (R14) Current Program Status
+Register
+Stack above the stack pointer Stack below the stack pointer
+§ SP and LR are fancy names for R13 and R14
+§ Stack above the stack pointer is preserved if the callee does not mess with
+the caller’s stack space (a.k.a. stack frame)
+§ Stack pointer is preserved, because the caller deallocates the space it uses
+on the stack before returning
+
+===== PAGE 59 =====
+Rules for Caller and Callee
+§ Caller save rule: The caller must save any non-preserved
+registers that it needs after the call
+§ After the call, it must restore these registers
+§ Callee save rule: Before a callee disturbs any of the
+preserved registers, it must save these registers
+§ Before the return, it must restore these registers
+
+===== PAGE 60 =====
+PUSH and POP Instructions
+§ PUSH: Saves registers on the stack
+§ PUSH {R4} stores R4 on to the stack and adds 4 to SP
+§ POP: Restores registers from the stack
+§ POP {R4} stores [SP] in R4 and subtracts 4 from SP
+§ Can store multiple registers on the stack in a single PUSH
+§ PUSH {R4, R8, LR}
+R13 stored at highest memory address
+lowest-numbered reg stored at lowest memory address
+
+===== PAGE 61 =====
+C Code
+int f1(int a, int b) {
+int i, x;
+x = (a + b)*(a − b);
+for (i=0; i<a; i++)
+x = x + f2(b+i);
+return x;
+}
+int f2(int p) {
+int r;
+r = p + 5;
+return r + p;
+}
+ARM Assembly Code
+; R0=a, R1=b, R4=i, R5=x
+F1
+PUSH {R4, R5, LR}
+ADD R5, R0, R1
+SUB R12, R0, R1
+MUL R5, R5, R12
+MOV R4, #0
+FOR
+CMP R4, R0
+BGE RETURN
+PUSH {R0, R1}
+ADD R0, R1, R4
+BL F2
+ADD R5, R5, R0
+POP {R0, R1}
+ADD R4, R4, #1
+B FOR
+RETURN
+MOV R0, R5
+POP {R4, R5, LR}
+MOV PC, LR
+; R0=p, R4=r
+F2
+PUSH {R4}
+ADD R4, R0, 5
+ADD R0, R4, R0
+POP {R4}
+MOV PC, LR
+
+===== PAGE 62 =====
+ARM Assembly Code
+; R0=a, R1=b, R4=i, R5=x
+F1
+PUSH {R4, R5, LR} ; save regs
+ADD R5, R0, R1 ; x = (a+b)
+SUB R12, R0, R1 ; temp = (a-b)
+MUL R5, R5, R12 ; x = x*temp
+MOV R4, #0 ; i = 0
+FOR
+CMP R4, R0 ; i < a?
+BGE RETURN ; no: exit loop
+PUSH {R0, R1} ; save regs
+ADD R0, R1, R4 ; arg is b+i
+BL F2 ; call f2(b+i)
+ADD R5, R5, R0 ; x = x+f2(b+i)
+POP {R0, R1} ; restore regs
+ADD R4, R4, #1 ; i++
+B FOR ; repeat loop
+RETURN
+MOV R0, R5 ; return x
+POP {R4, R5, LR} ; restore regs
+MOV PC, LR ; return
+; R0=p, R4=r
+F2
+PUSH {R4} ; save regs
+ADD R4, R0, 5 ; r = p+5
+ADD R0, R4, R0 ; return r+p
+POP {R4} ; restore regs
+MOV PC, LR ; return
+
+===== PAGE 63 =====
+ARM Assembly Code
+; R0=a, R1=b, R4=i, R5=x
+F1
+PUSH {R4, R5, LR}
+ADD R5, R0, R1
+SUB R12, R0, R1
+MUL R5, R5, R12
+MOV R4, #0
+FOR
+CMP R4, R0
+BGE RETURN
+PUSH {R0, R1}
+ADD R0, R1, R4
+BL F2
+ADD R5, R5, R0
+POP {R0, R1}
+ADD R4, R4, #1
+B FOR
+RETURN
+MOV R0, R5
+POP {R4, R5, LR}
+MOV PC, LR
+; R0=p, R4=r
+F2
+PUSH {R4}
+ADD R4, R0, 5
+ADD R0, R4, R0
+POP {R4}
+MOV PC, LR
+Address BEFFFAE8 BEFFFAE4 BEFFFAE0 BEFFFADC BEFFFAD8 BEFFFAD4
+Data
+LR
+R5
+R4
+R1
+R0
+SP
+
+===== PAGE 64 =====
+ARM Assembly Code
+; R0=a, R1=b, R4=i, R5=x
+F1
+PUSH {R4, R5, LR}
+ADD R5, R0, R1
+SUB R12, R0, R1
+MUL R5, R5, R12
+MOV R4, #0
+FOR
+CMP R4, R0
+BGE RETURN
+PUSH {R0, R1}
+ADD R0, R1, R4
+BL F2
+ADD R5, R5, R0
+POP {R0, R1}
+ADD R4, R4, #1
+B FOR
+RETURN
+MOV R0, R5
+POP {R4, R5, LR}
+MOV PC, LR
+; R0=p, R4=r
+F2
+PUSH {R4}
+ADD R4, R0, 5
+ADD R0, R4, R0
+POP {R4}
+MOV PC, LR
+Address BEFFFAE8 BEFFFAE4 BEFFFAE0 BEFFFADC BEFFFAD8 BEFFFAD4 Data
+LR
+R5
+R4
+R1
+R0
+R4
+SP
+
+===== PAGE 65 =====
+ARM Assembly Code
+; R0=a, R1=b, R4=i, R5=x
+F1
+PUSH {R4, R5, LR}
+ADD R5, R0, R1
+SUB R12, R0, R1
+MUL R5, R5, R12
+MOV R4, #0
+FOR
+CMP R4, R0
+BGE RETURN
+PUSH {R0, R1}
+ADD R0, R1, R4
+BL F2
+ADD R5, R5, R0
+POP {R0, R1}
+ADD R4, R4, #1
+B FOR
+RETURN
+MOV R0, R5
+POP {R4, R5, LR}
+MOV PC, LR
+; R0=p, R4=r
+F2
+PUSH {R4}
+ADD R4, R0, 5
+ADD R0, R4, R0
+POP {R4}
+MOV PC, LR
+Address BEFFFAE8 BEFFFAE4 BEFFFAE0 BEFFFADC BEFFFAD8 BEFFFAD4 Data
+LR
+R5
+R4
+R1
+R0
+R4
+SP
+
+===== PAGE 66 =====
+ARM Assembly Code
+; R0=a, R1=b, R4=i, R5=x
+F1
+PUSH {R4, R5, LR}
+ADD R5, R0, R1
+SUB R12, R0, R1
+MUL R5, R5, R12
+MOV R4, #0
+FOR
+CMP R4, R0
+BGE RETURN
+PUSH {R0, R1}
+ADD R0, R1, R4
+BL F2
+ADD R5, R5, R0
+POP {R0, R1}
+ADD R4, R4, #1
+B FOR
+RETURN
+MOV R0, R5
+POP {R4, R5, LR}
+MOV PC, LR
+; R0=p, R4=r
+F2
+PUSH {R4}
+ADD R4, R0, 5
+ADD R0, R4, R0
+POP {R4}
+MOV PC, LR
+Address BEFFFAE8 BEFFFAE4 BEFFFAE0 BEFFFADC BEFFFAD8 BEFFFAD4 Data
+LR
+R5
+R4
+R1
+R0
+R4
+SP
+
+===== PAGE 67 =====
+Exercise
+§ Provide two optimizations that reduce the stack space
+consumed by the previous program without impacting its
+correctness.
+
+===== PAGE 68 =====
+Recall: Function Execution
+§ f1()
+§ f1()à f2()
+§ f1()à f2() à f3()
+§ f1()à f2()
+§ f1()
+§ Stack grows downward on function calls
+§ Stack shrink upward as functions return
+
+===== PAGE 69 =====
+Stack Frame
+§ The space that a function allocates on
+the stack is called its stack frame
+§ Also called “activation record”
+§ Execution Environment of function: PC
+and stack frame, PC, preserved registers
+§ Caller’s execution env must be
+preserved b/w call & return
+§ Callee’s execution env must be installed
+on function invocation/activation
+Address BEFFFAE8 BEFFFAE4 BEFFFAE0 BEFFFADC BEFFFAD8 BEFFFAD4 Data
+LR
+R5
+R4
+R1
+R0
+R4
+f1’s stack frame
+f2’s stack
+frame
+
+===== PAGE 70 =====
+Stack Frame
+§ Many active frames during program
+execution
+§ We call it the program’s call stack
+function A function B function C
+1 2 3 4
+call B call C
+5
+7
+6
+9
+8
+return return return
+Stack
+saved reg
+saved reg
+temporary
+stack
+stack
+stack
+frame
+frame
+frame
+
+===== PAGE 71 =====
+Things to Remember
+§ The precise nature & layout of call
+stack depends on the compiler and
+architecture
+§ Stack is not a hardware component
+§ We set aside an area in memory
+and treat it as a stack
+§ A different (more generic) stack
+frame is shown to the right
+Stack
+returned value
+argument
+argument
+link to
+previous frame
+saved machine
+state
+local data
+temporaries
+
+===== PAGE 72 =====
+Application Binary Interface
+§ Calling convention is not part of ISA
+§ It is part of procedure call interface
+§ Such aspects make up the Application Binary Interface or
+ABI
+
+===== PAGE 73 =====
+Group of Stack Frames
+§ Many names for the call stack
+§ Execution Stack
+§ Program Stack
+§ Run-time Stack
+§ Control Stack
+§ Machine Stack
+§ Activation Stack
+Stack
+saved reg
+saved reg
+temporary
+stack
+stack
+stack
+frame
+frame
+frame
+
+===== PAGE 74 =====
+Summary
+§ Caller
+§ Puts arguments in R0-R3
+§ Saves any needed registers (R0-R3, R12)
+§ Call function: BL CALLEE
+§ Restores registers
+§ Looks for result in R0
+§ Callee
+§ Saves registers that might be disturbed (R4-R11, LR)
+§ Executes the function body (a.k.a. performs the function)
+§ Puts the result in R0
+§ Restores registers
+§ Returns: MOV PC, LR
+
+===== PAGE 75 =====
+Recursion
+§ Recursion is a powerful programming technique
+§ Clarity, simplicity, and convenience
+§ A recursive function is a non-leaf that calls itself
+§ Both caller and callee at the same time
+n = 0, factorial(0) = 1
+n = 1, factorial(1) = 1
+n = 2, factorial(2) = 2
+n = 3, factorial(3) = 6
+n = 4, factorial(4) = 24
+n = 5, factorial(5) = 120
+n = 6, factorial(6) = 720
+and so on ....
+C Code
+int factorial(int n) {
+if (n <= 1)
+return 1;
+else
+return (n * factorial(n-1));
+}
+
+===== PAGE 76 =====
+factorial(3)
+C Code
+int factorial(int n) {
+if (n <= 1)
+return 1;
+else
+return (n * factorial(n-1));
+}
+n = 3, factorial(3) = 3 * factorial(2)
+= 3 * 2 * factorial(1)
+= 3 * 2 * 1 * factorial(0)
+= 3 * 2 * 1 * 1
+= 6
+
+===== PAGE 77 =====
+Recursion
+ARM Assembly Code
+0x8500 FACTORIAL PUSH {R0, LR} ;Push n and LR on stack
+0x8504 CMP R0, #1 ;R0 <= 1?
+0x8508 BGT ELSE ;no: branch to else
+0x850C MOV R0, #1 ;otherwise, return 1
+0x8510 ADD SP, SP, #8 ;restore SP
+0x8514 MOV PC, LR ;return
+0x8518 ELSE SUB R0, R0, #1 ;n = n - 1
+0x851C BL FACTORIAL ;recursive call
+0x8520 POP {R1, LR} ;pop n (into R1) and LR
+0x8524 MUL R0, R1, R0 ;R0 = n*factorial(n-1)
+0x8528 MOV PC, LR ;return
+
+===== PAGE 78 =====
+factorial(3)
+ARM Assembly Code
+0x8500 FACTORIAL PUSH {R0, LR}
+0x8504 CMP R0, #1
+0x8508 BGT ELSE
+0x850C MOV R0, #1
+0x8510 ADD SP, SP, #8
+0x8514 MOV PC, LR
+0x8518 ELSE SUB R0, R0, #1
+0x851C BL FACTORIAL
+0x8520 POP {R1, LR}
+0x8524 MUL R0, R1, R0
+0x8528 MOV PC, LR
+LR
+0x1000
+R0
+0x0003
+Address Data
+BEFFFAE8
+BEFFFAE4
+BEFFFAE0
+BEFFFADC
+BEFFFAD8
+BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+SP
+
+===== PAGE 79 =====
+factorial(3)
+ARM Assembly Code
+0x8500 FACTORIAL PUSH {R0, LR}
+0x8504 CMP R0, #1
+0x8508 BGT ELSE
+0x850C MOV R0, #1
+0x8510 ADD SP, SP, #8
+0x8514 MOV PC, LR
+0x8518 ELSE SUB R0, R0, #1
+0x851C BL FACTORIAL
+0x8520 POP {R1, LR}
+0x8524 MUL R0, R1, R0
+0x8528 MOV PC, LR
+LR
+0x1000
+R0
+0x0003
+Address BEFFFAE8 BEFFFAE4 BEFFFAE0
+BEFFFADC
+BEFFFAD8
+BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+Data
+LR (0x1000)
+R0 (3)
+SP
+
+===== PAGE 80 =====
+factorial(2)
+ARM Assembly Code
+0x8500 FACTORIAL PUSH {R0, LR}
+0x8504 CMP R0, #1
+0x8508 BGT ELSE
+0x850C MOV R0, #1
+0x8510 ADD SP, SP, #8
+0x8514 MOV PC, LR
+0x8518 ELSE SUB R0, R0, #1
+0x851C BL FACTORIAL
+0x8520 POP {R1, LR}
+0x8524 MUL R0, R1, R0
+0x8528 MOV PC, LR
+LR
+0x8520
+R0
+0x0002
+Address BEFFFAE8 BEFFFAE4 BEFFFAE0
+BEFFFADC
+BEFFFAD8
+BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+Data
+LR (0x1000)
+R0 (3)
+SP
+
+===== PAGE 81 =====
+factorial(2)
+ARM Assembly Code
+0x8500 FACTORIAL PUSH {R0, LR}
+0x8504 CMP R0, #1
+0x8508 BGT ELSE
+0x850C MOV R0, #1
+0x8510 ADD SP, SP, #8
+0x8514 MOV PC, LR
+0x8518 ELSE SUB R0, R0, #1
+0x851C BL FACTORIAL
+0x8520 POP {R1, LR}
+0x8524 MUL R0, R1, R0
+0x8528 MOV PC, LR
+LR
+0x8520
+R0
+0x0002
+Address BEFFFAE8 BEFFFAE4 BEFFFAE0 BEFFFADC BEFFFAD8
+BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+Data
+LR (0x1000)
+R0 (3)
+LR (0x8520)
+R0 (2)
+SP
+
+===== PAGE 82 =====
+factorial(1)
+ARM Assembly Code
+0x8500 FACTORIAL PUSH {R0, LR}
+0x8504 CMP R0, #1
+0x8508 BGT ELSE
+0x850C MOV R0, #1
+0x8510 ADD SP, SP, #8
+0x8514 MOV PC, LR
+0x8518 ELSE SUB R0, R0, #1
+0x851C BL FACTORIAL
+0x8520 POP {R1, LR}
+0x8524 MUL R0, R1, R0
+0x8528 MOV PC, LR
+LR
+0x8520
+R0
+0x0001
+Address BEFFFAE8 BEFFFAE4 BEFFFAE0 BEFFFADC BEFFFAD8
+BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+Data
+LR (0x1000)
+R0 (3)
+LR (0x8520)
+R0 (2)
+SP
+
+===== PAGE 83 =====
+factorial(1)
+ARM Assembly Code
+0x8500 FACTORIAL PUSH {R0, LR}
+0x8504 CMP R0, #1
+0x8508 BGT ELSE
+0x850C MOV R0, #1
+0x8510 ADD SP, SP, #8
+0x8514 MOV PC, LR
+0x8518 ELSE SUB R0, R0, #1
+0x851C BL FACTORIAL
+0x8520 POP {R1, LR}
+0x8524 MUL R0, R1, R0
+0x8528 MOV PC, LR
+LR
+0x8520
+R0
+0x0001
+Address BEFFFAE8 BEFFFAE4 BEFFFAE0 BEFFFADC BEFFFAD8 BEFFFAD4 BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+Data
+LR (0x1000)
+R0 (3)
+LR (0x8520)
+R0 (2)
+LR (0x8520)
+R0 (1)
+SP
+
+===== PAGE 84 =====
+factorial(1)
+ARM Assembly Code
+0x8500 FACTORIAL PUSH {R0, LR}
+0x8504 CMP R0, #1
+0x8508 BGT ELSE
+0x850C MOV R0, #1
+0x8510 ADD SP, SP, #8
+0x8514 MOV PC, LR
+0x8518 ELSE SUB R0, R0, #1
+0x851C BL FACTORIAL
+0x8520 POP {R1, LR}
+0x8524 MUL R0, R1, R0
+0x8528 MOV PC, LR
+LR
+0x8520
+R0
+0x0001
+Address BEFFFAE8 BEFFFAE4 BEFFFAE0 BEFFFADC BEFFFAD8 BEFFFAD4 BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+Data
+LR (0x1000)
+R0 (3)
+LR (0x8520)
+R0 (2)
+LR (0x8520)
+R0 (1)
+SP
+
+===== PAGE 85 =====
+R0 = 1
+ARM Assembly Code
+0x8500 FACTORIAL PUSH {R0, LR}
+0x8504 CMP R0, #1
+0x8508 BGT ELSE
+0x850C MOV R0, #1
+0x8510 ADD SP, SP, #8
+0x8514 MOV PC, LR
+0x8518 ELSE SUB R0, R0, #1
+0x851C BL FACTORIAL
+0x8520 POP {R1, LR}
+0x8524 MUL R0, R1, R0
+0x8528 MOV PC, LR
+LR
+0x8520
+PC
+0x8520
+R0
+0x0001
+Address BEFFFAE8 BEFFFAE4 BEFFFAE0 BEFFFADC BEFFFAD8 BEFFFAD4 BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+Data
+LR (0x1000)
+R0 (3)
+LR (0x8520)
+R0 (2)
+LR (0x8520)
+R0 (1)
+SP
+
+===== PAGE 86 =====
+R0 = 2 X 1
+ARM Assembly Code
+0x8500 FACTORIAL PUSH {R0, LR}
+0x8504 CMP R0, #1
+0x8508 BGT ELSE
+0x850C MOV R0, #1
+0x8510 ADD SP, SP, #8
+0x8514 MOV PC, LR
+0x8518 ELSE SUB R0, R0, #1
+0x851C BL FACTORIAL
+0x8520 POP {R1, LR}
+0x8524 MUL R0, R1, R0
+0x8528 MOV PC, LR
+LR
+0x8520
+PC
+0x8520
+R0
+0x0002
+R1
+0x0002
+Address BEFFFAE8 BEFFFAE4 BEFFFAE0 BEFFFADC BEFFFAD8 BEFFFAD4 BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+Data
+LR (0x1000)
+R0 (3)
+LR (0x8520)
+R0 (2)
+LR (0x8520)
+R0 (1)
+SP
+
+===== PAGE 87 =====
+R0 = 3 X 2 = 6
+Address ARM Assembly Code
+0x8500 FACTORIAL PUSH {R0, LR}
+0x8504 CMP R0, #1
+0x8508 BGT ELSE
+0x850C MOV R0, #1
+0x8510 ADD SP, SP, #8
+0x8514 MOV PC, LR
+0x8518 ELSE SUB R0, R0, #1
+0x851C BL FACTORIAL
+0x8520 POP {R1, LR}
+0x8524 MUL R0, R1, R0
+0x8528 MOV PC, LR
+LR
+0x1000
+PC
+0x1000
+BEFFFAE8 BEFFFAE4 BEFFFAE0 BEFFFADC BEFFFAD8 BEFFFAD4 BEFFFAD4
+BEFFFAD4
+BEFFFAD4
+R0
+0x0006
+R1
+0x0003
+Data
+LR (0x1000)
+R0 (3)
+LR (0x8520)
+R0 (2)
+LR (0x8520)
+R0 (1)
+SP
+
+===== PAGE 88 =====
+Is recursion worth the trouble?
+§ There is an alternative to solving a problem using recursion
+§ Any recursive solution has an equivalent iterative solution
+(mathematically sound statement)
+§ Exercise: Write factorial(int n)with an iterative statement
+§ Overheads of recursion
+§ (CPU) Extra branch instructions due to function calls
+§ (Memory) Extra memory is consumed by the stack frames
+§ In many areas, the convenience is worth the trouble
+§ Neural networks, data structures, recursive descent parsers
+
+===== PAGE 89 =====
+Summary of factorial
+§ factorial saves LR according to the callee save rule
+§ factorial saves R0 according to the caller save rule, because it
+will need n after calling itself
+§ if n is less than or equal to 1 put the result (i.e., 1) in
+R0 and return (no need to restore LR because it is unchanged)
+§ Use R1 for restoring n, so as not to overwrite the returned value
+§ The multiply instruction (MUL R0, R1, R0) multiplies n(in
+R1)and the returned value (in R0)and puts the result in R0
+

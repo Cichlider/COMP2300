@@ -1,0 +1,177 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 7.5 Practice Exam}
+\author{Topics: Locality, Cache Basics, Associativity, Write Policies, SRAM, DRAM}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Time:} 120 minutes \hfill
+\textbf{Total:} 100 marks
+
+\vspace{0.5em}
+\noindent\textbf{Instructions}
+\begin{itemize}[leftmargin=1.5em]
+  \item Answer in English.
+  \item Part A is multiple choice.
+  \item Part B contains cache calculations and memory-technology reasoning.
+  \item Part C contains adapted past-exam style questions with sources.
+\end{itemize}
+
+\section*{Part A: Multiple Choice (30 marks, 3 marks each)}
+Choose exactly one option for each question.
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item Temporal locality means:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Nearby addresses are likely to be used
+    \item Recently used data is likely to be used again soon
+    \item Memory always grows upward
+    \item Every miss is compulsory
+  \end{enumerate}
+
+  \item A cache is best described as:
+  \begin{enumerate}[label=(\Alph*)]
+    \item A large slow memory for archival storage
+    \item A small fast storage layer that keeps a subset of a larger slower memory
+    \item A branch predictor
+    \item A decode-stage register
+  \end{enumerate}
+
+  \item In a direct-mapped cache, each set contains:
+  \begin{enumerate}[label=(\Alph*)]
+    \item 0 lines
+    \item 1 line
+    \item 2 lines
+    \item 4 lines
+  \end{enumerate}
+
+  \item Which policy updates lower memory immediately on a write hit?
+  \begin{enumerate}[label=(\Alph*)]
+    \item Write-back
+    \item Write-through
+    \item No-write-allocate
+    \item Random replacement
+  \end{enumerate}
+
+  \item Which memory technology typically backs on-chip caches?
+  \begin{enumerate}[label=(\Alph*)]
+    \item DRAM
+    \item SRAM
+    \item Magnetic tape
+    \item SSD flash only
+  \end{enumerate}
+
+  \item Which statement about DRAM is true?
+  \begin{enumerate}[label=(\Alph*)]
+    \item It stores bits in cross-coupled inverters
+    \item It never needs refresh
+    \item Its read operation is destructive
+    \item It is always faster than SRAM
+  \end{enumerate}
+
+  \item Which component selects a row in a memory array?
+  \begin{enumerate}[label=(\Alph*)]
+    \item Decoder / wordline logic
+    \item BTB
+    \item ALU
+    \item Link register
+  \end{enumerate}
+
+  \item A 2-way set associative cache allows each block to be placed in:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Any line in the whole cache
+    \item Exactly one of two lines in the indexed set
+    \item Exactly one line in the whole cache
+    \item Main memory only
+  \end{enumerate}
+
+  \item Which storage element is the most expensive per bit but fastest among the three?
+  \begin{enumerate}[label=(\Alph*)]
+    \item DRAM
+    \item SRAM
+    \item Flip-flops
+    \item Magnetic disk
+  \end{enumerate}
+
+  \item In a memory hierarchy, the usual trend is:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Larger memories are always faster
+    \item Smaller memories tend to be faster
+    \item DRAM is faster than registers
+    \item Cache eliminates the need for main memory
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part B: Computational Problems (50 marks)}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{Hit and miss rates (8 marks)}\\
+  A cache sees 500 memory accesses, of which 40 are misses.
+  \begin{enumerate}[label=(\alph*)]
+    \item Compute the miss rate.
+    \item Compute the hit rate.
+  \end{enumerate}
+
+  \item \textbf{Address breakdown (8 marks)}\\
+  A direct-mapped cache has 4 sets and a block size of 8 bytes.
+  \begin{enumerate}[label=(\alph*)]
+    \item How many block-offset bits are required?
+    \item How many set-index bits are required?
+    \item In a 16-bit address, how many tag bits remain?
+  \end{enumerate}
+
+  \item \textbf{Direct-mapped placement (8 marks)}\\
+  Consider the cache from B2. For address \texttt{0x0034}:
+  \begin{enumerate}[label=(\alph*)]
+    \item Give the binary form of the low 5 bits.
+    \item Identify the block offset.
+    \item Identify the set index.
+  \end{enumerate}
+
+  \item \textbf{Cache benefit calculation (8 marks)}\\
+  A device has the following access costs:
+  \begin{itemize}[leftmargin=1.5em]
+    \item Cache hit: 1 cycle
+    \item Cache miss: 4 cycles
+    \item Cache disabled: 3 cycles
+  \end{itemize}
+  \begin{enumerate}[label=(\alph*)]
+    \item Compute the average access time when hit rate is 25\%.
+    \item Compute the average access time when hit rate is 50\%.
+    \item For each case, state whether enabling the cache is beneficial.
+  \end{enumerate}
+
+  \item \textbf{SRAM vs DRAM reasoning (8 marks)}\\
+  Explain, in one or two short sentences each:
+  \begin{enumerate}[label=(\alph*)]
+    \item Why SRAM is preferred for caches.
+    \item Why DRAM is preferred for large main memory.
+  \end{enumerate}
+
+  \item \textbf{Write-policy comparison (10 marks)}\\
+  Briefly compare the following pairs:
+  \begin{enumerate}[label=(\alph*)]
+    \item write-through vs write-back
+    \item write-allocate vs no-write-allocate
+  \end{enumerate}
+  For each pair, give one advantage and one tradeoff.
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions (Source-Tagged) (20 marks)}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{Cache enable decision (Source: exam2025-main.pdf, Q1, adapted) (8 marks)}\\
+  A device access costs 3 cycles with cache disabled. With cache enabled, hits cost 1 cycle and misses cost 4 cycles. Derive the condition on hit rate under which the cache is beneficial.
+
+  \item \textbf{Levels in the memory hierarchy (Source: 2023\_Final\_Exam\_SuppDA.pdf, microarchitecture MCQ topic, adapted) (6 marks)}\\
+  List a reasonable top-to-bottom memory hierarchy for a modern processor and explain why each lower level tends to be larger but slower.
+
+  \item \textbf{Cache misses in pipelined execution (Source: exam24r.pdf / exam24px1.pdf, Q7c context, adapted) (6 marks)}\\
+  Explain why long-latency cache misses make memory-level parallelism valuable in later out-of-order designs, even though the basic cache concepts are introduced earlier.
+\end{enumerate}
+
+\end{document}

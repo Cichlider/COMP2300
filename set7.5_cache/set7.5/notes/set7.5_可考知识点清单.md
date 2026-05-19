@@ -1,0 +1,62 @@
+# Set 7.5 可考知识点清单
+
+- locality：
+  - temporal locality：最近用过的数据/指令可能再次被使用
+  - spatial locality：与当前地址相邻的数据/指令可能很快被使用
+- memory hierarchy 的基本规律：
+  - 越快的存储通常越贵、越小、功耗越高
+  - 越慢的存储通常越便宜、越大
+- cache：
+  - 更小更快的存储层，用来缓存更大更慢层的一部分数据
+- cache 基本单位：
+  - block / cache line
+  - tag
+  - set
+  - offset
+- hit / miss：
+  - `miss rate = misses / accesses`
+  - `hit rate = 1 - miss rate`
+- cache line placement 问题：
+  - block 能放到哪里
+  - 满了替换哪一条
+- direct-mapped cache：
+  - 每个 set 只有 1 条 line
+  - 硬件简单，但容易 conflict miss
+- n-way set associative cache：
+  - 每个 set 有 `n` 条 line
+  - 冲突更少，但比较与替换更复杂
+- 地址拆分常见形式：
+  - `tag | set index | block offset`
+- write policies：
+  - `write-through`
+  - `write-back`
+  - `no-write-allocate`
+  - `write-allocate`
+- 多级 cache hierarchy 的设计动机：
+  - 在 latency、capacity、cost 之间折中
+- storage element 基础：
+  - wordline 选择存储单元
+  - bitline 负责读写 bit
+- flip-flops：
+  - 非常快
+  - 成本高
+  - 常用于寄存器
+- SRAM：
+  - 用交叉耦合反相器存储
+  - 快
+  - 不需要 refresh
+  - 面积较大、每 bit 成本更高
+- DRAM：
+  - 用电容电荷表示 bit
+  - 密度高、成本低
+  - 读是 destructive 的
+  - 需要 refresh
+- RAM 中的“random access”：
+  - 任意地址可直接访问，不要求顺序扫描
+- 顺序访问 vs 随机访问：
+  - 磁带更偏 sequential
+  - RAM / cache 更偏 random
+- hierarchy 中的典型对应关系：
+  - register file / CPU state：flip-flops
+  - cache：SRAM
+  - main memory：DRAM

@@ -1,0 +1,187 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 8 Practice Exam}
+\author{Topics: ILP, Dependences, Dynamic Scheduling, Renaming, ROB, Speculation, LSQ}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Time:} 120 minutes \hfill
+\textbf{Total:} 100 marks
+
+\vspace{0.5em}
+\noindent\textbf{Instructions}
+\begin{itemize}[leftmargin=1.5em]
+  \item Answer in English.
+  \item Part A is multiple choice.
+  \item Part B contains dependence analysis and out-of-order reasoning.
+  \item Part C contains adapted past-exam style questions with source tags.
+\end{itemize}
+
+\section*{Part A: Multiple Choice (30 marks, 3 marks each)}
+Choose exactly one option for each question.
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item Which dependence corresponds to a \texttt{RAW} hazard?
+  \begin{enumerate}[label=(\Alph*)]
+    \item Anti dependence
+    \item Output dependence
+    \item True dependence
+    \item Control dependence
+  \end{enumerate}
+
+  \item Register renaming primarily eliminates:
+  \begin{enumerate}[label=(\Alph*)]
+    \item RAW only
+    \item WAR and WAW
+    \item Branch hazards only
+    \item Cache misses
+  \end{enumerate}
+
+  \item An issue queue is used to:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Store only committed results
+    \item Hold waiting instructions until operands are ready
+    \item Replace the branch predictor
+    \item Encode immediate values
+  \end{enumerate}
+
+  \item Which statement about \texttt{ROB} is correct?
+  \begin{enumerate}[label=(\Alph*)]
+    \item It guarantees that instructions execute in order
+    \item It supports in-order retirement of speculative results
+    \item It stores branch target addresses only
+    \item It removes all RAW hazards
+  \end{enumerate}
+
+  \item A precise exception requires that:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Younger instructions may already be permanently committed
+    \item Older instructions after the faulting instruction may commit first
+    \item All older instructions have completed and the faulting instruction has not improperly committed
+    \item The CPU flushes only the fetch stage
+  \end{enumerate}
+
+  \item Which dependence cannot be removed by renaming?
+  \begin{enumerate}[label=(\Alph*)]
+    \item WAR
+    \item WAW
+    \item RAW
+    \item Output name dependence
+  \end{enumerate}
+
+  \item In a modern OOO design, speculative results are typically written first to:
+  \begin{enumerate}[label=(\Alph*)]
+    \item ARF only
+    \item ROB
+    \item Instruction memory
+    \item BTB
+  \end{enumerate}
+
+  \item The main limitation of a scoreboard-only design highlighted in the lecture is:
+  \begin{enumerate}[label=(\Alph*)]
+    \item It has no ALUs
+    \item It cannot support any form of data dependence
+    \item It struggles with false dependences and precise recovery
+    \item It eliminates branch hazards completely
+  \end{enumerate}
+
+  \item A load-store queue is used because:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Loads and stores are always safe to reorder
+    \item Memory addresses may alias, so load/store reordering needs checking
+    \item It replaces all caches
+    \item It is the same thing as a branch history table
+  \end{enumerate}
+
+  \item Memory-level parallelism refers to:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Using one memory request at a time very quickly
+    \item Exploiting multiple memory requests in flight concurrently
+    \item Replacing DRAM with SRAM
+    \item Turning branches into arithmetic
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part B: Computational / Reasoning Problems (50 marks)}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{Classifying dependences (8 marks)}\\
+  For each pair below, classify the dependence as \textbf{RAW}, \textbf{WAR}, \textbf{WAW}, or \textbf{none}.
+\begin{verbatim}
+i1: LDR R2, [R6, #0]
+i2: ADD R3, R2, R5
+\end{verbatim}
+\begin{verbatim}
+i3: ADD R6, R3, R5
+i4: LDR R2, [R6, #0]
+\end{verbatim}
+\begin{verbatim}
+i5: ADD R2, R7, R8
+i6: SUB R2, R9, R10
+\end{verbatim}
+
+  \item \textbf{Renaming to remove false dependences (8 marks)}\\
+  Rename the following code using temporary names \texttt{T0} and \texttt{T1} so that false dependences are removed while true dependences are preserved.
+\begin{verbatim}
+i1: ADD R1, R2, R3
+i2: SUB R2, R4, R5
+i3: ADD R6, R1, R7
+i4: MUL R2, R8, R9
+\end{verbatim}
+  State which original false dependence(s) you removed.
+
+  \item \textbf{ROB allocation and retirement order (8 marks)}\\
+  Suppose three instructions enter rename in program order and are assigned tags \texttt{ROB0}, \texttt{ROB1}, and \texttt{ROB2}.
+  \begin{enumerate}[label=(\alph*)]
+    \item Which tag belongs to the oldest instruction?
+    \item If \texttt{ROB2} finishes execution first, may it retire first? Why or why not?
+    \item Which instruction must be at the head of the ROB before \texttt{ROB2} may retire?
+  \end{enumerate}
+
+  \item \textbf{Speculation and precise exceptions (8 marks)}\\
+  An older load instruction causes an exception. Two younger arithmetic instructions have already finished execution out of order.
+  \begin{enumerate}[label=(\alph*)]
+    \item In a design that writes results directly into the architectural register file, why can this become an imprecise exception?
+    \item How does a ROB-based design avoid this problem?
+  \end{enumerate}
+
+  \item \textbf{Load/store reordering (8 marks)}\\
+  For each case below, state whether reordering is safe and briefly justify:
+  \begin{enumerate}[label=(\alph*)]
+    \item An older store writes address \texttt{A}; a younger load reads address \texttt{B}, where \texttt{A} and \texttt{B} are known to be different.
+    \item An older store writes address \texttt{A}; a younger load reads address \texttt{A}.
+    \item The address of the older store is not yet known.
+  \end{enumerate}
+
+  \item \textbf{OOO overlap on a cache miss (10 marks)}\\
+  A load instruction misses in cache and waits many cycles for memory. Behind it are:
+  \begin{itemize}[leftmargin=1.5em]
+    \item one dependent ADD
+    \item two independent arithmetic instructions
+    \item one younger branch with operands already ready
+  \end{itemize}
+  \begin{enumerate}[label=(\alph*)]
+    \item Which instruction must wait because of a true dependence?
+    \item Which younger instructions may still issue in an OOO design?
+    \item Why is this impossible in a strict in-order design?
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions (Source-Tagged) (20 marks)}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{Register renaming (Source: exam24r.pdf, Q7b; 2023\_Final\_Exam.pdf, Q2 rename topic, adapted) (7 marks)}\\
+  Explain how register renaming removes false dependences while preserving true dependences. Why does this help out-of-order execution?
+
+  \item \textbf{OOO pipeline issues addressed by ARF+ROB (Source: exam2025-main.pdf, Q3C; 2023\_Final\_Exam\_SuppDA.pdf, ARF+ROB discussion, adapted) (7 marks)}\\
+  List four problems in a scoreboard-style out-of-order pipeline that are addressed by adding register renaming and hardware speculation.
+
+  \item \textbf{Issue queue and dynamic scheduling (Source: exam2025-main.pdf, Q3; exam24r.pdf, Q7c, adapted) (6 marks)}\\
+  Briefly explain the role of the issue queue in a dynamically scheduled processor. Why does it help tolerate long-latency misses better than a simple in-order pipeline?
+\end{enumerate}
+
+\end{document}

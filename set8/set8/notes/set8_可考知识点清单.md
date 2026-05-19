@@ -1,0 +1,77 @@
+# Set 8 可考知识点清单
+
+- `ILP`：
+  - overlapping the execution of instructions
+- 依赖与 hazard 的区分：
+  - dependence：程序语义属性
+  - hazard：某种微体系结构实现暴露出来的问题
+- 三类依赖：
+  - true dependence
+  - anti dependence
+  - output dependence
+- 三类常见名字：
+  - `RAW`：true dependence
+  - `WAR`：anti dependence
+  - `WAW`：output dependence
+- 关键结论：
+  - renaming 可以消除 `WAR` / `WAW`
+  - renaming 不能消除 `RAW`
+- in-order pipeline 的局限：
+  - 老指令卡住时，后面独立指令也常被一起阻塞
+- OOO 的基本思想：
+  - 较老但非就绪的指令可以等待
+  - 较年轻但就绪的独立指令可以先执行
+- issue queue / reservation stations：
+  - 保存待执行指令
+  - ready 后由调度器发射
+- dynamic scheduling：
+  - 由硬件在运行时决定下一条执行哪条指令
+- scoreboard（早期 OOO）：
+  - 能处理很多 `RAW` 场景
+  - 但 `WAR` / `WAW` 仍会带来问题
+  - 缺乏良好的 speculation recovery
+  - exceptions 可能不精确
+- precise exception：
+  - faulting instruction 之前都已完成并可见
+  - faulting instruction 本身未错误提交
+  - faulting instruction 之后的年轻指令未污染 architectural state
+- hardware speculation 的关键组件：
+  - register renaming
+  - dynamic branch prediction
+  - dynamic scheduling
+  - in-order retirement / recovery
+- `ROB`（Reorder Buffer）：
+  - 保存 speculative 结果
+  - 支持 in-order retirement
+  - 支持 misprediction / exception recovery
+- `ARF`：
+  - 保存已提交的 architectural register state
+- rename stage：
+  - 为新的目的寄存器分配唯一 tag
+  - 把源操作数重命名到正确版本
+- source value 可能来自：
+  - `ARF`
+  - `ROB`
+  - forwarding path
+- writeback 与 retire：
+  - writeback 先写 ROB
+  - retire 再按程序顺序提交到 ARF
+- OOO + ROB 的核心模式：
+  - `out-of-order execute`
+  - `in-order commit`
+- load/store 乱序：
+  - 只有在地址不冲突时才安全
+  - 需要 `LSQ`
+- `LSQ`：
+  - 跟踪 speculative loads / stores
+  - 检查 older stores 与 younger loads 的地址关系
+- Tomasulo 脉络：
+  - renaming + dynamic scheduling
+  - 现代实现常加 ROB 以支持精确恢复
+- ILP exploitation classes：
+  - statically scheduled superscalar
+  - dynamically scheduled superscalar
+  - 带 speculation 的现代 OOO 设计
+- `MLP`：
+  - OOO 会自然激发更多并行的内存请求
+  - 需要 non-blocking caches 和并行 memory subsystem 配合

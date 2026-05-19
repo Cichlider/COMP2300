@@ -1,0 +1,186 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 7 Practice Exam}
+\author{Topics: Pipelining, Hazards, Forwarding, Stalls, Branch Prediction, Superscalar}
+\date{}
+
+\begin{document}
+\maketitle
+
+\noindent\textbf{Time:} 120 minutes \hfill
+\textbf{Total:} 100 marks
+
+\vspace{0.5em}
+\noindent\textbf{Instructions}
+\begin{itemize}[leftmargin=1.5em]
+  \item Answer in English.
+  \item Part A is multiple choice.
+  \item Part B contains pipeline calculations and hazard reasoning.
+  \item Part C contains adapted past-exam style questions with source tags.
+  \item Assume a five-stage ARM pipeline unless stated otherwise.
+\end{itemize}
+
+\section*{Part A: Multiple Choice (30 marks, 3 marks each)}
+Choose exactly one option for each question.
+
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item The primary benefit of pipelining is:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Lowering ISA complexity
+    \item Improving throughput by overlapping instruction stages
+    \item Eliminating branch instructions
+    \item Guaranteeing CPI \(= 1\) on all workloads
+  \end{enumerate}
+
+  \item Which statement is true about latency in a pipelined CPU?
+  \begin{enumerate}[label=(\Alph*)]
+    \item It always decreases for each instruction
+    \item It may stay similar or increase because of pipeline-register overhead
+    \item It becomes zero after the pipeline fills
+    \item It is equal to IPC
+  \end{enumerate}
+
+  \item A read-after-write hazard is a:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Structural hazard
+    \item Control hazard
+    \item Data hazard
+    \item Cache-coherence hazard
+  \end{enumerate}
+
+  \item Forwarding helps because it:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Replaces the register file
+    \item Sends a result directly from a later pipeline stage to an earlier consumer
+    \item Eliminates all control hazards
+    \item Prevents all load-use stalls
+  \end{enumerate}
+
+  \item A load-use hazard often still needs a stall because:
+  \begin{enumerate}[label=(\Alph*)]
+    \item The ALU cannot add two operands in one cycle
+    \item The load result becomes available only after the memory stage
+    \item The branch predictor is too slow
+    \item The decode stage cannot read registers
+  \end{enumerate}
+
+  \item In the lecture design, a bubble is:
+  \begin{enumerate}[label=(\Alph*)]
+    \item A branch target buffer entry
+    \item An empty operation inserted into the pipeline
+    \item A renamed register
+    \item The same thing as forwarding
+  \end{enumerate}
+
+  \item Which structure primarily stores branch target addresses?
+  \begin{enumerate}[label=(\Alph*)]
+    \item BHT
+    \item BTB
+    \item ROB
+    \item IQ
+  \end{enumerate}
+
+  \item A one-bit predictor is weak on loop termination because it:
+  \begin{enumerate}[label=(\Alph*)]
+    \item Cannot distinguish branch PC values
+    \item Has no branch target address
+    \item Changes direction too easily after a single unusual outcome
+    \item Requires two pipeline stages to update
+  \end{enumerate}
+
+  \item A Smith predictor uses:
+  \begin{enumerate}[label=(\Alph*)]
+    \item 2-bit saturating counters
+    \item Floating-point scores
+    \item A stack of branch PCs
+    \item Only compile-time information
+  \end{enumerate}
+
+  \item A 2-way superscalar processor ideally can achieve:
+  \begin{enumerate}[label=(\Alph*)]
+    \item IPC up to 0.5
+    \item IPC up to 1
+    \item IPC up to 2
+    \item IPC up to 5
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part B: Computational Problems (50 marks)}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{Ideal pipeline timing (8 marks)}\\
+  A five-stage single-issue pipeline executes 20 independent instructions with no hazards.
+  \begin{enumerate}[label=(\alph*)]
+    \item How many cycles are needed if the pipeline starts empty?
+    \item What is the CPI for this run?
+    \item What is the IPC for this run?
+  \end{enumerate}
+
+  \item \textbf{Forwarding or stall? (8 marks)}\\
+  Consider the instruction sequence:
+\begin{verbatim}
+i1: ADD R1, R2, R3
+i2: SUB R4, R1, #1
+i3: LDR R5, [R6, #0]
+i4: ADD R7, R5, R8
+\end{verbatim}
+  \begin{enumerate}[label=(\alph*)]
+    \item Which pair can be handled by forwarding without any stall?
+    \item Which pair is a load-use hazard that still requires a stall?
+    \item Briefly explain why.
+  \end{enumerate}
+
+  \item \textbf{Load-use stall accounting (8 marks)}\\
+  Assume a five-stage pipeline with forwarding and hazard detection. A program executes 40 instructions, and 6 of them cause exactly one load-use stall each.
+  \begin{enumerate}[label=(\alph*)]
+    \item How many total cycles are needed if the ideal no-hazard execution would have taken 44 cycles?
+    \item What is the effective CPI?
+  \end{enumerate}
+
+  \item \textbf{Branch penalty comparison (8 marks)}\\
+  A branch is taken 30 times in a program.
+  \begin{enumerate}[label=(\alph*)]
+    \item If the branch misprediction penalty is 4 cycles, how many wasted cycles occur for 30 mispredictions?
+    \item If early branch resolution reduces the penalty to 2 cycles, how many cycles are saved over those same 30 mispredictions?
+  \end{enumerate}
+
+  \item \textbf{One-bit and two-bit prediction (8 marks)}\\
+  Consider the branch outcome sequence:
+  \[
+    T,\ T,\ T,\ T,\ N
+  \]
+  \begin{enumerate}[label=(\alph*)]
+    \item If a one-bit predictor starts in state \texttt{Taken}, how many predictions are correct?
+    \item If a two-bit Smith predictor starts in state \texttt{Strongly Taken}, what final state does it end in after the sequence?
+  \end{enumerate}
+
+  \item \textbf{Superscalar IPC (10 marks)}\\
+  A 2-way superscalar processor executes a 24-instruction program in 15 cycles.
+  \begin{enumerate}[label=(\alph*)]
+    \item Compute the achieved IPC.
+    \item Compute the achieved CPI.
+    \item Briefly explain why the achieved IPC may be lower than the ideal maximum.
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions (Source-Tagged) (20 marks)}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{No-forwarding vs forwarding pipeline (Source: exam24r.pdf / exam24px1.pdf, Q7a, adapted) (7 marks)}\\
+  A short ARM sequence runs on a five-stage pipeline.
+  \begin{enumerate}[label=(\alph*)]
+    \item Explain how the answer changes when the CPU has no forwarding/hazard detection.
+    \item Explain how forwarding changes the hazard picture.
+    \item Name one case where a stall is still required even with forwarding.
+  \end{enumerate}
+
+  \item \textbf{Smith predictor accuracy (Source: 2023\_Final\_Exam.pdf, Q2D, adapted) (6 marks)}\\
+  Explain why a 2-bit Smith predictor usually performs better than a 1-bit predictor on loops that are mostly taken and then exit once.
+
+  \item \textbf{Pipeline depth and register cost (Source: exam2025-main.pdf, Q7 / Q14, adapted) (7 marks)}\\
+  Briefly explain the tradeoff between deeper pipelines and pipeline-register overhead. Why can a deeper pipeline improve clock frequency but still fail to improve overall performance proportionally?
+\end{enumerate}
+
+\end{document}

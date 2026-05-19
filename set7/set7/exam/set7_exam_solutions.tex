@@ -1,0 +1,131 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{enumitem}
+\usepackage[T1]{fontenc}
+
+\title{COMP2300 Set 7 Practice Exam Solutions}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Part A: Multiple Choice}
+\begin{enumerate}[label=\textbf{A\arabic*.}]
+  \item B
+  \item B
+  \item C
+  \item B
+  \item B
+  \item B
+  \item B
+  \item C
+  \item A
+  \item C
+\end{enumerate}
+
+\section*{Part B: Computational Problems}
+\begin{enumerate}[label=\textbf{B\arabic*.}]
+  \item \textbf{Ideal pipeline timing}
+  \begin{enumerate}[label=(\alph*)]
+    \item A five-stage pipeline needs:
+    \[
+      5 - 1 + 20 = 24 \text{ cycles}
+    \]
+    \item
+    \[
+      CPI = \frac{24}{20} = 1.2
+    \]
+    \item
+    \[
+      IPC = \frac{20}{24} \approx 0.833
+    \]
+  \end{enumerate}
+
+  \item \textbf{Forwarding or stall?}
+  \begin{enumerate}[label=(\alph*)]
+    \item \texttt{i1 -> i2} can be handled by forwarding.
+    \item \texttt{i3 -> i4} is the load-use hazard that still requires a stall.
+    \item The ADD result from \texttt{i1} is ready early enough to forward into the dependent SUB. The load result from \texttt{i3} is not available until the end of the memory stage, so the next instruction reaches execute too soon.
+  \end{enumerate}
+
+  \item \textbf{Load-use stall accounting}
+  \begin{enumerate}[label=(\alph*)]
+    \item Six hazards add six extra cycles:
+    \[
+      44 + 6 = 50 \text{ cycles}
+    \]
+    \item
+    \[
+      CPI = \frac{50}{40} = 1.25
+    \]
+  \end{enumerate}
+
+  \item \textbf{Branch penalty comparison}
+  \begin{enumerate}[label=(\alph*)]
+    \item
+    \[
+      30 \times 4 = 120 \text{ wasted cycles}
+    \]
+    \item New wasted cycles:
+    \[
+      30 \times 2 = 60
+    \]
+    Saved:
+    \[
+      120 - 60 = 60 \text{ cycles}
+    \]
+  \end{enumerate}
+
+  \item \textbf{One-bit and two-bit prediction}
+  \begin{enumerate}[label=(\alph*)]
+    \item Starting in \texttt{Taken}, the one-bit predictor predicts:
+    \[
+      T,\ T,\ T,\ T,\ T
+    \]
+    Against actual:
+    \[
+      T,\ T,\ T,\ T,\ N
+    \]
+    So it gets 4 correct.
+    \item The Smith predictor starts in \texttt{ST}. Four taken outcomes keep it in \texttt{ST}. The final not-taken outcome moves it one step toward not-taken:
+    \[
+      ST \rightarrow WT
+    \]
+    Final state is \texttt{Weakly Taken}.
+  \end{enumerate}
+
+  \item \textbf{Superscalar IPC}
+  \begin{enumerate}[label=(\alph*)]
+    \item
+    \[
+      IPC = \frac{24}{15} = 1.6
+    \]
+    \item
+    \[
+      CPI = \frac{15}{24} = 0.625
+    \]
+    \item IPC is below the ideal maximum of 2 because real code has dependences, branch/control effects, imperfect balance between the two issue lanes, and sometimes insufficient ready independent work.
+  \end{enumerate}
+\end{enumerate}
+
+\section*{Part C: Past Exam Questions}
+\begin{enumerate}[label=\textbf{C\arabic*.}]
+  \item \textbf{No-forwarding vs forwarding pipeline}
+  \begin{enumerate}[label=(\alph*)]
+    \item Without forwarding or hazard detection, the programmer/compiler must insert NOPs or reorder instructions so consumers do not read stale values.
+    \item With forwarding, many ALU-to-ALU RAW hazards can be handled in hardware by bypassing results from later stages.
+    \item A classic remaining case is load-use, because the load value arrives only after memory access completes.
+  \end{enumerate}
+
+  \item \textbf{Smith predictor accuracy}
+  \\[0.5ex]
+  A 1-bit predictor flips direction after a single unusual outcome, so on loops it tends to mispredict at loop exit and then again at loop re-entry. A 2-bit Smith predictor adds hysteresis: one unexpected outcome moves the counter only to a weak state rather than immediately reversing the prediction, so loop behavior is tracked more accurately.
+
+  \item \textbf{Pipeline depth and register cost}
+  \\[0.5ex]
+  Deeper pipelines shorten the combinational work per stage, which can improve clock frequency. However, every extra stage adds pipeline-register overhead, increases fill/drain effects, and often increases the cost of hazards and mispredictions. Therefore the performance gain is usually sublinear and can even be negative if the added control and recovery penalties dominate.
+\end{enumerate}
+
+\end{document}
