@@ -34,6 +34,18 @@
 - `notes/`：中文整理与可考知识点清单。
 - `exam/`：练习卷、答案及对应 PDF。
 
+## 做题入口
+
+- `set1`：[Questions](./set1/set1/exam/set1_exam_questions.pdf) / [Solutions](./set1/set1/exam/set1_exam_solutions.pdf)
+- `set2`：[Questions](./set2/set2/exam/set2_exam_questions.pdf) / [Solutions](./set2/set2/exam/set2_exam_solutions.pdf)
+- `set3`：[Questions](./set3/set3/exam/set3_exam_questions.pdf) / [Solutions](./set3/set3/exam/set3_exam_solutions.pdf)
+- `set4`：[Questions](./set4/set4/exam/set4_exam_questions.pdf) / [Solutions](./set4/set4/exam/set4_exam_solutions.pdf)
+- `set5`：[Questions](./set5/set5/exam/set5_exam_questions.pdf) / [Solutions](./set5/set5/exam/set5_exam_solutions.pdf)
+- `set6`：[Questions](./set6/set6/exam/set6_exam_questions.pdf) / [Solutions](./set6/set6/exam/set6_exam_solutions.pdf)
+- `set7`：[Questions](./set7/set7/exam/set7_exam_questions.pdf) / [Solutions](./set7/set7/exam/set7_exam_solutions.pdf)
+- `set7.5`：[Questions](./set7.5_cache/set7.5/exam/set7.5_exam_questions.pdf) / [Solutions](./set7.5_cache/set7.5/exam/set7.5_exam_solutions.pdf)
+- `set8`：[Questions](./set8/set8/exam/set8_exam_questions.pdf) / [Solutions](./set8/set8/exam/set8_exam_solutions.pdf)
+
 ## 说明
 
 - 和 assessment 直接相关的代码、电路图或答案不要公开分享。
